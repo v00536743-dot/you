@@ -1,0 +1,170 @@
+{
+  "comment": "Реестр сайтов, которые уже встречались в роликах и постах. Агент дополняет его после каждой проверки: дата, статус, что работает на записи, что роняет страницу. Защиту от ботов не обходим: закрытый сайт пропускается с честным отчётом.",
+  "version": 1,
+  "sites": {
+    "learn-anything": {
+      "title": "learn-anything",
+      "url": "https://learn-anything.xyz/",
+      "aliases": [
+        "learn anything",
+        "learnanything",
+        "лёрн энисинг"
+      ],
+      "say": {
+        "learn-anything": "лёрн энисинг",
+        "learn anything": "лёрн энисинг"
+      },
+      "status": "ok",
+      "checked": "2026-10-11",
+      "demo": {
+        "query": "Linux",
+        "query_en": "Linux"
+      },
+      "recipe": [
+        {
+          "do": "goto"
+        },
+        {
+          "t": 0.6,
+          "do": "move",
+          "sel": "input"
+        },
+        {
+          "t": 1.2,
+          "do": "type",
+          "sel": "input",
+          "text": "{query}",
+          "delay": 120
+        },
+        {
+          "t": 3.0,
+          "do": "press",
+          "key": "Enter"
+        },
+        {
+          "t": 5.5,
+          "do": "scroll",
+          "dy": 520
+        },
+        {
+          "t": 7.5,
+          "do": "scroll",
+          "dy": 520
+        }
+      ],
+      "notes": "Прототип 10.10.2026: после поиска всплывает окно, закрывается кнопкой Close."
+    },
+    "cadlookup": {
+      "title": "CAD Lookup",
+      "url": "https://www.cadlookup.com/",
+      "aliases": [
+        "cad-search",
+        "cad search",
+        "cadlookup",
+        "cad lookup",
+        "кэд лукап"
+      ],
+      "say": {
+        "cad-search": "кэд сёрч",
+        "cad lookup": "кэд лукап",
+        "cadlookup": "кэд лукап"
+      },
+      "status": "ok",
+      "checked": "2026-10-10",
+      "demo": {
+        "query": "gear with 12 teeth",
+        "query_en": "gear with 12 teeth"
+      },
+      "recipe": [
+        {
+          "do": "goto"
+        },
+        {
+          "t": 1.0,
+          "do": "move",
+          "sel": "input"
+        },
+        {
+          "t": 1.6,
+          "do": "type",
+          "sel": "input",
+          "text": "{query}",
+          "delay": 85
+        },
+        {
+          "t": 3.4,
+          "do": "press",
+          "key": "Enter"
+        },
+        {
+          "t": 6.0,
+          "do": "hover",
+          "sel": ".result-card"
+        },
+        {
+          "t": 8.0,
+          "do": "scroll",
+          "dy": 600
+        }
+      ],
+      "avoid": [
+        "click on a 3D model: the page crashes in headless mode"
+      ],
+      "notes": "Найдено в прототипе: клик по 3D-модели роняет страницу в headless. Только наведение и прокрутка."
+    },
+    "builditapp": {
+      "title": "builditapp",
+      "url": "https://builditapp.com/",
+      "aliases": [
+        "builditapp",
+        "build it app",
+        "билдитапп"
+      ],
+      "status": "blocked",
+      "checked": "2026-10-10",
+      "notes": "Закрыт защитой от ботов. Не обходим: в ролик не берём, в отчёте пишем честно."
+    },
+    "linux-cheatsheet-ru": {
+      "title": "Мегашпаргалка по Linux",
+      "url": "https://github.com/justxor/Linux-",
+      "aliases": [
+        "мегашпаргалка по linux",
+        "мегашпаргалка",
+        "шпаргалка по linux"
+      ],
+      "status": "ok",
+      "checked": "2026-10-11",
+      "found_by_search": true,
+      "confirm": "Адрес найден поиском 11.10.2026: README совпадает с описанием из поста (файлы, процессы, права, память, сеть, SSH, systemd, grep, sed, awk, Bash, RAID, контейнеры, вопросы с собеседований). Автор подтверждает, что это та самая.",
+      "demo": {
+        "query": "",
+        "query_en": ""
+      },
+      "recipe": [
+        {
+          "do": "goto"
+        },
+        {
+          "t": 1.5,
+          "do": "scroll",
+          "dy": 700
+        },
+        {
+          "t": 3.5,
+          "do": "scroll",
+          "dy": 900
+        },
+        {
+          "t": 5.5,
+          "do": "scroll",
+          "dy": 900
+        },
+        {
+          "t": 7.5,
+          "do": "scroll",
+          "dy": 900
+        }
+      ]
+    }
+  }
+}

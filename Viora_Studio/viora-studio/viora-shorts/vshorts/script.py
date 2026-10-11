@@ -1,0 +1,281 @@
+"""Сценарий ролика: каркас из пунктов поста и проверка правил.
+
+Код собирает скелет и ловит нарушения, голос и шутку пишет модель.
+Модель может переписать любую реплику в script.json, проверка та же.
+"""
+
+from __future__ import annotations
+
+import re
+from dataclasses import dataclass, field, asdict
+from typing import Any, Dict, List, Optional
+
+from .common import emojis, has_dash, is_cyrillic, plural_ru, speech_seconds, words
+from .intake import Item, Raw, lookup, norm_name
+
+NUM_WORDS_RU = {1: "один", 2: "два", 3: "три", 4: "четыре", 5: "пять", 6: "шесть", 7: "семь"}
+NUM_WORDS_RU_F = {1: "одна", 2: "две", 3: "три", 4: "четыре", 5: "пять", 6: "шесть", 7: "семь"}
+NUM_WORDS_EN = {1: "one", 2: "two", 3: "three", 4: "four", 5: "five", 6: "six", 7: "seven"}
+
+GREETINGS = ("привет", "здравствуй", "здарова", "всем хай", "хай,", "ребята", "друзья,",
+             "доброго времени", "hello", "hi guys", "hey guys", "welcome", "what's up")
+FILLERS = ("в этом видео", "в этом ролике", "сегодня я покажу", "сегодня покажу", "смотрите,",
+           "давайте посмотрим", "давайте разбер", "in this video", "today i", "let's take a look")
+FAREWELLS = ("всем пока", "пока-пока", "до встречи", "увидимся", "до скорого", "bye", "see you",
+             "that's all", "на этом всё", "ну всё")
+LINK_DESC = ("ссылка в описании", "ссылки в описании", "link in the description",
+             "links in the description", "link in description")
+
+# Минимум экранного времени. Сайту нужно успеть открыться и показать результат,
+# QR-вспышке в конце нужны 3 секунды (COMMON.md раздел 4).
+MIN_SECONDS = {"hook": 2.5, "item": 6.0, "chapter": 4.0, "cta": 3.5, "text": 3.0}
+BEAT_PAD = 0.35
+
+
+@dataclass
+class Beat:
+    id: str
+    kind: str
+    say: str
+    on_screen: str = ""
+    why: str = ""
+    item: Optional[Dict[str, Any]] = None
+    seconds: float = 0.0
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass
+class Script:
+    lang: str
+    beats: List[Beat]
+    part: int = 1
+    parts: int = 1
+    subs: Dict[str, str] = field(default_factory=dict)
+    duration_target: List[float] = field(default_factory=lambda: [20.0, 40.0])
+
+    def to_dict(self) -> Dict[str, Any]:
+        data = asdict(self)
+        data["beats"] = [beat.to_dict() for beat in self.beats]
+        return data
+
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "Script":
+        beats = [Beat(**{k: v for k, v in beat.items() if k in Beat.__dataclass_fields__})
+                 for beat in data.get("beats", [])]
+        return cls(lang=data.get("lang", "ru"), beats=beats, part=int(data.get("part", 1)),
+                   parts=int(data.get("parts", 1)), subs=dict(data.get("subs", {})),
+                   duration_target=list(data.get("duration_target", [20.0, 40.0])))
+
+
+def sentences(text: str) -> List[str]:
+    return [s.strip() for s in re.split(r"(?<=[.!?])\s+", text or "") if s.strip()]
+
+
+def compress(text: str, limit: int = 16) -> str:
+    """Целые предложения, пока влезают в лимит слов. Обрубок фразы хуже короткой фразы."""
+    out: List[str] = []
+    count = 0
+    for sentence in sentences(re.sub(r"\([^)]*\)", "", text or "")):
+        size = len(words(sentence))
+        if out and count + size > limit:
+            break
+        if not out and size > limit:
+            cut = sentence.split(",")[0].strip()
+            out.append(cut.rstrip(".") + ".")
+            break
+        out.append(sentence)
+        count += size
+    return " ".join(out).strip()
+
+
+def estimate(beat: Beat, lang: str, speed: float) -> float:
+    talk = speech_seconds(beat.say, lang, speed) + BEAT_PAD
+    return round(max(talk, MIN_SECONDS.get(beat.kind, 3.0)), 2)
+
+
+def _free(raw: Raw, chosen: List[Item]) -> bool:
+    blob = " ".join([raw.hook] + [i.lead + " " + " ".join(i.extra) for i in chosen]).lower()
+    return "бесплатн" in blob or "free" in blob
+
+
+def spoken_name(item: Item, lang: str, root: Optional[str] = None) -> str:
+    """Как синтезатор читает латинское имя. Кириллические имена читаются как есть."""
+    if lang != "ru" or is_cyrillic(item.name):
+        return item.name
+    row = lookup(item.name, item.url, root) or {}
+    table = row.get("say") if isinstance(row.get("say"), dict) else {}
+    key = norm_name(item.name)
+    for alias, spoken in table.items():
+        if norm_name(alias) == key:
+            return spoken
+    return item.name
+
+
+def add_subs(subs: Dict[str, str], spoken: str, written: str) -> None:
+    """Подмена в субтитрах: первое слово становится именем, остальные пропадают."""
+    if spoken == written:
+        return
+    said = spoken.split()
+    subs[said[0]] = written
+    for extra in said[1:]:
+        subs[extra] = ""
+
+
+def build(raw: Raw, chosen: List[Item], lang: str = "ru", part: int = 1, parts: int = 1,
+          handle: str = "BADVINO", speed: float = 1.05, root: Optional[str] = None) -> Script:
+    """Скелет сценария. Для английского нужны английские подводки от модели."""
+    if lang != "ru" and any(is_cyrillic(i.lead) for i in chosen):
+        raise ValueError("подводки пунктов на русском: для английского ролика модель пишет "
+                         "script.json сама (reel.py script --lang en даёт заготовку)")
+    count = len(chosen)
+    free = _free(raw, chosen)
+    beats: List[Beat] = []
+    subs: Dict[str, str] = {}
+    names = [spoken_name(i, lang, root) for i in chosen]
+    for item, said in zip(chosen, names):
+        add_subs(subs, said, item.name)
+
+    if lang == "ru":
+        adj = "бесплатных" if free else "полезных"
+        noun = plural_ru(count, "сайт", "сайта", "сайтов")
+        num = NUM_WORDS_RU.get(count, str(count)).capitalize()
+        listing = ", ".join(names[:-1]) + " и " + names[-1] if count > 1 else names[0]
+        hook_say = "%s %s %s: %s." % (num, adj, noun, listing) if count > 1 else \
+            "%s: %s." % ("Бесплатная находка" if free else "Находка", listing)
+        hook_screen = "%d %s %s" % (count, adj.upper(), noun.upper())
+    else:
+        adj = "free" if free else "useful"
+        noun = "site" if count == 1 else "sites"
+        listing = ", ".join(names[:-1]) + " and " + names[-1] if count > 1 else names[0]
+        hook_say = "%s %s %s: %s." % (NUM_WORDS_EN.get(count, str(count)).capitalize(), adj, noun, listing)
+        hook_screen = "%d %s %s" % (count, adj.upper(), noun.upper())
+    if parts > 1:
+        hook_screen += (" | ЧАСТЬ %d" if lang == "ru" else " | PART %d") % part
+    beats.append(Beat("hook", "hook", hook_say, hook_screen, "результат и обещание в первую секунду"))
+
+    for index, item in enumerate(chosen, 1):
+        name = names[index - 1]
+        lead = compress(item.lead or (item.extra[0] if item.extra else ""))
+        say = "%s. %s" % (name[:1].upper() + name[1:], lead) if lead else "%s." % name
+        screen = "%d %s" % (index, item.name.upper())
+        beats.append(Beat("item-%d" % index, "item", say.strip(), screen,
+                          "польза: показываем сайт в деле", item=item.to_dict()))
+
+    if lang == "ru":
+        cta = "Ссылки в закрепе и в канале %s." % handle
+        if parts > 1 and part < parts:
+            cta = "Продолжение в части %d. %s" % (part + 1, cta)
+        screen = "ССЫЛКА В ЗАКРЕПЕ"
+    else:
+        cta = "Links are in the pinned comment and on the %s channel." % handle
+        if parts > 1 and part < parts:
+            cta = "Part %d is next. %s" % (part + 1, cta)
+        screen = "LINK IN PINNED COMMENT"
+    beats.append(Beat("cta", "cta", cta, screen, "один призыв после пользы, петля на первый кадр"))
+
+    script = Script(lang=lang, beats=beats, part=part, parts=parts, subs=subs)
+    retime(script, speed)
+    return script
+
+
+def retime(script: Script, speed: float = 1.05) -> None:
+    for beat in script.beats:
+        beat.seconds = estimate(beat, script.lang, speed)
+
+
+def total(script: Script) -> float:
+    return round(sum(beat.seconds for beat in script.beats), 2)
+
+
+def _allowed_numbers(script: Script, raw_text: str) -> set:
+    allowed = set(re.findall(r"\d+(?:[.,]\d+)?", raw_text or ""))
+    items = sum(1 for b in script.beats if b.kind == "item")
+    allowed.update(str(n) for n in range(1, max(items, script.parts) + 2))
+    return allowed
+
+
+def lint(script: Script, raw_text: str = "") -> List[Dict[str, str]]:
+    """Правила сценария. ERROR не пускает план к движку, WARN показываем автору."""
+    issues: List[Dict[str, str]] = []
+
+    def add(level: str, code: str, msg: str) -> None:
+        issues.append({"level": level, "code": code, "message": msg})
+
+    if not script.beats:
+        add("ERROR", "E-EMPTY", "в сценарии нет реплик")
+        return issues
+    allowed = _allowed_numbers(script, raw_text)
+    ctas = [i for i, b in enumerate(script.beats) if b.kind == "cta"]
+    items = [i for i, b in enumerate(script.beats) if b.kind in ("item", "chapter")]
+    first, last = script.beats[0], script.beats[-1]
+
+    for beat in script.beats:
+        both = "%s %s" % (beat.say, beat.on_screen)
+        low = both.lower()
+        if has_dash(both):
+            add("ERROR", "E-DASH", "%s: длинное тире, ставим дефис или точку" % beat.id)
+        if any(p in low for p in LINK_DESC):
+            add("ERROR", "E-LINK-DESC", "%s: в шортсе ссылка не кликабельна, говорим «в закрепе»" % beat.id)
+        if any(p in low for p in FILLERS):
+            add("ERROR", "E-FILLER", "%s: «в этом видео» и «смотрите» съедают первую секунду" % beat.id)
+        if emojis(beat.on_screen):
+            add("ERROR", "E-EMOJI-FRAME", "%s: эмодзи как элемент кадра запрещён" % beat.id)
+        if len(words(beat.on_screen)) > 6:
+            add("WARN", "W-SCREEN-LONG", "%s: текст в кадре длиннее шести слов" % beat.id)
+        if beat.kind == "item" and len(words(beat.say)) > 30:
+            add("WARN", "W-ITEM-LONG", "%s: реплика длиннее 30 слов, режь до одной мысли" % beat.id)
+        if script.lang == "en" and (is_cyrillic(beat.say) or is_cyrillic(beat.on_screen)):
+            add("ERROR", "E-LANG", "%s: английский ролик, а в реплике кириллица" % beat.id)
+        for number in re.findall(r"\d+(?:[.,]\d+)?", both):
+            if number not in allowed:
+                add("ERROR", "E-NUMBER", "%s: цифры %s нет в сырье, не выдумываем" % (beat.id, number))
+
+    low_first = first.say.lower()
+    if any(low_first.startswith(g) or (" %s" % g) in low_first[:40] for g in GREETINGS):
+        add("ERROR", "E-GREETING", "первая реплика с приветствием: сразу результат или вопрос")
+    if len(words(first.say)) > 16:
+        add("ERROR", "E-HOOK-LONG", "крючок длиннее 16 слов, первая секунда не вывезет")
+    if any(p in last.say.lower() for p in FAREWELLS):
+        add("ERROR", "E-FAREWELL", "прощание в конце рвёт петлю")
+    if len(ctas) != 1:
+        add("ERROR", "E-CTA-COUNT", "призыв должен быть ровно один, сейчас %d" % len(ctas))
+    elif items and ctas[0] < items[0]:
+        add("ERROR", "E-CTA-EARLY", "призыв стоит до пользы")
+    elif ctas and ctas[0] != len(script.beats) - 1:
+        add("WARN", "W-CTA-NOT-LAST", "призыв не последний: проверь петлю")
+    if not items and len(script.beats) < 3:
+        add("WARN", "W-THIN", "в сценарии нет пунктов пользы")
+
+    lo, hi = script.duration_target
+    length = total(script)
+    if length > hi + 0.01:
+        add("ERROR", "E-DURATION-LONG", "оценка %.1f с, верх %.0f с: режь пункт или разбей на серию" % (length, hi))
+    elif length < lo - 0.01:
+        add("WARN", "W-DURATION-SHORT", "оценка %.1f с, низ %.0f с: добавь деталь или покажи сайт дольше" % (length, lo))
+    return issues
+
+
+def errors(issues: List[Dict[str, str]]) -> List[Dict[str, str]]:
+    return [i for i in issues if i["level"] == "ERROR"]
+
+
+def to_markdown(script: Script) -> str:
+    rows = ["# Сценарий (%s, часть %d из %d, оценка %.1f с)" % (script.lang, script.part, script.parts, total(script)), ""]
+    clock = 0.0
+    for beat in script.beats:
+        end = clock + beat.seconds
+        rows.append("[%s-%s] %s" % (_mmss(clock), _mmss(end), beat.id))
+        rows.append("  ГОЛОС: %s" % beat.say)
+        if beat.on_screen:
+            rows.append("  ЭКРАН: %s" % beat.on_screen)
+        rows.append("")
+        clock = end
+    if script.subs:
+        rows.append("Как читать и как писать: " + ", ".join("%s -> %s" % (k, v or "(пусто)") for k, v in script.subs.items()))
+    return "\n".join(rows).rstrip() + "\n"
+
+
+def _mmss(seconds: float) -> str:
+    return "%d:%02d" % (int(seconds) // 60, int(seconds) % 60)

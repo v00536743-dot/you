@@ -1,0 +1,24 @@
+{
+  "preset": "mono",
+  "title": "VIORA MONO",
+  "description": "Строго чёрное и белое. Акцента нет: выделяем размером и толщиной, а не цветом.",
+  "palette": {"bg": "#000000", "fg": "#FFFFFF", "accent": "#FFFFFF"},
+  "fonts": {
+    "display": "fonts/Montserrat-ExtraBold.ttf",
+    "body": "fonts/Montserrat-Medium.ttf",
+    "logo": "fonts/Montserrat-Thin.ttf"
+  },
+  "font_license": "Montserrat, SIL Open Font License 1.1 (fonts/OFL.txt), кириллица есть, встраивать можно",
+  "tracking": {"logo": 0.42, "kicker": 0.32, "display": 0.01},
+  "registers": {
+    "minimal": "чёрный воздух, белый капс, тонкая белая линия",
+    "punch": "белая плашка с чёрным словом вместо цветного акцента"
+  },
+  "line_width": 2,
+  "radius": 0,
+  "grid": 8,
+  "logo": {"text": "VIORA", "sub": "STUDIO"},
+  "emotion_default": "calm",
+  "tone": "сдержанно, как в лучших минимал-обложках канала",
+  "forbid": ["любой цвет кроме чёрного, белого и серого", "свечение", "градиенты", "эмодзи в кадре"]
+}

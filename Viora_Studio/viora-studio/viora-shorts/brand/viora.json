@@ -1,0 +1,25 @@
+{
+  "preset": "viora",
+  "title": "VIORA STUDIO",
+  "description": "Фирменный стиль канала: чёрный фон, тонкий геометрический логотип с широким трекингом, крупный белый капс, один красный акцент, много воздуха.",
+  "palette": {"bg": "#000000", "fg": "#F5F5F5", "accent": "#E63946"},
+  "fonts": {
+    "display": "fonts/Montserrat-ExtraBold.ttf",
+    "body": "fonts/Montserrat-Medium.ttf",
+    "logo": "fonts/Montserrat-Thin.ttf"
+  },
+  "font_license": "Montserrat, SIL Open Font License 1.1 (fonts/OFL.txt), кириллица есть, встраивать можно",
+  "tracking": {"logo": 0.42, "kicker": 0.32, "display": 0.01},
+  "registers": {
+    "minimal": "чёрное и белое, акцент только тонкой линией или одним словом, предмет-символ линией",
+    "punch": "один крупный герой, акцентное слово красным и красная плашка-ярлык, всё остальное белое"
+  },
+  "line_width": 2,
+  "radius": 0,
+  "grid": 8,
+  "logo": {"text": "VIORA", "sub": "STUDIO"},
+  "emotion_default": "trust",
+  "tone": "спокойно и уверенно, без крика: факт, польза, ссылка",
+  "forbid": ["свечение и blur-тень", "градиенты", "шрифты по умолчанию (DejaVu, Arial, Inter без выбора)",
+             "эмодзи в кадре", "тени и скругления без правила", "больше трёх основных цветов"]
+}

@@ -1,0 +1,301 @@
+{
+  "comment": "Тесты самого линтера. Запуск: python3 tools/lint_post.py --selftest. codes это что обязан поймать, forbidden это ложные срабатывания, которых быть не должно.",
+  "cases": [
+    {
+      "file": "good-01-servisy.txt",
+      "expect": "clean",
+      "strict": true,
+      "rubric": null
+    },
+    {
+      "file": "good-02-relise.txt",
+      "expect": "clean",
+      "strict": true,
+      "rubric": null
+    },
+    {
+      "file": "../sample-post.txt",
+      "expect": "clean",
+      "strict": true,
+      "rubric": null
+    },
+    {
+      "file": "bad-01-slop.txt",
+      "expect": "errors",
+      "strict": false,
+      "rubric": "сервисы",
+      "codes": [
+        "E-ARROW",
+        "E-BARE-URL",
+        "E-FOOTER-PLAIN",
+        "E-BANNED-WORD",
+        "E-SLOP-CONSTRUCT",
+        "E-TY-FORM",
+        "E-FIRST-SCREEN",
+        "E-HASHTAG-MISSING",
+        "W-FORWARD-CTA",
+        "W-SOUL-LOW"
+      ],
+      "forbidden": [
+        "E-GREETING-LONG",
+        "E-CIRCLED",
+        "E-PERSONAL"
+      ]
+    },
+    {
+      "file": "bad-02-pervyi-ekran.txt",
+      "expect": "errors",
+      "strict": false,
+      "rubric": "сервисы",
+      "codes": [
+        "E-GREETING-USED",
+        "E-FIRST-SCREEN",
+        "E-HASHTAG-MISSING",
+        "E-DEADLINE-MISSING",
+        "W-FORWARD-CTA",
+        "W-SYMMETRY",
+        "W-POS-STREAK"
+      ],
+      "forbidden": [
+        "E-ARROW",
+        "E-BARE-URL",
+        "E-FOOTER-PLAIN",
+        "E-TY-FORM",
+        "E-PERSONAL"
+      ]
+    },
+    {
+      "file": "bad-03-koncovka.txt",
+      "expect": "errors",
+      "strict": false,
+      "rubric": null,
+      "codes": [
+        "E-CIRCLED",
+        "E-EMOJI-BAN",
+        "E-DEADLINE-NOT-IN-HEAD",
+        "W-FORWARD-CTA",
+        "W-SOUL-LOW",
+        "W-REACTION-END"
+      ],
+      "forbidden": [
+        "E-TY-FORM",
+        "E-FOOTER-PLAIN",
+        "E-HASHTAG-MISSING",
+        "E-PERSONAL"
+      ]
+    },
+    {
+      "file": "good-03-razrez.txt",
+      "expect": "clean",
+      "strict": true,
+      "rubric": null
+    },
+    {
+      "file": "bad-04-tire.txt",
+      "expect": "errors",
+      "strict": false,
+      "rubric": "сервисы",
+      "codes": [
+        "E-EMDASH"
+      ],
+      "forbidden": [
+        "E-DASH",
+        "W-DASH-ONE",
+        "E-SPLIT-NEEDED",
+        "E-POST-RETELL"
+      ]
+    },
+    {
+      "file": "bad-05-bez-statyi.txt",
+      "expect": "errors",
+      "strict": false,
+      "rubric": "сервисы",
+      "codes": [
+        "E-SPLIT-NEEDED",
+        "W-ITEMS-MANY",
+        "W-LEN-LONG",
+        "W-SYMMETRY"
+      ],
+      "forbidden": [
+        "E-POST-RETELL",
+        "E-EMDASH",
+        "E-TG-LIMIT"
+      ]
+    },
+    {
+      "file": "bad-06-tizer.txt",
+      "expect": "errors",
+      "strict": false,
+      "rubric": "сервисы",
+      "why": "при статье пост пересказывает её пунктами вместо анонса",
+      "codes": [
+        "E-POST-RETELL"
+      ],
+      "forbidden": [
+        "E-EMDASH",
+        "E-FOOTER-MISSING"
+      ]
+    },
+    {
+      "file": "humanity-dry.txt",
+      "rubric": "сервисы",
+      "why": "сухой ИИ-текст: слоп-связка и ни одного живого признака",
+      "expect": "dirty",
+      "codes": [
+        "E-SLOP-CONSTRUCT",
+        "W-HUMANITY-LOW"
+      ]
+    },
+    {
+      "file": "good-06-anons.txt",
+      "expect": "clean",
+      "strict": true,
+      "rubric": null,
+      "why": "анонс при статье: приветствие, название ссылкой, хэштег, футер"
+    },
+    {
+      "file": "bad-09-reklama-bez-erid.txt",
+      "expect": "errors",
+      "strict": false,
+      "rubric": null,
+      "why": "рекламный пост без пометки «Реклама» и без erid",
+      "codes": [
+        "E-AD-NO-MARK"
+      ],
+      "forbidden": [
+        "E-FOOTER-MISSING"
+      ]
+    },
+    {
+      "file": "bad-10-futer-staryi.txt",
+      "expect": "errors",
+      "strict": false,
+      "rubric": "сервисы",
+      "why": "футер собран со старым ярлыком [V.S.] вместо [ТГК]: одна претензия и никаких каскадов",
+      "codes": [
+        "E-FOOTER-OLD-LABEL"
+      ],
+      "forbidden": [
+        "E-FOOTER-MISSING",
+        "E-FOOTER-PLAIN",
+        "E-FOOTER-NOT-LAST",
+        "W-LABEL-NONSTD",
+        "W-HASHTAG-PLACE"
+      ]
+    },
+    {
+      "file": "good-07-dva-ryada.txt",
+      "expect": "clean",
+      "strict": true,
+      "rubric": "сервисы",
+      "why": "пункт в два ряда и ссылки внутри слов это норма бренда: ни одной претензии"
+    },
+    {
+      "file": "good-08-milahi.txt",
+      "expect": "clean",
+      "strict": true,
+      "rubric": null,
+      "published": true,
+      "why": "реальный пост автора, сентябрь 2026: тёплое приветствие на 80 знаков, игривая просьба о реакциях и блок «Простыми словами:». Линтер обязан молчать целиком"
+    },
+    {
+      "file": "good-09-servisy-realnyi.txt",
+      "expect": "clean",
+      "strict": true,
+      "rubric": null,
+      "why": "реальный пост автора «5 полезных сайтов и скиллов»: ни приветствия, ни личной детали, ни просьбы переслать, и это норма"
+    },
+    {
+      "file": "good-10-opus-bez-hashtega.txt",
+      "expect": "errors",
+      "strict": false,
+      "rubric": null,
+      "why": "реальный пост автора про Opus 5.1: крючок держится на драме факта, а не на цифре. Единственная претензия это забытый хэштег",
+      "codes": [
+        "E-HASHTAG-MISSING"
+      ],
+      "forbidden": [
+        "E-FIRST-SCREEN",
+        "E-PERSONAL",
+        "E-FORWARD-CTA",
+        "W-SOUL-LOW",
+        "W-REACTION-END"
+      ]
+    },
+    {
+      "file": "good-11-bez-lichnogo.txt",
+      "expect": "clean",
+      "strict": true,
+      "rubric": "сервисы",
+      "why": "подборка без личной детали: её заменяют мнение автора и живая концовка"
+    },
+    {
+      "file": "bad-12-suhoy-bez-dushi.txt",
+      "expect": "errors",
+      "strict": true,
+      "rubric": "сервисы",
+      "why": "правильный, но сухой пост: ни тёплого слова, ни мнения, ни шутки",
+      "codes": [
+        "W-SOUL-LOW"
+      ],
+      "forbidden": [
+        "E-PERSONAL",
+        "W-JARGON",
+        "E-GREETING-BANAL"
+      ]
+    },
+    {
+      "file": "bad-13-zhargon.txt",
+      "expect": "errors",
+      "strict": true,
+      "rubric": "сервисы",
+      "why": "термины из словаря simple.md стоят голыми, блока «Простыми словами:» нет",
+      "codes": [
+        "W-JARGON"
+      ],
+      "forbidden": [
+        "W-SOUL-LOW",
+        "W-REACTION-END",
+        "E-GREETING-LONG"
+      ]
+    },
+    {
+      "file": "bad-14-privetstvie-banal.txt",
+      "expect": "errors",
+      "strict": false,
+      "rubric": "сервисы",
+      "why": "«Всем привет, друзья!» это зачин каждого второго канала",
+      "codes": [
+        "E-GREETING-BANAL"
+      ],
+      "forbidden": [
+        "E-GREETING-BLACKLIST",
+        "E-GREETING-LONG",
+        "W-SOUL-LOW"
+      ]
+    },
+    {
+      "file": "bad-11-fraza.txt",
+      "expect": "errors",
+      "strict": true,
+      "rubric": "сервисы",
+      "why": "обороты уровня фразы из reference/polish.md ловятся каждый своим кодом",
+      "codes": [
+        "W-COLON-REVEAL",
+        "W-PSEUDO-INSIGHT",
+        "W-META-TALK",
+        "W-FAKE-SOURCE",
+        "W-FAKE-VERB",
+        "W-NEG-LIST",
+        "W-KICKER",
+        "W-SYNONYM-CYCLE",
+        "W-LABEL-STACK"
+      ],
+      "forbidden": [
+        "E-EMDASH",
+        "E-FOOTER-MISSING",
+        "W-LABEL-NONSTD"
+      ]
+    }
+  ]
+}

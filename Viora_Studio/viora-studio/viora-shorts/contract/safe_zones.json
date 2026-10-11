@@ -1,0 +1,21 @@
+{
+  "_note": "Стартовые значения. Агент обязан сверить с актуальными справками и обновить поле source/checked. Размеры для кадра 1080x1920 в пикселях.",
+  "youtube_shorts": {
+    "top": 288, "bottom": 672, "left": 48, "right": 192,
+    "source": "https://support.google.com/google-ads/answer/16041697",
+    "kind": "Google Ads template for vertical video, used as an approximation for organic Shorts",
+    "checked": "2026-10-11"
+  },
+  "tiktok": {
+    "top": null, "bottom": null, "left": null, "right": null,
+    "source": "TO RESEARCH: TikTok official specs / creator center",
+    "kind": "unknown, the agent must research and fill",
+    "checked": null
+  },
+  "reels": {
+    "top": null, "bottom": null, "left": null, "right": null,
+    "source": "TO RESEARCH: Meta official specs",
+    "kind": "unknown, the agent must research and fill",
+    "checked": null
+  }
+}

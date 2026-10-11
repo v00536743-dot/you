@@ -1,0 +1,8 @@
+{
+  "skill": "viora-studio",
+  "version": "7.0.0",
+  "source": "/tmp/hoplite/workspace/viora-studio",
+  "mode": "stub",
+  "files": 1,
+  "target": "../../../viora-studio"
+}
