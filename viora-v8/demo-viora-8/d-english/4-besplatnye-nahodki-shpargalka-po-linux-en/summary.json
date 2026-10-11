@@ -1,0 +1,161 @@
+{
+  "status": "ready",
+  "out": "d-english/4-besplatnye-nahodki-shpargalka-po-linux-en",
+  "name": "4-besplatnye-nahodki-shpargalka-po-linux-en",
+  "kind": "post",
+  "lang": "en",
+  "part": 1,
+  "parts": 1,
+  "seconds": 25.8,
+  "engine": "/usr/bin/python3 viora-shorts/tests/fake_engine.py",
+  "engine_version": "движок не вшит: слой работает с заглушкой tests/fake_engine.py",
+  "fake_engine": true,
+  "attempts": [
+    {
+      "attempt": 1,
+      "stage": "qa",
+      "passed": true,
+      "failed": []
+    }
+  ],
+  "video": "d-english/4-besplatnye-nahodki-shpargalka-po-linux-en/render/fake.mp4",
+  "contact": null,
+  "sites": [],
+  "dropped": [],
+  "recommended_title": "3 FREE SITES FOR LINUX, LEARNING AND 3D 😱 #shorts #linux #learning #3d #usefulsites #free",
+  "script_warnings": [],
+  "plan_warnings": [],
+  "meta_issues": [],
+  "announce_issues": [],
+  "srt": "тайминги слов от заглушки движка",
+  "covers": [
+    "cover-minimal.png",
+    "cover-punch.png",
+    "cover-frame.png",
+    "cover-minimal-9x16.png"
+  ],
+  "image_generator": false,
+  "checklist": [
+    {
+      "n": "1",
+      "what": "Первый кадр уже интересный",
+      "who": "engine",
+      "state": "движок не проверял (заглушка)"
+    },
+    {
+      "n": "2",
+      "what": "Первая фраза без приветствия, сразу результат",
+      "who": "auto",
+      "state": "да"
+    },
+    {
+      "n": "3",
+      "what": "Идея читается в миниатюре и без звука",
+      "who": "manual",
+      "state": "смотри контактный лист"
+    },
+    {
+      "n": "4",
+      "what": "Название честное, до 100 знаков, одно эмодзи",
+      "who": "auto",
+      "state": "да"
+    },
+    {
+      "n": "5",
+      "what": "Обложка: один фокус, 3-5 слов, 320 px, контраст",
+      "who": "auto",
+      "state": "да"
+    },
+    {
+      "n": "6",
+      "what": "Событие каждые 2-3 секунды",
+      "who": "auto+engine",
+      "state": "да, движок: движок не проверял (заглушка)"
+    },
+    {
+      "n": "7",
+      "what": "Нет паузы дольше секунды",
+      "who": "engine",
+      "state": "движок не проверял (заглушка)"
+    },
+    {
+      "n": "8",
+      "what": "Обещание из начала выполнено",
+      "who": "auto+manual",
+      "state": "да по цифрам, смысл проверь глазами"
+    },
+    {
+      "n": "9",
+      "what": "Нет прощания, петля или часть 2",
+      "who": "auto",
+      "state": "да"
+    },
+    {
+      "n": "10",
+      "what": "Понятно без звука, субтитры есть",
+      "who": "auto+manual",
+      "state": "да, перескажи ролик без звука"
+    },
+    {
+      "n": "11",
+      "what": "Один призыв после пользы",
+      "who": "auto",
+      "state": "да"
+    },
+    {
+      "n": "12",
+      "what": "Ссылка в кадре дважды, QR сканируется",
+      "who": "auto+engine",
+      "state": "да, декодер: движок не проверял (заглушка)"
+    },
+    {
+      "n": "13",
+      "what": "Закреп и описание готовы",
+      "who": "auto",
+      "state": "да"
+    },
+    {
+      "n": "14",
+      "what": "Профиль канала готов",
+      "who": "manual",
+      "state": "напомни автору: аватар, шапка, одна ссылка, закреп"
+    },
+    {
+      "n": "15",
+      "what": "Всё важное в рабочей зоне платформы",
+      "who": "engine",
+      "state": "движок не проверял (заглушка)"
+    },
+    {
+      "n": "16",
+      "what": "Нет слопа: градиент, свечение, шрифт по умолчанию",
+      "who": "auto+engine",
+      "state": "да, кадры: движок не проверял (заглушка)"
+    },
+    {
+      "n": "17",
+      "what": "Язык верный, длинных тире нет",
+      "who": "auto",
+      "state": "да"
+    },
+    {
+      "n": "18",
+      "what": "Громкость около -14 LUFS",
+      "who": "engine",
+      "state": "движок не проверял (заглушка)"
+    },
+    {
+      "n": "19",
+      "what": "Пометка «изменённый или синтетический контент»",
+      "who": "manual",
+      "state": "озвучка синтезатором обычно не требует, реалистичных подделок в ролике нет: проверь при загрузке"
+    },
+    {
+      "n": "20",
+      "what": "Ролик отличается от прошлых",
+      "who": "auto",
+      "state": "да (похожесть 0%)"
+    }
+  ],
+  "reminder": ""
+}

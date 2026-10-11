@@ -1,0 +1,65 @@
+{
+  "lang": "ru",
+  "beats": [
+    {
+      "id": "hook",
+      "kind": "hook",
+      "say": "Два бесплатных сайта: лёрн энисинг и кэд лукап.",
+      "on_screen": "2 БЕСПЛАТНЫХ САЙТА",
+      "why": "результат и обещание в первую секунду",
+      "item": null,
+      "seconds": 3.28
+    },
+    {
+      "id": "item-1",
+      "kind": "item",
+      "say": "Лёрн энисинг. роадмапы по любой теме, бесплатно",
+      "on_screen": "1 LEARN-ANYTHING",
+      "why": "польза: показываем сайт в деле",
+      "item": {
+        "name": "learn-anything",
+        "lead": "роадмапы по любой теме, бесплатно",
+        "url": "https://learn-anything.xyz/",
+        "url_from": "author",
+        "extra": []
+      },
+      "seconds": 6.61
+    },
+    {
+      "id": "item-2",
+      "kind": "item",
+      "say": "Кэд лукап. 3D-модели по описанию",
+      "on_screen": "2 CAD LOOKUP",
+      "why": "польза: показываем сайт в деле",
+      "item": {
+        "name": "CAD Lookup",
+        "lead": "3D-модели по описанию",
+        "url": "https://www.cadlookup.com/",
+        "url_from": "author",
+        "extra": []
+      },
+      "seconds": 6.61
+    },
+    {
+      "id": "cta",
+      "kind": "cta",
+      "say": "Ссылки в закрепе и в канале BADVINO.",
+      "on_screen": "ССЫЛКА В ЗАКРЕПЕ",
+      "why": "один призыв после пользы, петля на первый кадр",
+      "item": null,
+      "seconds": 3.5
+    }
+  ],
+  "part": 1,
+  "parts": 1,
+  "subs": {
+    "лёрн": "learn-anything",
+    "энисинг": "",
+    "кэд": "CAD Lookup",
+    "лукап": ""
+  },
+  "duration_target": [
+    20.0,
+    40.0
+  ]
+}

@@ -88,12 +88,16 @@ def facts_from(items: List[Dict[str, Any]], lang: str, free: bool, part: int = 1
     return {"lang": lang, "count": len(items), "names": names, "free": free, "labels": labels[:3],
             "topic_tags": tags, "part": part, "parts": parts, "noun": noun,
             "leads": [i.get("lead", "") for i in items],
+            "pairs": [(display_name(i, lang), i["url"], i.get("lead", "")) for i in items if i.get("url")],
             "urls": [i.get("url") for i in items if i.get("url")]}
 
 
 def hashtag_sets(facts: Dict[str, Any]) -> Dict[str, List[str]]:
     lang = facts["lang"]
-    base = list(BASE_TAGS[lang]) if facts.get("free") else [BASE_TAGS[lang][0]]
+    if "base_tags" in facts:
+        base = list(facts["base_tags"])
+    else:
+        base = list(BASE_TAGS[lang]) if facts.get("free") else [BASE_TAGS[lang][0]]
     topic = list(facts["topic_tags"])
     title = [SHORTS_TAG] + topic[:3] + base[:2]
     top = (topic + base)[:3]

@@ -94,6 +94,8 @@ class Farm(unittest.TestCase):
         self.assertEqual(summary["kind"], "html")
         self.assertEqual(summary["status"], "ready")
         plan = load_json(os.path.join(summary["out"], "plan.json"))
+        self.assertEqual(summary["meta_issues"], [])
+        self.assertEqual(summary["announce_issues"], [])
         capture = plan["scenes"][1]["source"]["actions"][0]
         self.assertEqual((capture["do"], capture["mode"]), ("capture", "realtime"))
 

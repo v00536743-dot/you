@@ -189,6 +189,18 @@ def build(raw: Raw, chosen: List[Item], lang: str = "ru", part: int = 1, parts: 
 def retime(script: Script, speed: float = 1.05) -> None:
     for beat in script.beats:
         beat.seconds = estimate(beat, script.lang, speed)
+    fit_low(script)
+
+
+def fit_low(script: Script, cap: float = 9.0) -> None:
+    """Короче цели: показываем сайты дольше (до 9 с), а не дописываем воду в реплики."""
+    items = [b for b in script.beats if b.kind in ("item", "chapter")]
+    short = script.duration_target[0] - total(script)
+    if short <= 0 or not items:
+        return
+    for beat in items:
+        add = min(short / len(items), max(0.0, cap - beat.seconds))
+        beat.seconds = round(beat.seconds + add, 2)
 
 
 def total(script: Script) -> float:

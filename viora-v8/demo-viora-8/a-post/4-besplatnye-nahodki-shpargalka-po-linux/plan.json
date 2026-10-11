@@ -1,0 +1,303 @@
+{
+  "schema_version": "1",
+  "meta": {
+    "name": "4-besplatnye-nahodki-shpargalka-po-linux",
+    "language": "ru",
+    "platforms": [
+      "youtube_shorts",
+      "tiktok"
+    ],
+    "duration_target": [
+      20.0,
+      40.0
+    ],
+    "emotion": "trust",
+    "audience": "школьники, студенты, начинающие разработчики и вайб-кодеры, смотрят с телефона",
+    "loop": true
+  },
+  "layout": {
+    "mode": "center_bottom",
+    "bottom": {
+      "height_pct": 18,
+      "handle": "BADVINO",
+      "links": [
+        "https://t.me/VioraStudio",
+        "https://www.youtube.com/@badVIno-VS"
+      ]
+    },
+    "cta_in_center": [
+      {
+        "t": 11.32,
+        "duration": 2.5,
+        "kind": "handle",
+        "text": "BADVINO | t.me/VioraStudio",
+        "url": "https://t.me/VioraStudio"
+      },
+      {
+        "t": 23.32,
+        "duration": 3.0,
+        "kind": "qr",
+        "url": "https://t.me/VioraStudio",
+        "text": "t.me/VioraStudio"
+      }
+    ]
+  },
+  "brand": {
+    "preset": "viora",
+    "palette": {
+      "bg": "#000000",
+      "fg": "#F5F5F5",
+      "accent": "#E63946"
+    },
+    "fonts": {
+      "display": "../../../../Viora_Studio/viora-studio/viora-shorts/brand/fonts/Montserrat-ExtraBold.ttf",
+      "body": "../../../../Viora_Studio/viora-studio/viora-shorts/brand/fonts/Montserrat-Medium.ttf"
+    }
+  },
+  "captions": {
+    "enabled": true,
+    "max_words": 3,
+    "highlight": "accent",
+    "subs": {
+      "лёрн": "learn-anything",
+      "энисинг": "",
+      "кэд": "cad-search",
+      "сёрч": ""
+    }
+  },
+  "audio": {
+    "voice": {
+      "engine": "auto",
+      "voice": "ru-RU-DmitryNeural",
+      "speed": 1.05
+    },
+    "target_lufs": -14
+  },
+  "scenes": [
+    {
+      "id": "hook",
+      "say": "Три бесплатные находки: Мегашпаргалка по Linux, лёрн энисинг и кэд сёрч.",
+      "why": "результат и обещание в первую секунду",
+      "x_duration_hint": 4.38,
+      "on_screen_text": "3 БЕСПЛАТНЫЕ НАХОДКИ",
+      "source": {
+        "type": "site",
+        "ref": "https://github.com/justxor/Linux-",
+        "actions": [
+          {
+            "do": "goto"
+          },
+          {
+            "t": 1.5,
+            "do": "scroll",
+            "dy": 700
+          },
+          {
+            "t": 3.5,
+            "do": "scroll",
+            "dy": 900
+          }
+        ]
+      },
+      "speed": [
+        {
+          "t": 0.0,
+          "rate": 3.0
+        }
+      ],
+      "sfx": [
+        {
+          "t": 0.0,
+          "name": "hit"
+        }
+      ]
+    },
+    {
+      "id": "item-1",
+      "say": "Мегашпаргалка по Linux. База: файлы, процессы, права, память, сеть. Команды SSH, systemd, grep, sed и awk с примерами.",
+      "why": "польза: показываем сайт в деле",
+      "x_duration_hint": 6.94,
+      "on_screen_text": "1 МЕГАШПАРГАЛКА ПО LINUX",
+      "source": {
+        "type": "site",
+        "ref": "https://github.com/justxor/Linux-",
+        "actions": [
+          {
+            "do": "goto"
+          },
+          {
+            "t": 1.5,
+            "do": "scroll",
+            "dy": 700
+          },
+          {
+            "t": 3.5,
+            "do": "scroll",
+            "dy": 900
+          },
+          {
+            "t": 5.5,
+            "do": "scroll",
+            "dy": 900
+          }
+        ]
+      },
+      "sfx": [
+        {
+          "t": 0.0,
+          "name": "whoosh"
+        }
+      ]
+    },
+    {
+      "id": "item-2",
+      "say": "Лёрн энисинг. Пишем, что хотим изучить. Получаем гайды, видео, роадмапы и советы по теме.",
+      "why": "польза: показываем сайт в деле",
+      "x_duration_hint": 6.0,
+      "on_screen_text": "2 LEARN-ANYTHING",
+      "source": {
+        "type": "site",
+        "ref": "https://learn-anything.xyz/",
+        "actions": [
+          {
+            "do": "goto"
+          },
+          {
+            "t": 0.6,
+            "do": "move",
+            "sel": "input"
+          },
+          {
+            "t": 1.2,
+            "do": "type",
+            "sel": "input",
+            "text": "Linux",
+            "delay": 120
+          },
+          {
+            "t": 3.0,
+            "do": "press",
+            "key": "Enter"
+          },
+          {
+            "t": 5.5,
+            "do": "scroll",
+            "dy": 520
+          }
+        ]
+      },
+      "speed": [
+        {
+          "t": 0.0,
+          "rate": 1.6
+        },
+        {
+          "t": 4.2,
+          "rate": 1.0
+        }
+      ],
+      "sfx": [
+        {
+          "t": 0.0,
+          "name": "whoosh"
+        },
+        {
+          "t": 3.0,
+          "name": "click"
+        }
+      ]
+    },
+    {
+      "id": "item-3",
+      "say": "Кэд сёрч. Ищет 3D-модели по описанию. Сохраняем и тащим в свои проекты.",
+      "why": "польза: показываем сайт в деле",
+      "x_duration_hint": 6.0,
+      "on_screen_text": "3 CAD-SEARCH",
+      "source": {
+        "type": "site",
+        "ref": "https://www.cadlookup.com/",
+        "actions": [
+          {
+            "do": "goto"
+          },
+          {
+            "t": 1.0,
+            "do": "move",
+            "sel": "input"
+          },
+          {
+            "t": 1.6,
+            "do": "type",
+            "sel": "input",
+            "text": "gear with 12 teeth",
+            "delay": 85
+          },
+          {
+            "t": 3.4,
+            "do": "press",
+            "key": "Enter"
+          }
+        ]
+      },
+      "speed": [
+        {
+          "t": 0.0,
+          "rate": 1.6
+        },
+        {
+          "t": 4.6,
+          "rate": 1.0
+        }
+      ],
+      "sfx": [
+        {
+          "t": 0.0,
+          "name": "whoosh"
+        },
+        {
+          "t": 3.4,
+          "name": "click"
+        }
+      ],
+      "x_avoid": [
+        "click on a 3D model: the page crashes in headless mode"
+      ]
+    },
+    {
+      "id": "cta",
+      "say": "Ссылки в закрепе и в канале BADVINO.",
+      "why": "один призыв после пользы, петля на первый кадр",
+      "x_duration_hint": 3.5,
+      "on_screen_text": "ССЫЛКА В ЗАКРЕПЕ",
+      "source": {
+        "type": "site",
+        "ref": "https://github.com/justxor/Linux-",
+        "actions": [
+          {
+            "do": "goto"
+          },
+          {
+            "t": 0.6,
+            "do": "scroll",
+            "dy": 400
+          }
+        ]
+      },
+      "sfx": [
+        {
+          "t": 0.0,
+          "name": "whoosh"
+        }
+      ]
+    }
+  ],
+  "metadata": {},
+  "x_viora": {
+    "version": "8.0.0",
+    "register": "minimal",
+    "part": 1,
+    "parts": 1,
+    "estimated_seconds": 26.82,
+    "pending": []
+  }
+}

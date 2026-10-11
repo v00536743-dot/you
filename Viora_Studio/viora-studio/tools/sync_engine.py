@@ -112,9 +112,12 @@ def sync(source: str, ref: str | None, mod: str = MOD) -> dict:
     with open(os.path.join(mod, "ENGINE_VERSION"), "w", encoding="utf-8") as handle:
         handle.write("source=%s\nref=%s\ncommit=%s\ndate=%s\ntree=%s\n" % (
             info["source"], info["ref"], info["commit"] or "-", info["date"] or "-", info["tree"]))
-    schema = os.path.join(target, "spec", "plan.schema.json")
-    if os.path.exists(schema):
-        shutil.copy2(schema, os.path.join(mod, "contract", "plan.schema.json"))
+    # Движок кладёт схему в schema/ (ветка SHORTS) или в spec/ (как в viora-v8): берём что есть.
+    for folder in ("schema", "spec"):
+        for name in ("plan.schema.json", "plan.example.json", "safe_zones.json"):
+            path = os.path.join(target, folder, name)
+            if os.path.exists(path):
+                shutil.copy2(path, os.path.join(mod, "contract", name))
     return info
 
 

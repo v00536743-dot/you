@@ -22,7 +22,8 @@ HEX = re.compile(r"^#[0-9A-Fa-f]{6}$")
 def load_schema(root: Optional[str] = None) -> Dict[str, Any]:
     """Схема движка, если он вшит, иначе копия контракта из viora-shorts/contract."""
     base = mod_root(root)
-    for rel in (("engine", "spec", "plan.schema.json"), ("contract", "plan.schema.json")):
+    for rel in (("engine", "schema", "plan.schema.json"), ("engine", "spec", "plan.schema.json"),
+                ("contract", "plan.schema.json")):
         data = read_json(os.path.join(base, *rel))
         if data:
             return data

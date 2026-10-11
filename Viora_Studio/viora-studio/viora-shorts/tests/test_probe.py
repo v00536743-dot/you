@@ -81,6 +81,16 @@ class Select(unittest.TestCase):
         parts = probe.select(probe.check_items(items, offline=True))
         self.assertEqual([len(p) for p in parts], [4])
 
+    def test_blocked_reports_live_status_and_can_retry(self):
+        item = intake.Item("builditapp", "Майнкрафт", "https://builditapp.com/")
+        fetch = lambda url, timeout: (200, {}, BIG, url)
+        skipped = probe.check_items([item], fetch=fetch)[0]
+        self.assertTrue(skipped.verdict.startswith("пропущен"))
+        self.assertIn("Сейчас по HTTP: открывается", skipped.verdict)
+        self.assertIn("--retry-blocked", skipped.verdict)
+        again = probe.check_items([item], fetch=fetch, retry_blocked=True)[0]
+        self.assertEqual(again.verdict, "берём")
+
     def test_missing_link_reported(self):
         checked = probe.check_items([intake.Item("NoLink", "x")], offline=True)
         self.assertIn("нет ссылки", checked[0].verdict)

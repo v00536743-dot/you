@@ -1,0 +1,322 @@
+{
+  "schema_version": "1",
+  "meta": {
+    "name": "odin-html-fayl",
+    "language": "ru",
+    "platforms": [
+      "youtube_shorts",
+      "tiktok"
+    ],
+    "duration_target": [
+      25,
+      60
+    ],
+    "emotion": "trust",
+    "audience": "школьники, студенты, начинающие разработчики и вайб-кодеры, смотрят с телефона",
+    "loop": true
+  },
+  "layout": {
+    "mode": "center_bottom",
+    "bottom": {
+      "height_pct": 18,
+      "handle": "BADVINO",
+      "links": [
+        "https://t.me/VioraStudio",
+        "https://www.youtube.com/@badVIno-VS"
+      ]
+    },
+    "cta_in_center": [
+      {
+        "t": 11.24,
+        "duration": 2.5,
+        "kind": "handle",
+        "text": "BADVINO | t.me/VioraStudio",
+        "url": "https://t.me/VioraStudio"
+      },
+      {
+        "t": 23.26,
+        "duration": 3.0,
+        "kind": "qr",
+        "url": "https://t.me/VioraStudio",
+        "text": "t.me/VioraStudio"
+      }
+    ]
+  },
+  "brand": {
+    "preset": "viora",
+    "palette": {
+      "bg": "#000000",
+      "fg": "#F5F5F5",
+      "accent": "#E63946"
+    },
+    "fonts": {
+      "display": "../../../../Viora_Studio/viora-studio/viora-shorts/brand/fonts/Montserrat-ExtraBold.ttf",
+      "body": "../../../../Viora_Studio/viora-studio/viora-shorts/brand/fonts/Montserrat-Medium.ttf"
+    }
+  },
+  "captions": {
+    "enabled": true,
+    "max_words": 3,
+    "highlight": "accent",
+    "subs": {}
+  },
+  "audio": {
+    "voice": {
+      "engine": "auto",
+      "voice": "ru-RU-DmitryNeural",
+      "speed": 1.05
+    },
+    "target_lufs": -14
+  },
+  "scenes": [
+    {
+      "id": "hook",
+      "say": "Это не видео. Это один HTML-файл на 3 КБ, и в нём целый фильм.",
+      "why": "самый зрелищный кадр в первую секунду",
+      "x_duration_hint": 5.48,
+      "source": {
+        "type": "html",
+        "ref": "../../../../Viora_Studio/viora-studio/viora-shorts/tests/fixtures/mini-film.html",
+        "actions": [
+          {
+            "do": "capture",
+            "mode": "realtime",
+            "from": 4.0,
+            "to": 8.0,
+            "fps": 30,
+            "sound": "page",
+            "seek_hook": true,
+            "start_click": true,
+            "autoplay_policy": "no-user-gesture-required"
+          },
+          {
+            "t": 0.8,
+            "do": "key",
+            "key": " ",
+            "hold": 0.6
+          },
+          {
+            "t": 3.0,
+            "do": "key",
+            "key": " ",
+            "hold": 0.6
+          }
+        ]
+      },
+      "sfx": [
+        {
+          "t": 0.0,
+          "name": "hit"
+        }
+      ],
+      "on_screen_text": "ОДИН HTML-ФАЙЛ",
+      "speed": [
+        {
+          "t": 0.0,
+          "rate": 0.6
+        }
+      ]
+    },
+    {
+      "id": "chapter-1",
+      "say": "Корабль выходит из порта. Волны рисует код: двенадцать линий и синус, ни одной картинки.",
+      "why": "глава из таймлайна файла",
+      "x_duration_hint": 5.48,
+      "source": {
+        "type": "html",
+        "ref": "../../../../Viora_Studio/viora-studio/viora-shorts/tests/fixtures/mini-film.html",
+        "actions": [
+          {
+            "do": "capture",
+            "mode": "realtime",
+            "from": 0,
+            "to": 4,
+            "fps": 30,
+            "sound": "page",
+            "seek_hook": true,
+            "start_click": true,
+            "autoplay_policy": "no-user-gesture-required"
+          },
+          {
+            "t": 0.8,
+            "do": "key",
+            "key": " ",
+            "hold": 0.6
+          },
+          {
+            "t": 3.0,
+            "do": "key",
+            "key": " ",
+            "hold": 0.6
+          }
+        ]
+      },
+      "sfx": [
+        {
+          "t": 0.0,
+          "name": "whoosh"
+        }
+      ],
+      "on_screen_text": "ВОЛНЫ ИЗ КОДА",
+      "speed": [
+        {
+          "t": 0.0,
+          "rate": 1.5
+        }
+      ]
+    },
+    {
+      "id": "chapter-2",
+      "say": "Красная линия справа это айсберг. Один акцентный цвет, и уже понятно, чем всё кончится.",
+      "why": "кульминация, замедляем",
+      "x_duration_hint": 6.67,
+      "source": {
+        "type": "html",
+        "ref": "../../../../Viora_Studio/viora-studio/viora-shorts/tests/fixtures/mini-film.html",
+        "actions": [
+          {
+            "do": "capture",
+            "mode": "realtime",
+            "from": 4,
+            "to": 8,
+            "fps": 30,
+            "sound": "page",
+            "seek_hook": true,
+            "start_click": true,
+            "autoplay_policy": "no-user-gesture-required"
+          },
+          {
+            "t": 0.8,
+            "do": "key",
+            "key": " ",
+            "hold": 0.6
+          },
+          {
+            "t": 3.0,
+            "do": "key",
+            "key": " ",
+            "hold": 0.6
+          }
+        ]
+      },
+      "sfx": [
+        {
+          "t": 0.0,
+          "name": "whoosh"
+        }
+      ],
+      "on_screen_text": "АЙСБЕРГ",
+      "speed": [
+        {
+          "t": 0.0,
+          "rate": 0.6
+        }
+      ]
+    },
+    {
+      "id": "chapter-3",
+      "say": "Огни на воде мигают по формуле. Гул океана тоже из кода, без звукового файла.",
+      "why": "развязка и звук страницы",
+      "x_duration_hint": 5.48,
+      "source": {
+        "type": "html",
+        "ref": "../../../../Viora_Studio/viora-studio/viora-shorts/tests/fixtures/mini-film.html",
+        "actions": [
+          {
+            "do": "capture",
+            "mode": "realtime",
+            "from": 8,
+            "to": 12,
+            "fps": 30,
+            "sound": "page",
+            "seek_hook": true,
+            "start_click": true,
+            "autoplay_policy": "no-user-gesture-required"
+          },
+          {
+            "t": 0.8,
+            "do": "key",
+            "key": " ",
+            "hold": 0.6
+          },
+          {
+            "t": 3.0,
+            "do": "key",
+            "key": " ",
+            "hold": 0.6
+          }
+        ]
+      },
+      "sfx": [
+        {
+          "t": 0.0,
+          "name": "whoosh"
+        }
+      ],
+      "on_screen_text": "ЗВУК ТОЖЕ КОД",
+      "speed": [
+        {
+          "t": 0.0,
+          "rate": 2.0
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "say": "Файл и разбор в канале BADVINO, ссылка в закрепе.",
+      "why": "один призыв, петля на первый кадр",
+      "x_duration_hint": 3.65,
+      "source": {
+        "type": "html",
+        "ref": "../../../../Viora_Studio/viora-studio/viora-shorts/tests/fixtures/mini-film.html",
+        "actions": [
+          {
+            "do": "capture",
+            "mode": "realtime",
+            "from": 0.0,
+            "to": 3.65,
+            "fps": 30,
+            "sound": "page",
+            "seek_hook": true,
+            "start_click": true,
+            "autoplay_policy": "no-user-gesture-required"
+          },
+          {
+            "t": 0.8,
+            "do": "key",
+            "key": " ",
+            "hold": 0.6
+          },
+          {
+            "t": 3.0,
+            "do": "key",
+            "key": " ",
+            "hold": 0.6
+          }
+        ]
+      },
+      "sfx": [
+        {
+          "t": 0.0,
+          "name": "whoosh"
+        }
+      ],
+      "on_screen_text": "ССЫЛКА В ЗАКРЕПЕ",
+      "speed": [
+        {
+          "t": 0.0,
+          "rate": 1.5
+        }
+      ]
+    }
+  ],
+  "metadata": {},
+  "x_viora": {
+    "version": "8.0.0",
+    "register": "minimal",
+    "part": 1,
+    "parts": 1,
+    "estimated_seconds": 26.76,
+    "pending": []
+  }
+}

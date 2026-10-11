@@ -176,7 +176,7 @@ def run(source: str, out_root: str, *, root: Optional[str] = None, lang: Optiona
         script_path: Optional[str] = None, links: Optional[Dict[str, str]] = None, part: Optional[int] = None,
         speed_spec: str = "", sound: Optional[str] = None, video_url: Optional[str] = None,
         post_url: Optional[str] = None, write_log: bool = False, today: Optional[str] = None,
-        fetch: Any = None, save_prefs: bool = True) -> Dict[str, Any]:
+        fetch: Any = None, save_prefs: bool = True, retry_blocked: bool = False) -> Dict[str, Any]:
     store = prefs_mod.load(root)
     asked = prefs_mod.missing(store)
     if asked and not assume_defaults:
@@ -213,7 +213,7 @@ def run(source: str, out_root: str, *, root: Optional[str] = None, lang: Optiona
         else:
             scripter.retime(built, voice_speed)
     if raw.kind in ("post", "links") and not script_path:
-        checked = probe.check_items(raw.items, fetch=fetch, offline=offline, root=root)
+        checked = probe.check_items(raw.items, fetch=fetch, offline=offline, root=root, retry_blocked=retry_blocked)
         site_report = probe.report_lines(checked)
         dropped = [c.item.name for c in checked if c.verdict != "берём"]
         parts = probe.select(checked, root=root)
@@ -293,9 +293,22 @@ def run(source: str, out_root: str, *, root: Optional[str] = None, lang: Optiona
     facts = meta.facts_from(chosen_items, language, "бесплатн" in facts_text.lower() or "free" in facts_text.lower(),
                             part_no, parts_total, noun)
     if html_info is not None and not chosen_items:
+        tags = ["#html", "#javascript", "#анимация" if language == "ru" else "#animation"]
+        if html_info.has_three:
+            tags.append("#threejs")
         facts = {"lang": language, "count": 1, "names": [html_info.title], "free": False,
-                 "labels": meta.topics(facts_text, language)[0][:3], "topic_tags": meta.topics(facts_text, language)[1],
+                 "labels": [], "topic_tags": tags, "base_tags": ["#код" if language == "ru" else "#coding"],
                  "part": part_no, "parts": parts_total, "noun": "сайт", "leads": [], "urls": []}
+        kb = html_info.size_kb
+        sound_word = ("ЗВУК" if language == "ru" else "SOUND") if (html_info.has_webaudio or html_info.has_media) else "CANVAS"
+        facts["cover"] = {
+            "kicker": ["HTML", "%d %s" % (kb, "КБ" if language == "ru" else "KB")],
+            "headline": html_info.title.upper()[:24],
+            "plate": "ОДИН HTML-ФАЙЛ" if language == "ru" else "ONE HTML FILE",
+            "number": kb, "rest": " КБ" if language == "ru" else " KB",
+            "frame_headline": html_info.title.upper()[:24],
+            "frame_sub": " · ".join(["HTML", "JS", sound_word]),
+        }
     package = meta.package(facts, eff["links"], store.get("title_style"), post_url)
     if html_info is not None and not chosen_items:
         package["titles"] = html_titles(html_info, language, package["hashtags"]["title"])
@@ -333,7 +346,11 @@ def run(source: str, out_root: str, *, root: Optional[str] = None, lang: Optiona
     ru_facts = meta.facts_from(chosen_items, "ru", facts["free"], part_no, parts_total, noun) if chosen_items else \
         dict(facts, names=[html_info.title] if html_info else facts["names"])
     ru_facts["labels_ru"] = ru_facts.get("labels", [])
-    post, post_issues = announce.best(ru_facts, seconds, video_url or yt.rstrip("/") + "/shorts", dropped, root)
+    url = video_url or yt.rstrip("/") + "/shorts"
+    if html_info is not None and not chosen_items:
+        post, post_issues = announce.best_html(html_info, seconds, url, root)
+    else:
+        post, post_issues = announce.best(ru_facts, seconds, url, dropped, root)
     write_text(os.path.join(out_dir, "announce.txt"), post)
     ctx["announce_issues"] = post_issues
 
@@ -342,8 +359,13 @@ def run(source: str, out_root: str, *, root: Optional[str] = None, lang: Optiona
     rows = checklist(ctx)
     reminder = prefs_mod.reminder(store)
     image_gen = prefs_mod.image_generator()
+    blocking = metalint.errors(meta_issues) or post_issues
+    if gate.get("passed"):
+        status = "needs-fix" if blocking else "ready"
+    else:
+        status = "rendered-qa-failed" if ctx.get("rendered") else ("needs-fix" if blocking else "plan-ready")
     summary = {
-        "status": "ready" if gate.get("passed") else ("rendered-qa-failed" if ctx.get("rendered") else "plan-ready"),
+        "status": status,
         "out": out_dir, "name": name, "kind": raw.kind, "lang": language, "part": part_no, "parts": parts_total,
         "seconds": round(seconds, 1), "engine": " ".join(cmd) if cmd else None, "engine_version": eng.version(root),
         "fake_engine": bool((ctx.get("qa") or {}).get("fake")), "attempts": gate.get("attempts", []),
@@ -385,17 +407,21 @@ def html_titles(info: Any, lang: str, tags: List[str]) -> List[Dict[str, Any]]:
             (4, "поиск", "HTML and JavaScript: a full scene in %d KB" % kb),
             (5, "поиск", "HTML animation without video software"),
         ]
+    why = ["капс и эмодзи: шаблон автора для ленты Shorts", "название файла и вес: конкретика вместо обещаний",
+           "парадокс без капса: держит любопытство", "что это и как сделано: для поиска",
+           "технологии и размер в начале: для поиска по теме", "спокойная поисковая фраза без эмодзи"]
     out = []
     for index, (loud, kind, text) in enumerate(rows):
         out.append({"text": meta._fit(text, tags), "loudness": loud, "for": kind,
-                    "why": meta.WHY[(loud, kind)], "recommended": index == 0})
+                    "why": why[index], "recommended": index == 0})
     return out
 
 
 def report_markdown(summary: Dict[str, Any]) -> str:
     status = {"ready": "ГОТОВО: ролик собран и прошёл QA",
               "rendered-qa-failed": "РОЛИК СОБРАН, НО QA НЕ ПРОЙДЕН: правки ниже",
-              "plan-ready": "ПЛАН ГОТОВ, движок не подключён: ролик не рендерился"}[summary["status"]]
+              "plan-ready": "ПЛАН ГОТОВ, движок не подключён: ролик не рендерился",
+              "needs-fix": "НУЖНА ПРАВКА: упаковка или анонс не прошли линтер, причины ниже"}[summary["status"]]
     rows = ["# Отчёт по ролику %s" % summary["name"], "", status, ""]
     if summary.get("fake_engine"):
         rows += ["Внимание: рендер сделан ЗАГЛУШКОЙ движка (tests/fake_engine.py). Видео нет, пиксели не проверены.", ""]

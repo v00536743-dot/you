@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import importlib.util
 import os
+import re
 from typing import Any, Dict, List, Optional
 
 from .common import plural_ru, skill_root
@@ -74,11 +75,27 @@ def build(facts: Dict[str, Any], seconds: float, video_url: str, dropped: Option
     rows.append("%d %s за %d %s: %s. Всё показал вживую, без воды)" %
                 (n, what, secs, plural_ru(secs, "секунду", "секунды", "секунд"), listing))
     rows.append("")
+    pairs = facts.get("pairs") or []
+    if pairs:
+        # В шортсе ссылки не кликабельны, а в канале да: это и есть то, чего в видео нет.
+        links = []
+        for name, url, *rest in pairs:
+            lead = (rest[0] if rest else "") or ""
+            clause = re.split(r"[.,;:!?]", lead.strip())[0].strip()
+            clause = " ".join(clause.split()[:6])
+            # Подпись только по-русски и только при двух ссылках: иначе фраза длиннее 20 слов.
+            if len(pairs) > 2 or not re.search("[а-яё]", clause.lower()):
+                clause = ""
+            links.append("[%s](%s)%s" % (name, url, (" (%s)" % clause.lower()) if clause else ""))
+        glue = ", ".join(links[:-1]) + " и " + links[-1] if len(links) > 1 else links[0]
+        rows.append("Ссылки, чтобы не искать: %s." % glue)
     if dropped:
+        if pairs:
+            rows.append("")
         rows.append("%s в ролик не %s: закрыт от записи, ссылка в посте про находки." %
                     (", ".join(dropped), "влез" if len(dropped) == 1 else "влезли"))
-    else:
-        rows.append("Ссылки на все сайты в закрепе под видео, там же короткая инструкция.")
+    if not pairs and not dropped:
+        rows.append("Ссылки на все сайты в закрепе под видео.")
     rows += ["", "[ВИДЕО](%s)" % video_url, ""]
     study = [STUDY[l] for l in facts.get("labels_ru", facts.get("labels", [])) if l in STUDY][:2]
     if study:
@@ -87,6 +104,37 @@ def build(facts: Dict[str, Any], seconds: float, video_url: str, dropped: Option
         rows.append("Перешли тому, кому это сэкономит вечер.")
     rows += ["#шортс", "", FOOTER]
     return "\n".join(rows) + "\n"
+
+
+def build_html(info: Any, seconds: float, video_url: str, root: Optional[str] = None,
+               hello: Optional[str] = None) -> str:
+    """Анонс ролика про HTML-файл: что за файл, сколько весит, что показали."""
+    secs = int(round(seconds))
+    rows: List[str] = []
+    hello = greeting(root) if hello is None else hello
+    if hello:
+        rows += [hello, ""]
+    rows.append("Один HTML-файл на %d КБ, а внутри целый фильм «%s». Показал его за %d %s, без воды)" % (
+        info.size_kb, info.title, secs, plural_ru(secs, "секунду", "секунды", "секунд")))
+    rows.append("")
+    extra = "звук тоже идёт из самой страницы" if info.has_webaudio or info.has_media else "всё рисует код, без картинок"
+    offline = "Открывается в любом браузере, интернет не нужен." if not info.needs_network else \
+        "Для запуска нужен интернет: файл тянет библиотеки из сети."
+    rows.append("В ролике главы по порядку, %s. %s" % (extra, offline))
+    rows += ["", "[ВИДЕО](%s)" % video_url, "", "Перешли тому, кто сейчас учит веб или JavaScript.", "#шортс", "", FOOTER]
+    return "\n".join(rows) + "\n"
+
+
+def best_html(info: Any, seconds: float, video_url: str, root: Optional[str] = None) -> Any:
+    tried = []
+    for hello in greetings(root) + [""]:
+        text = build_html(info, seconds, video_url, root, hello=hello)
+        issues = lint(text, root)
+        if not issues:
+            return text, []
+        tried.append((len(issues), text, issues))
+    tried.sort(key=lambda row: row[0])
+    return tried[0][1], tried[0][2]
 
 
 def lint(text: str, root: Optional[str] = None) -> List[Dict[str, str]]:

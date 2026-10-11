@@ -1,0 +1,70 @@
+{
+  "lang": "en",
+  "beats": [
+    {
+      "id": "hook",
+      "kind": "hook",
+      "say": "Three free finds: a Linux cheat sheet, learn-anything and cad-search.",
+      "on_screen": "3 FREE FINDS",
+      "why": "result and promise in the first second",
+      "item": null,
+      "seconds": 3.75
+    },
+    {
+      "id": "item-1",
+      "kind": "item",
+      "say": "A Linux cheat sheet: files, processes, permissions, SSH, systemd, grep, sed and awk, all with examples.",
+      "on_screen": "1 LINUX CHEAT SHEET",
+      "why": "value: show the page",
+      "item": {
+        "name": "Мегашпаргалка по Linux",
+        "name_en": "Linux cheat sheet",
+        "url": "https://github.com/justxor/Linux-",
+        "lead": "Files, processes, permissions, memory, network, SSH, systemd, grep, sed and awk with examples. Free."
+      },
+      "seconds": 6.0
+    },
+    {
+      "id": "item-2",
+      "kind": "item",
+      "say": "learn-anything. Type what you want to learn and get guides, videos and roadmaps.",
+      "on_screen": "2 LEARN-ANYTHING",
+      "why": "value: search in action",
+      "item": {
+        "name": "learn-anything",
+        "url": "https://learn-anything.xyz/",
+        "lead": "Type what you want to learn, get guides, videos and roadmaps."
+      },
+      "seconds": 6.0
+    },
+    {
+      "id": "item-3",
+      "kind": "item",
+      "say": "cad-search. Describe a part in plain words and get 3D models for your project.",
+      "on_screen": "3 CAD-SEARCH",
+      "why": "value: search in action",
+      "item": {
+        "name": "cad-search",
+        "url": "https://www.cadlookup.com/",
+        "lead": "Finds 3D models by description."
+      },
+      "seconds": 6.0
+    },
+    {
+      "id": "cta",
+      "kind": "cta",
+      "say": "Links are in the pinned comment and on the BADVINO channel.",
+      "on_screen": "LINK IN PINNED COMMENT",
+      "why": "one call to action, loop to the first frame",
+      "item": null,
+      "seconds": 4.09
+    }
+  ],
+  "part": 1,
+  "parts": 1,
+  "subs": {},
+  "duration_target": [
+    20,
+    40
+  ]
+}

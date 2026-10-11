@@ -1,0 +1,74 @@
+{
+  "lang": "ru",
+  "titles": [
+    {
+      "text": "ОДИН HTML-ФАЙЛ ВМЕСТО ВИДЕО 😱 #shorts #html #javascript #анимация #код",
+      "loudness": 1,
+      "for": "интрига",
+      "why": "капс и эмодзи: шаблон автора для ленты Shorts",
+      "recommended": true
+    },
+    {
+      "text": "НОЧНОЙ РЕЙС В ОДНОМ ФАЙЛЕ НА 3 КБ 🔥 #shorts #html #javascript #анимация #код",
+      "loudness": 2,
+      "for": "интрига",
+      "why": "название файла и вес: конкретика вместо обещаний",
+      "recommended": false
+    },
+    {
+      "text": "Это не видео, а один HTML-файл #shorts #html #javascript #анимация #код",
+      "loudness": 3,
+      "for": "интрига",
+      "why": "парадокс без капса: держит любопытство",
+      "recommended": false
+    },
+    {
+      "text": "Ночной рейс: анимация в одном HTML-файле #shorts #html #javascript #анимация #код",
+      "loudness": 3,
+      "for": "поиск",
+      "why": "что это и как сделано: для поиска",
+      "recommended": false
+    },
+    {
+      "text": "HTML и JavaScript: целая сцена в 3 КБ #shorts #html #javascript #анимация #код",
+      "loudness": 4,
+      "for": "поиск",
+      "why": "технологии и размер в начале: для поиска по теме",
+      "recommended": false
+    },
+    {
+      "text": "Анимация на HTML без движка видео: Ночной рейс #shorts #html #javascript #анимация #код",
+      "loudness": 5,
+      "for": "поиск",
+      "why": "спокойная поисковая фраза без эмодзи",
+      "recommended": false
+    }
+  ],
+  "description": "#html #javascript #анимация\nНочной рейс: 1 бесплатный сайт.\n\nЕщё находки и все ссылки в Телеграм-канале.\nTelegram: https://t.me/VioraStudio\nYouTube: https://www.youtube.com/@badVIno-VS\n\n#shorts #код #находки\n",
+  "pinned": "Ещё находки каждый день: https://t.me/VioraStudio\n",
+  "tiktok": "Ночной рейс. Ссылки в профиле. #html #javascript #анимация #код #находки\n",
+  "hashtags": {
+    "title": [
+      "#shorts",
+      "#html",
+      "#javascript",
+      "#анимация",
+      "#код"
+    ],
+    "top": [
+      "#html",
+      "#javascript",
+      "#анимация"
+    ],
+    "bottom": [
+      "#shorts",
+      "#код",
+      "#находки"
+    ]
+  },
+  "links_allowed": [
+    "https://t.me/VioraStudio",
+    "https://www.youtube.com/@badVIno-VS",
+    "https://t.me/viorames"
+  ]
+}

@@ -114,6 +114,7 @@ def compose(variant: str, facts: Dict[str, Any], tokens: Dict[str, Any], size: T
     n = facts.get("count", 0)
     short_names = [name.split()[0].upper() for name in facts.get("names", [])][:3]
     labels = [NOMINATIVE.get(l, l.upper()) for l in facts.get("labels", [])][:3]
+    custom = facts.get("cover") or {}
     boxes: List[Tuple[int, int, int, int]] = []
     texts: List[str] = []
     tall = H > W
@@ -142,13 +143,13 @@ def compose(variant: str, facts: Dict[str, Any], tokens: Dict[str, Any], size: T
     head_y = int(H * 0.56) if not tall else SAFE_TALL["top"] + 500
     step = 54 if not tall else 62
     if variant == "minimal":
-        kicker = ["FREE:"] + short_names
+        kicker = custom.get("kicker") or (["FREE:"] + short_names)
         y = head_y - step * len(kicker) - 24
         for row in kicker:
             boxes.append(_tracked(draw, (margin_l, y), row, kicker_font, fg, track.get("kicker", 0.3)))
             texts.append(row)
             y += step
-        headline = "БЕСПЛАТНО" if lang == "ru" else "FREE"
+        headline = custom.get("headline") or ("БЕСПЛАТНО" if lang == "ru" else "FREE")
         font = _fit_font(tokens, headline, max_w, 150 if not tall else 170, root)
         draw.text((margin_l, head_y), headline, font=font, fill=fg)
         hb = draw.textbbox((margin_l, head_y), headline, font=font)
@@ -156,7 +157,7 @@ def compose(variant: str, facts: Dict[str, Any], tokens: Dict[str, Any], size: T
         texts.append(headline)
         draw.line((margin_l, hb[3] + 28, margin_l + 160, hb[3] + 28), fill=accent, width=line + 2)
     elif variant == "punch":
-        plate = " · ".join(labels) if labels else ("ЧАСТЬ %d" % facts.get("part", 1))
+        plate = custom.get("plate") or (" · ".join(labels) if labels else ("ЧАСТЬ %d" % facts.get("part", 1)))
         pf = _font(tokens, "body", 30 if not tall else 40, root)
         pw = int(pf.getlength(plate)) + 40
         top = head_y - 96
@@ -164,9 +165,9 @@ def compose(variant: str, facts: Dict[str, Any], tokens: Dict[str, Any], size: T
         draw.text((margin_l + 20, top + 10), plate, font=pf, fill=bg if contrast(pal["bg"], pal["accent"]) > contrast(pal["fg"], pal["accent"]) else fg)
         boxes.append((margin_l, top, margin_l + pw, top + 56))
         texts.append(plate)
-        number = str(n)
+        number = str(custom.get("number", n))
         noun = facts.get("noun", "сайт")
-        rest = ((" НАХОДКИ" if noun == "находка" else " САЙТА") if lang == "ru" else " FREE SITES")
+        rest = custom.get("rest") or ((" НАХОДКИ" if noun == "находка" else " САЙТА") if lang == "ru" else " FREE SITES")
         font = _fit_font(tokens, number + rest, max_w if not tall else max_w, 140 if not tall else 150, root)
         draw.text((margin_l, head_y), number, font=font, fill=accent)
         nx = margin_l + int(font.getlength(number + " "))
@@ -176,13 +177,14 @@ def compose(variant: str, facts: Dict[str, Any], tokens: Dict[str, Any], size: T
         texts.append(number + rest)
         # Подписи с именами здесь нет: плашка и заголовок уже дают 3-5 слов.
     else:
-        headline = ("%d %s" % (n, "НАХОДКИ" if facts.get("noun") == "находка" else "САЙТА")) if lang == "ru" else "%d SITES" % n
+        headline = custom.get("frame_headline") or (
+            ("%d %s" % (n, "НАХОДКИ" if facts.get("noun") == "находка" else "САЙТА")) if lang == "ru" else "%d SITES" % n)
         font = _fit_font(tokens, headline, max_w, 140 if not tall else 160, root)
         draw.text((margin_l, head_y), headline, font=font, fill=fg)
         hb = draw.textbbox((margin_l, head_y), headline, font=font)
         boxes.append(hb)
         texts.append(headline)
-        sub = " · ".join(labels) or ", ".join(short_names)
+        sub = custom.get("frame_sub") or " · ".join(labels) or ", ".join(short_names)
         _tracked(draw, (margin_l, hb[3] + 34), sub, kicker_font, accent, track.get("kicker", 0.3))
         boxes.append((margin_l, hb[3] + 34, margin_l + int(kicker_font.getlength(sub) * 1.3), hb[3] + 34 + kicker_font.size))
         texts.append(sub)

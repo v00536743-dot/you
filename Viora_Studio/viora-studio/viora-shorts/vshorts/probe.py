@@ -118,7 +118,7 @@ class Checked:
 
 
 def check_items(items: List[Item], fetch: Optional[Fetcher] = None, offline: bool = False,
-                root: Optional[str] = None) -> List[Checked]:
+                root: Optional[str] = None, retry_blocked: bool = False) -> List[Checked]:
     """Каждый пункт: есть ли ссылка, открывается ли сайт, что знает реестр."""
     out: List[Checked] = []
     for item in items:
@@ -126,9 +126,13 @@ def check_items(items: List[Item], fetch: Optional[Fetcher] = None, offline: boo
         if not item.url:
             out.append(Checked(item, None, "нет ссылки: нужен адрес от автора или ресерч"))
             continue
-        if row.get("status") == "blocked":
-            out.append(Checked(item, SiteStatus(item.url, False, 0, row.get("notes", "закрыт")),
-                               "пропущен: %s" % row.get("notes", "закрыт защитой от ботов")))
+        if row.get("status") == "blocked" and not retry_blocked:
+            # Обычный запрос может пройти, а запись headless-браузером нет: так было в прототипе.
+            # Поэтому живой ответ пишем в отчёт, но в ролик сайт не берём без флага --retry-blocked.
+            live = "" if offline else " Сейчас по HTTP: %s." % check_site(item.url, fetch).reason
+            note = "запись headless закрыта защитой от ботов (замер %s).%s Вернуть: --retry-blocked" % (
+                row.get("checked", "-"), live)
+            out.append(Checked(item, SiteStatus(item.url, False, 0, note), "пропущен: %s" % note))
             continue
         if offline:
             status = SiteStatus(item.url, True, 0, "сеть выключена, верю реестру" if row else

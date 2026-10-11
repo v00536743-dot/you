@@ -69,7 +69,7 @@ def cmd_farm(args) -> int:
                            offline=args.offline, engine_override=args.engine, script_path=args.script,
                            links=_links(args.link), part=args.part, speed_spec=args.speed or "",
                            sound=args.sound, video_url=args.video_url, post_url=args.post_url,
-                           write_log=args.log)
+                           write_log=args.log, retry_blocked=args.retry_blocked)
     except farm.FarmStop as stop:
         print(stop.message)
         for key in ("issues",):
@@ -272,6 +272,7 @@ def main(argv=None) -> int:
     p.add_argument("--video-url")
     p.add_argument("--post-url")
     p.add_argument("--log", action="store_true", help="записать в журнал, если ролик готов")
+    p.add_argument("--retry-blocked", action="store_true", help="заново попробовать сайты, закрытые в прошлый раз")
     p.add_argument("--json", action="store_true")
     p.set_defaults(func=cmd_farm)
 

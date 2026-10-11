@@ -1,0 +1,9 @@
+Промпт обложки (вставь в генератор картинок, текст наложит код):
+
+Format: 1280x720 (16:9) and a second version 1080x1920 (9:16).
+Scene: a single thin white line drawing of one symbolic object for учёбы, 3D (browser window, key or lock), centered on the right third, lots of empty black space.
+Composition: rule of thirds, subject on the right third, the left 55%% stays empty and dark for text.
+Palette: background #000000, main #F5F5F5, one accent #E63946, nothing else.
+Style: flat, clean, high contrast, editorial minimalism, like a premium tech channel.
+Do NOT draw: any text or letters, logos, faces of real people, neon glow, bloom, lens flare, gradients, purple or blue gradient backgrounds, sparkles, 3D clipart, emoji.
+Leave the bottom right corner empty (the video length badge sits there).
