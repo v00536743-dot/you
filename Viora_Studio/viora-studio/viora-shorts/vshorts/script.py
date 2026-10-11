@@ -124,7 +124,8 @@ def add_subs(subs: Dict[str, str], spoken: str, written: str) -> None:
 
 
 def build(raw: Raw, chosen: List[Item], lang: str = "ru", part: int = 1, parts: int = 1,
-          handle: str = "BADVINO", speed: float = 1.05, root: Optional[str] = None) -> Script:
+          handle: str = "BADVINO", speed: float = 1.05, root: Optional[str] = None,
+          noun: str = "сайт") -> Script:
     """Скелет сценария. Для английского нужны английские подводки от модели."""
     if lang != "ru" and any(is_cyrillic(i.lead) for i in chosen):
         raise ValueError("подводки пунктов на русском: для английского ролика модель пишет "
@@ -138,19 +139,24 @@ def build(raw: Raw, chosen: List[Item], lang: str = "ru", part: int = 1, parts: 
         add_subs(subs, said, item.name)
 
     if lang == "ru":
-        adj = "бесплатных" if free else "полезных"
-        noun = plural_ru(count, "сайт", "сайта", "сайтов")
-        num = NUM_WORDS_RU.get(count, str(count)).capitalize()
+        if noun == "находка":
+            adj = ("бесплатные" if free else "полезные") if 2 <= count <= 4 else ("бесплатных" if free else "полезных")
+            noun_word = plural_ru(count, "находка", "находки", "находок")
+            num = NUM_WORDS_RU_F.get(count, str(count)).capitalize()
+        else:
+            adj = "бесплатных" if free else "полезных"
+            noun_word = plural_ru(count, "сайт", "сайта", "сайтов")
+            num = NUM_WORDS_RU.get(count, str(count)).capitalize()
         listing = ", ".join(names[:-1]) + " и " + names[-1] if count > 1 else names[0]
-        hook_say = "%s %s %s: %s." % (num, adj, noun, listing) if count > 1 else \
+        hook_say = "%s %s %s: %s." % (num, adj, noun_word, listing) if count > 1 else \
             "%s: %s." % ("Бесплатная находка" if free else "Находка", listing)
-        hook_screen = "%d %s %s" % (count, adj.upper(), noun.upper())
+        hook_screen = "%d %s %s" % (count, adj.upper(), noun_word.upper())
     else:
         adj = "free" if free else "useful"
-        noun = "site" if count == 1 else "sites"
+        noun_word = "site" if count == 1 else "sites"
         listing = ", ".join(names[:-1]) + " and " + names[-1] if count > 1 else names[0]
-        hook_say = "%s %s %s: %s." % (NUM_WORDS_EN.get(count, str(count)).capitalize(), adj, noun, listing)
-        hook_screen = "%d %s %s" % (count, adj.upper(), noun.upper())
+        hook_say = "%s %s %s: %s." % (NUM_WORDS_EN.get(count, str(count)).capitalize(), adj, noun_word, listing)
+        hook_screen = "%d %s %s" % (count, adj.upper(), noun_word.upper())
     if parts > 1:
         hook_screen += (" | ЧАСТЬ %d" if lang == "ru" else " | PART %d") % part
     beats.append(Beat("hook", "hook", hook_say, hook_screen, "результат и обещание в первую секунду"))
@@ -279,3 +285,45 @@ def to_markdown(script: Script) -> str:
 
 def _mmss(seconds: float) -> str:
     return "%d:%02d" % (int(seconds) // 60, int(seconds) % 60)
+
+
+def build_html(info: Any, lang: str = "ru", speed_map: Optional[List[Dict[str, float]]] = None,
+               handle: str = "BADVINO", voice_speed: float = 1.05,
+               duration_target: Optional[List[float]] = None) -> Script:
+    """Скелет рассказа про HTML-файл: крючок с лучшим кадром, главы, призыв.
+
+    Реплики глав по умолчанию это их названия. Рассказ голосом Viora пишет модель
+    в script.json, код потом проверяет длину, цифры и петлю.
+    """
+    from .html_adapter import output_length
+
+    speed_map = speed_map or []
+    beats: List[Beat] = []
+    if lang == "ru":
+        hook = "Это один HTML-файл на %d КБ. И вот что он умеет." % info.size_kb
+        screen = "ОДИН HTML-ФАЙЛ"
+    else:
+        hook = "This is a single %d KB HTML file. Watch what it does." % info.size_kb
+        screen = "ONE HTML FILE"
+    beats.append(Beat("hook", "hook", hook, screen, "самый зрелищный кадр в первую секунду"))
+    chapters = info.chapters or []
+    for index, chapter in enumerate(chapters, 1):
+        title = chapter.title.strip().rstrip(".")
+        beat = Beat("chapter-%d" % index, "chapter", title + ".", title.upper()[:40],
+                    "глава из таймлайна файла",
+                    item={"start": chapter.start, "end": chapter.end})
+        beats.append(beat)
+    if lang == "ru":
+        cta = "Файл и разбор в канале %s, ссылка в закрепе." % handle
+        cta_screen = "ССЫЛКА В ЗАКРЕПЕ"
+    else:
+        cta = "The file and the breakdown are on the %s channel, link in the pinned comment." % handle
+        cta_screen = "LINK IN PINNED COMMENT"
+    beats.append(Beat("cta", "cta", cta, cta_screen, "один призыв, петля на первый кадр"))
+    script = Script(lang=lang, beats=beats, duration_target=duration_target or [25.0, 60.0])
+    retime(script, voice_speed)
+    for beat in script.beats:
+        if beat.kind == "chapter" and beat.item:
+            shown = output_length(beat.item["start"], beat.item["end"], speed_map)
+            beat.seconds = round(max(beat.seconds, min(shown, 12.0)), 2)
+    return script

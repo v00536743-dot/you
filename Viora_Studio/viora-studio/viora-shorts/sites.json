@@ -164,7 +164,8 @@
           "do": "scroll",
           "dy": 900
         }
-      ]
+      ],
+      "title_en": "Linux cheat sheet"
     }
   }
 }
