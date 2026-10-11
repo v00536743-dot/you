@@ -172,7 +172,13 @@ def capture_all(scenes: list[SceneT], plan: dict, plan_dir: Path, lay: L.Layout,
             cap = TI.images_capture(s.data, cw, ch, fps, s.length, work, plan_dir, brand.accent)
             s.clip, s.clicks = cap.clip, cap.clicks
         elif t == "text":
-            cap = TI.text_capture(s.data, cw, ch, fps, s.length, work, plan_dir, brand, s.words)
+            y0 = 0
+            if s.data.get("on_screen_text"):
+                y0 = max(0, lay.label_box.y1 - lay.center.y + 16)
+            y1 = ch
+            if plan["captions"].get("enabled", True) and (s.words or s.data.get("say")):
+                y1 = min(ch, lay.caption_band.y - lay.center.y - 16)
+            cap = TI.text_capture(s.data, cw, ch, fps, s.length, work, plan_dir, brand, s.words, free=(y0, y1))
             s.clip, s.notes = cap.clip, s.notes + cap.notes
     top_info: dict = {"kind": "none"}
     top_job = None

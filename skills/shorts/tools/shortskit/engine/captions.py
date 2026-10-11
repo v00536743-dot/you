@@ -20,6 +20,7 @@ FUNCTION_WORDS = {
     "en": set("a an the to of in on at by for with from into onto and or but nor so if as than that this these those my your our their his her its not no is are was were be".split()),
 }
 NUM_WORDS = re.compile(r"^(\d+[\d.,]*|один|одна|два|две|три|четыре|пять|шесть|семь|восемь|девять|десять|сто|тысяча|one|two|three|four|five|six|seven|eight|nine|ten|hundred|thousand)$", re.I)
+ADJ_RU = re.compile(r"(ая|яя|ый|ий|ой|ое|ее|ые|ие|ую|юю|ого|его|ому|ему|ых|их|ым|им)$")
 STRONG = re.compile(r"[.!?\u2026]+[\"')»]*$")
 MEDIUM = re.compile(r"[,;:\-]+[\"')»]*$")
 MIN_EM = 64
@@ -107,7 +108,8 @@ def chunk_words(words: list[dict], lang: str, max_words: int, fits) -> list[list
         for j in range(i + 1, min(n, i + max_words) + 1):
             ch = words[i:j]
             text = " ".join(w["w"] for w in ch)
-            if len(ch) > 1 and not fits(text):
+            lines = fits(ch)
+            if len(ch) > 1 and lines == 0:
                 break
             c = 0.0
             for w in ch[:-1]:
@@ -130,8 +132,12 @@ def chunk_words(words: list[dict], lang: str, max_words: int, fits) -> list[list
                     c += 1
                 if core(last) in fw:
                     c += 6
+                if lang[:2] == "ru" and ADJ_RU.search(core(last)) and len(core(last)) > 4 and not MEDIUM.search(last):
+                    c += 3  # adjective usually belongs with the next noun
                 if NUM_WORDS.match(core(last)) and not MEDIUM.search(last) and not STRONG.search(last):
                     c += 4
+            if lines == 2:
+                c += 0.8  # two lines are fine, one line is better
             size_cost = {1: 2.5, 2: 0.0, 3: 0.2}.get(len(ch), 1.5)
             if len(ch) == 1 and (STRONG.search(last) or len(core(last)) >= 10):
                 size_cost = 0.5
@@ -161,26 +167,40 @@ def build(words: list[dict], brand: Brand, layout: Layout, cfg: dict, lang: str)
     def disp(t: str) -> str:
         return t.upper() if upper else t
 
-    def fits(t: str) -> bool:
-        return text_width(disp(t), font, em) <= maxw
+    def fits(ch: list[dict]) -> int:
+        """1 = one line, 2 = two balanced lines, 0 = does not fit."""
+        t = " ".join(w["w"] for w in ch)
+        if text_width(disp(t), font, em) <= maxw:
+            return 1
+        if len(ch) > 1:
+            half = (len(ch) + 1) // 2
+            l1 = " ".join(w["w"] for w in ch[:half])
+            l2 = " ".join(w["w"] for w in ch[half:])
+            if max(text_width(disp(l1), font, em), text_width(disp(l2), font, em)) <= maxw:
+                return 2
+        return 0
 
     groups = chunk_words(words, lang, int(cfg.get("max_words", 3)), fits)
     chunks = []
     for g in groups:
         ch = Chunk(g, size=em)
         t = disp(ch.text)
+        half = (len(g) + 1) // 2
+
+        def width_at(size: int) -> tuple[int, int]:
+            one = text_width(t, font, size)
+            if one <= maxw or len(g) == 1:
+                return one, 1
+            l1, l2 = disp(" ".join(w["w"] for w in g[:half])), disp(" ".join(w["w"] for w in g[half:]))
+            return max(text_width(l1, font, size), text_width(l2, font, size)), 2
+
         size = em
-        while text_width(t, font, size) > maxw and size > MIN_EM:
+        width, ch.lines = width_at(size)
+        while width > maxw and size > MIN_EM:
             size -= 4
+            width, ch.lines = width_at(size)
         ch.size = size
-        width = text_width(t, font, size)
-        if width > maxw:
-            if len(g) > 1:
-                ch.lines = 2
-                half = (len(g) + 1) // 2
-                l1, l2 = disp(" ".join(w["w"] for w in g[:half])), disp(" ".join(w["w"] for w in g[half:]))
-                width = max(text_width(l1, font, size), text_width(l2, font, size))
-            ch.overflow = width > maxw
+        ch.overflow = width > maxw
         chunks.append(ch)
     place(chunks, brand, layout, cfg)
     return chunks
