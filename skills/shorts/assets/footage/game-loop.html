@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8">
+<title>game loop (SHORTS asset)</title>
+<style>html,body{margin:0;background:#101418;overflow:hidden}canvas{display:block;width:100vw;height:100vh}</style>
+<canvas id="c"></canvas>
+<script>
+// Own code, CC0. A runner over rooftops: movement fills the whole panel, flat colours, loops every 10 s.
+// window.__seek(t) draws time t exactly, so the engine can film it frame by frame.
+const cv = document.getElementById('c'), g = cv.getContext('2d');
+function size(){ cv.width = innerWidth * devicePixelRatio; cv.height = innerHeight * devicePixelRatio; }
+size(); addEventListener('resize', size);
+const LOOP = 10, SPEED = 520;
+const C = {sky:'#101418', far:'#1C242C', mid:'#2A3540', roof:'#3B4A57', hero:'#F5F5F5', coin:'#FFC93C', acc:'#FF6A1A'};
+function rnd(i){ let x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); }
+function building(i, w0, base, layerH){ return {w: w0 * (0.6 + rnd(i) * 0.9), h: layerH * (0.35 + rnd(i + 7) * 0.65)}; }
+function layer(t, speed, w0, layerH, color, yBase, seed){
+  const W = cv.width, H = cv.height; let x = -((t * speed) % (w0 * 40)); let i = 0;
+  g.fillStyle = color;
+  while (x < W + w0 * 2) {
+    const b = building(i + seed, w0, yBase, layerH);
+    g.fillRect(x, H - yBase - b.h, b.w - 6, b.h + yBase);
+    x += b.w; i++;
+    if (i > 400) break;
+  }
+}
+window.__seek = function(t){
+  t = ((t % LOOP) + LOOP) % LOOP;
+  const W = cv.width, H = cv.height, u = H / 384;
+  g.fillStyle = C.sky; g.fillRect(0, 0, W, H);
+  layer(t, 40 * u, 90 * u, 250 * u, C.far, 0, 1);
+  layer(t, 110 * u, 130 * u, 190 * u, C.mid, 0, 50);
+  // rooftops with gaps the runner jumps over
+  const roofY = H - 70 * u, seg = 420 * u, gap = 120 * u, off = (t * SPEED * u / 1.0) % (seg + gap);
+  g.fillStyle = C.roof;
+  for (let x = -off; x < W + seg; x += seg + gap) g.fillRect(x, roofY, seg, 70 * u);
+  // coins
+  for (let k = 0; k < 14; k++) {
+    const cx = ((k * 260 * u) - (t * SPEED * u) % (260 * u * 14) + 260 * u * 14) % (260 * u * 14) - 40 * u;
+    const cy = roofY - (90 + 40 * Math.sin(k * 1.7)) * u;
+    const spin = Math.abs(Math.cos(t * 6 + k));
+    g.fillStyle = C.coin; g.beginPath(); g.ellipse(cx, cy, 14 * u * spin + 2, 14 * u, 0, 0, Math.PI * 2); g.fill();
+  }
+  // runner: jumps on a fixed rhythm so it lines up with the gaps
+  const hx = W * 0.3, phase = (t * SPEED * u + W * 0.3) % (seg + gap) / (seg + gap);
+  const jump = phase > 0.78 ? Math.sin((phase - 0.78) / 0.44 * Math.PI) : (phase < 0.22 ? Math.sin((phase + 0.22) / 0.44 * Math.PI) : 0);
+  const hy = roofY - 46 * u - Math.max(0, jump) * 120 * u, step = Math.sin(t * 22);
+  g.fillStyle = C.hero; g.fillRect(hx - 14 * u, hy - 46 * u, 28 * u, 46 * u);
+  g.fillRect(hx - 12 * u, hy - 72 * u, 24 * u, 24 * u);
+  g.fillStyle = C.acc; g.fillRect(hx - 14 * u, hy - 40 * u, 28 * u, 8 * u);
+  g.fillStyle = C.hero;
+  g.fillRect(hx - 12 * u + step * 8 * u, hy, 9 * u, 22 * u); g.fillRect(hx + 3 * u - step * 8 * u, hy, 9 * u, 22 * u);
+};
+window.__seek(0);
+</script>
+</html>
