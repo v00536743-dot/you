@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SHORTS plan",
+  "description": "Contract between the skills. SHORTS owns the schema, Viora Studio 8.0.0 produces plans against it. Change only together and bump schema_version.",
+  "type": "object",
+  "required": ["schema_version", "meta", "layout", "brand", "scenes"],
+  "properties": {
+    "schema_version": {"const": "1"},
+    "meta": {
+      "type": "object",
+      "required": ["name", "language", "platforms"],
+      "properties": {
+        "name": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "language": {"type": "string", "minLength": 2},
+        "platforms": {"type": "array", "minItems": 1, "items": {"enum": ["youtube_shorts", "tiktok", "reels", "youtube"]}},
+        "duration_target": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2},
+        "emotion": {"type": "string"},
+        "audience": {"type": "string"},
+        "loop": {"type": "boolean"}
+      }
+    },
+    "layout": {
+      "type": "object",
+      "required": ["mode"],
+      "properties": {
+        "mode": {"enum": ["three", "top_center", "center_bottom", "center_only"]},
+        "top": {"type": "object", "properties": {"height_pct": {"type": "number", "maximum": 20}, "source": {"type": "string"}}},
+        "bottom": {"type": "object", "properties": {"height_pct": {"type": "number", "maximum": 20}, "handle": {"type": "string"}, "links": {"type": "array", "items": {"type": "string"}}}},
+        "cta_in_center": {
+          "type": "array",
+          "maxItems": 3,
+          "items": {
+            "type": "object",
+            "required": ["t", "kind"],
+            "properties": {
+              "t": {"type": "number", "minimum": 0},
+              "duration": {"type": "number", "minimum": 1.5, "maximum": 3},
+              "kind": {"enum": ["handle", "qr", "text"]},
+              "text": {"type": "string"},
+              "url": {"type": "string"}
+            }
+          }
+        }
+      }
+    },
+    "brand": {
+      "type": "object",
+      "required": ["preset"],
+      "properties": {
+        "preset": {"type": "string"},
+        "palette": {"type": "object", "properties": {"bg": {"type": "string"}, "fg": {"type": "string"}, "accent": {"type": "string"}}},
+        "fonts": {"type": "object", "properties": {"display": {"type": "string"}, "body": {"type": "string"}}}
+      }
+    },
+    "captions": {
+      "type": "object",
+      "properties": {
+        "enabled": {"type": "boolean"},
+        "max_words": {"type": "integer", "minimum": 1, "maximum": 4},
+        "highlight": {"enum": ["accent", "none"]},
+        "subs": {"type": "object", "additionalProperties": {"type": "string"}}
+      }
+    },
+    "audio": {
+      "type": "object",
+      "properties": {
+        "voice": {"type": "object", "properties": {"engine": {"type": "string"}, "voice": {"type": "string"}, "speed": {"type": "number"}}},
+        "music": {"type": "object", "properties": {"source": {"type": "string"}, "duck_db": {"type": "number"}}},
+        "target_lufs": {"type": "number"}
+      }
+    },
+    "scenes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "source"],
+        "properties": {
+          "id": {"type": "string"},
+          "say": {"type": "string"},
+          "on_screen_text": {"type": "string"},
+          "why": {"type": "string"},
+          "source": {
+            "type": "object",
+            "required": ["type"],
+            "properties": {
+              "type": {"enum": ["site", "html", "video", "film", "text", "images"]},
+              "ref": {"type": "string"},
+              "actions": {"type": "array", "items": {"type": "object"}}
+            }
+          },
+          "speed": {"type": "array", "items": {"type": "object", "required": ["t", "rate"], "properties": {"t": {"type": "number"}, "rate": {"type": "number", "exclusiveMinimum": 0}}}},
+          "sfx": {"type": "array", "items": {"type": "object", "required": ["t", "name"], "properties": {"t": {"type": "number"}, "name": {"type": "string"}}}}
+        }
+      }
+    },
+    "metadata": {"type": "object"}
+  }
+}
