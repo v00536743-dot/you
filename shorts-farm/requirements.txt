@@ -1,0 +1,7 @@
+playwright
+edge-tts
+yt-dlp
+librosa
+scenedetect
+opencv-python-headless
+faster-whisper

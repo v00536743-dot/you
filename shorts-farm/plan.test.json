@@ -1,0 +1,29 @@
+{
+  "name": "viora-test-2-sites",
+  "voice": "ru-RU-DmitryNeural",
+  "speed": 1.06,
+  "subs": {"лёрн": "learn-anything", "энисинг": "", "кэд": "CAD", "лукап": "Lookup", "Линукс": "Linux"},
+  "scenes": [
+    {"say": "Два бесплатных сайта, и оба вам пригодятся.", "badge": "2 БЕСПЛАТНЫХ САЙТА",
+     "actions": [{"do": "goto", "url": "https://learn-anything.xyz/"}, {"t": 0.5, "do": "move", "x": 540, "y": 520, "steps": 30}]},
+    {"say": "Первый, лёрн энисинг. Пишешь тему, например Линукс, и сайт сразу выдаёт подборку: книги, дистрибутивы, ссылки. Всё по полочкам.", "badge": "1 LEARN-ANYTHING",
+     "actions": [{"do": "goto", "url": "https://learn-anything.xyz/"},
+                 {"t": 1.2, "do": "type", "sel": "input", "text": "Linux", "delay": 140},
+                 {"t": 3.2, "do": "press", "key": "Enter"},
+                 {"t": 6.2, "do": "click", "text": "Close"},
+                 {"t": 7.8, "do": "scroll", "dy": 520, "steps": 30},
+                 {"t": 10, "do": "scroll", "dy": 520, "steps": 30}]},
+    {"say": "Второй, кэд лукап. Описываешь деталь обычными словами, например шестерёнка с двенадцатью зубьями, и получаешь сорок 3D моделей.", "badge": "2 CAD LOOKUP",
+     "actions": [{"do": "goto", "url": "https://www.cadlookup.com/"},
+                 {"t": 3.2, "do": "type", "sel": "input", "text": "gear with 12 teeth", "delay": 85},
+                 {"t": 5.0, "do": "press", "key": "Enter"},
+                 {"t": 8.0, "do": "hover", "sel": ".result-card"},
+                 {"t": 9.5, "do": "move", "x": 760, "y": 300, "steps": 20},
+                 {"t": 10.5, "do": "scroll", "dy": 600, "steps": 40}]},
+    {"say": "Оба бесплатные. Остальные находки в канале VIORA STUDIO. Подпишись, ссылка в закрепе и в канале BADVINO.", "badge": "ССЫЛКА В ЗАКРЕПЕ",
+     "actions": [{"do": "goto", "url": "https://www.cadlookup.com/"},
+                 {"t": 0.4, "do": "type", "sel": "input", "text": "robot arm", "delay": 80},
+                 {"t": 1.5, "do": "press", "key": "Enter"},
+                 {"t": 4.0, "do": "scroll", "dy": 500, "steps": 40}]}
+  ]
+}
