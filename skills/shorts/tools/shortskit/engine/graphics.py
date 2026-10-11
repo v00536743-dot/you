@@ -5,6 +5,7 @@ Text is always real font + flat colour + outline. Glow / gradient plates exist o
 """
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 
 import numpy as np
@@ -39,10 +40,21 @@ def _font(path, size: int) -> ImageFont.FreeTypeFont:
     return ImageFont.truetype(str(path), size)
 
 
-def _wrap(text: str, font: ImageFont.FreeTypeFont, maxw: int, max_lines: int = 2) -> list[str]:
-    words, lines, cur = text.split(), [], ""
+def _split_long(words: list[str], font: ImageFont.FreeTypeFont, maxw: int) -> list[str]:
+    """A word wider than the line is split after its hyphens (LEARN-ANYTHING -> LEARN- / ANYTHING)."""
+    out = []
     for w in words:
-        t = (cur + " " + w).strip()
+        if font.getlength(w) > maxw and "-" in w.strip("-"):
+            out += [p for p in re.split(r"(?<=-)", w) if p]
+        else:
+            out.append(w)
+    return out
+
+
+def _wrap(text: str, font: ImageFont.FreeTypeFont, maxw: int, max_lines: int = 2) -> list[str]:
+    words, lines, cur = _split_long(text.split(), font, maxw), [], ""
+    for w in words:
+        t = (cur + w) if cur.endswith("-") else (cur + " " + w).strip()
         if font.getlength(t) <= maxw or not cur:
             cur = t
         else:
@@ -63,11 +75,17 @@ def _fit_text(text: str, path, start: int, minimum: int, maxw: int, max_lines: i
         size -= 4
 
 
+GLOW_PAD = 40
+
+
 def _glow(img: Image.Image, color: str) -> Image.Image:
-    a = img.split()[3].filter(ImageFilter.GaussianBlur(14))
-    halo = Image.new("RGBA", img.size, hex_to_rgb(color) + (0,))
+    """Slop effect, only for QA bad-case tests (brand.effects.text_glow). Adds GLOW_PAD px on each side."""
+    big = Image.new("RGBA", (img.width + 2 * GLOW_PAD, img.height + 2 * GLOW_PAD), (0, 0, 0, 0))
+    big.alpha_composite(img, (GLOW_PAD, GLOW_PAD))
+    a = big.split()[3].filter(ImageFilter.GaussianBlur(14))
+    halo = Image.new("RGBA", big.size, hex_to_rgb(color) + (0,))
     halo.putalpha(a.point(lambda v: min(255, int(v * 1.6))))
-    return Image.alpha_composite(halo, img)
+    return Image.alpha_composite(halo, big)
 
 
 def _gradient(w: int, h: int) -> Image.Image:
@@ -95,7 +113,7 @@ def label(text: str, brand: Brand, lay: Layout) -> Sprite:
     t = text.upper() if brand.upper else text
     box = lay.label_box
     pad_x, pad_y = 32, 16
-    f, lines, size = _fit_text(t, brand.display.path, LABEL_EM + 8, LABEL_EM, box.w - 2 * pad_x)
+    f, lines, size = _fit_text(t, brand.display.path, LABEL_EM + 8, LABEL_EM, box.w - 2 * pad_x, 3)
     if brand.label_style == "plate":
         txt_col = brand.bg if contrast(brand.bg, brand.accent) >= contrast(brand.fg, brand.accent) else brand.fg
         layer = _text_layer(lines, f, txt_col, None, 0, int(max(f.getlength(ln) for ln in lines)) + 4)
@@ -193,11 +211,13 @@ def cta_qr(url: str, link_text: str, brand: Brand, lay: Layout, y: float | None 
         if content.height <= avail_h and content.width <= maxw:
             break
     img = _card(content, light, dark, 0, 32)
+    pad = 0
     if brand.effects.get("text_glow"):
         img = _glow(img, brand.accent)
+        pad = GLOW_PAD
     box = _place_cta(img, lay, y)
-    qx = box.x + 32 + (content.width - q.width) // 2
-    qr_box = Rect(qx, box.y + 32, q.width, q.height)
+    qx = box.x + pad + 32 + (content.width - q.width) // 2
+    qr_box = Rect(qx, box.y + pad + 32, q.width, q.height)
     return Sprite("cta_qr", img, box, link_text, s, [(dark, light, 7.0)], url=url, qr_box=qr_box)
 
 

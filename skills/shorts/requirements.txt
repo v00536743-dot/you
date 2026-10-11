@@ -1,0 +1,15 @@
+playwright>=1.47
+edge-tts>=7.0
+yt-dlp>=2026.8
+segno>=1.6
+opencv-python-headless>=4.9
+numpy>=1.26
+pillow>=10.3
+jsonschema>=4.22
+librosa>=0.10
+soundfile>=0.12
+pyloudnorm>=0.1.1
+fonttools>=4.50
+pytest>=8.0
+# optional: word timings for live speech in long videos
+# faster-whisper>=1.0

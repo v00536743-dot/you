@@ -136,11 +136,15 @@ def is_blank(img: np.ndarray) -> dict:
 
 
 def glow_score(rgba: np.ndarray) -> float:
-    """Share of soft (semi-transparent) pixels around opaque content. Anti-aliasing ~0.05-0.2, glow > 0.5."""
-    a = rgba[..., 3].astype(np.int32)
-    opaque = int((a > 230).sum())
+    """Average thickness (px) of the soft semi-transparent edge around opaque content.
+    Anti-aliased text or a hard plate: ~0-2 px. A blur glow: 8+ px."""
+    a = rgba[..., 3]
+    opaque = (a > 230).astype(np.uint8)
+    if opaque.sum() == 0:
+        return 0.0
+    edge = opaque - cv2.erode(opaque, np.ones((3, 3), np.uint8))
     soft = int(((a > 10) & (a <= 230)).sum())
-    return soft / max(1, opaque)
+    return soft / max(1, int(edge.sum()))
 
 
 def gradient_score(img: np.ndarray, min_run: int = 6, block: int = 16) -> dict:

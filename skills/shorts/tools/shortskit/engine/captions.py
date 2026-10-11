@@ -36,6 +36,7 @@ class Chunk:
     size: int = DEFAULT_EM
     box: list[int] = field(default_factory=list)
     overflow: bool = False
+    split_word: bool = False  # one long hyphenated word shown on two lines
 
     @property
     def start(self) -> float:
@@ -189,7 +190,13 @@ def build(words: list[dict], brand: Brand, layout: Layout, cfg: dict, lang: str)
 
         def width_at(size: int) -> tuple[int, int]:
             one = text_width(t, font, size)
-            if one <= maxw or len(g) == 1:
+            if one <= maxw:
+                return one, 1
+            if len(g) == 1:
+                if "-" in t.strip("-"):
+                    a, b = t.split("-", 1)
+                    ch.split_word = True
+                    return max(text_width(a + "-", font, size), text_width(b, font, size)), 2
                 return one, 1
             l1, l2 = disp(" ".join(w["w"] for w in g[:half])), disp(" ".join(w["w"] for w in g[half:]))
             return max(text_width(l1, font, size), text_width(l2, font, size)), 2
@@ -215,6 +222,10 @@ def place(chunks: list[Chunk], brand: Brand, layout: Layout, cfg: dict) -> None:
         line_h = brand.display.ass_size(ch.size)
         if ch.lines == 1:
             w = text_width(ch.text.upper() if upper else ch.text, str(brand.display.path), ch.size)
+        elif ch.split_word:
+            t = ch.text.upper() if upper else ch.text
+            a, b = t.split("-", 1)
+            w = max(text_width(a + "-", str(brand.display.path), ch.size), text_width(b, str(brand.display.path), ch.size))
         else:
             half = (len(ch.words) + 1) // 2
             parts = [" ".join(x["w"] for x in ch.words[:half]), " ".join(x["w"] for x in ch.words[half:])]
@@ -256,7 +267,7 @@ def to_ass(chunks: list[Chunk], brand: Brand, cfg: dict, total: float) -> str:
         x = (ch.box[0] + ch.box[2]) // 2
         y = ch.box[3] - OUTLINE
         size = brand.display.ass_size(ch.size)
-        half = (len(ch.words) + 1) // 2 if ch.lines == 2 else None
+        half = (len(ch.words) + 1) // 2 if ch.lines == 2 and not ch.split_word else None
         for wi, w in enumerate(ch.words):
             s = ch.start if wi == 0 else w["s"]
             e = ch.words[wi + 1]["s"] if wi + 1 < len(ch.words) else ch_end
@@ -265,6 +276,8 @@ def to_ass(chunks: list[Chunk], brand: Brand, cfg: dict, total: float) -> str:
             parts = []
             for k, ww in enumerate(ch.words):
                 t = _esc(ww["w"].upper() if upper else ww["w"])
+                if ch.split_word:
+                    t = t.replace("-", "-\\N", 1)
                 if hl and k == wi:
                     t = "{\\u1}" + t + "{\\u0}" if brand.highlight_mode == "underline" else "{\\1c" + acc + "}" + t + "{\\1c" + fill + "}"
                 if half is not None and k == half:

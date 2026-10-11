@@ -131,9 +131,9 @@ def fit_contrast(color: str, against: str, target: float = 7.0) -> str:
     toward = (255, 255, 255) if luminance(hex_to_rgb(against)) < 0.18 else (0, 0, 0)
     for i in range(1, 101):
         k = i / 100
-        c = tuple(base[j] + (toward[j] - base[j]) * k for j in range(3))
-        if contrast(c, against) >= target:
-            return rgb_to_hex(c)
+        c = rgb_to_hex(base[j] + (toward[j] - base[j]) * k for j in range(3))
+        if contrast(c, against) >= target:  # check the rounded hex, not the float colour
+            return c
     return rgb_to_hex(toward)
 
 

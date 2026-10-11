@@ -249,7 +249,7 @@ def _center_frames(scenes: list[SceneT], lay: L.Layout):
 
 def compose(out_mp4: Path, scenes: list[SceneT], lay: L.Layout, brand: B.Brand, overlays: list[Overlay],
             bottom_img: Image.Image | None, top_info: dict, total: float, fps: int, ass_path: Path | None,
-            audio_wav: Path, fx: dict, loop: bool) -> dict:
+            audio_wav: Path, fx: dict, loop: bool, cand_dir: Path | None = None) -> dict:
     from ..util import hex_to_rgb
 
     n = int(round(total * fps))
@@ -278,6 +278,13 @@ def compose(out_mp4: Path, scenes: list[SceneT], lay: L.Layout, brand: B.Brand, 
     last_top = None
     loop_n = int(0.3 * fps) if loop else 0
     t_start = time.time()
+    # clean centre frames (no captions, no overlays) for covers: middle of every scene
+    cand = {}
+    if cand_dir is not None:
+        cand_dir.mkdir(parents=True, exist_ok=True)
+        for s in scenes:
+            if not s.skipped:
+                cand[int((s.start + s.length * 0.55) * fps)] = s.id
     try:
         for k in range(n):
             t = k / fps
@@ -299,6 +306,8 @@ def compose(out_mp4: Path, scenes: list[SceneT], lay: L.Layout, brand: B.Brand, 
                     m = np.float32([[z, 0, -(z - 1) * ww / 2], [0, z, -(z - 1) * hh / 2]])
                     cf = cv2.warpAffine(cf, m, (ww, hh))
                 canvas[lay.center.y:lay.center.y1, :] = cf
+                if k in cand:
+                    Image.fromarray(last_c).save(cand_dir / f"{k / fps:06.2f}-{cand[k]}.png")
             if bottom_arr is not None and lay.bottom is not None:
                 canvas[lay.bottom.y:lay.bottom.y1, :] = bottom_arr
             cta_on = any(o.sprite.kind.startswith("cta") and o.t0 <= t < o.t1 for o in overlays)
@@ -388,7 +397,10 @@ def render(plan_path: Path | str, out_dir: Path | str, force: bool = False, keep
     for s in live:
         txt = (s.data.get("on_screen_text") or "").strip()
         if txt:
-            overlays.append(Overlay(G.label(txt, brand, lay), s.start, s.start + s.length, instant_in=s.start == 0))
+            spr = G.label(txt, brand, lay)
+            if not lay.safe.allows(spr.box):
+                s.notes.append(f"on_screen_text '{txt}' is too wide at {spr.min_font}px: shorten it (QA will fail)")
+            overlays.append(Overlay(spr, s.start, s.start + s.length, instant_in=s.start == 0))
     bottom = plan["layout"].get("bottom") or {}
     name = plan["meta"]["name"]
     utm = bool(plan.get("metadata", {}).get("utm"))
@@ -452,7 +464,7 @@ def render(plan_path: Path | str, out_dir: Path | str, force: bool = False, keep
     # compose
     out_mp4 = out / f"{name}.mp4"
     comp = compose(out_mp4, scenes, lay, brand, overlays, bottom_img, top_info, total, fps, ass_path, audio_wav,
-                   plan.get("fx", {}), bool(plan["meta"].get("loop", True)))
+                   plan.get("fx", {}), bool(plan["meta"].get("loop", True)), out / "cover" / "candidates")
 
     for s in live:
         events.append({"t": s.start, "kind": "scene", "id": s.id})

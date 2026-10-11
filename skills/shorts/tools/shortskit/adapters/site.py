@@ -126,7 +126,7 @@ class Screencast:
 
 
 def frames_to_clip(frames: list[tuple[float, Path]], t0: float, out: Path, w: int, h: int, fps: int, out_len: float,
-                   speed: SpeedMap, camera: Camera | None) -> tuple[int, float]:
+                   speed: SpeedMap, camera: Camera | None, t_end: float | None = None) -> tuple[int, float]:
     """Sample timestamped frames on the output timeline. Returns (frames written, seconds held at the end)."""
     if not frames:
         raise ShortsError("no frames recorded")
@@ -140,7 +140,8 @@ def frames_to_clip(frames: list[tuple[float, Path]], t0: float, out: Path, w: in
         t_src = speed.src_at(k / fps)
         wall = t0 + t_src
         i = max(0, bisect.bisect_right(times, wall) - 1)
-        if wall > times[-1] + 1.0:
+        # screencast only sends frames when the page changes: a static page is fine until capture ended
+        if wall > (t_end if t_end is not None else times[-1]) + 0.2:
             held += 1 / fps
         p = frames[i][1]
         img = cache.get(p)
@@ -156,7 +157,8 @@ def frames_to_clip(frames: list[tuple[float, Path]], t0: float, out: Path, w: in
 
 
 async def _locate(page, a: dict):
-    if "text" in a:
+    # for "type" the `text` field is what to type, never a locator
+    if "text" in a and a.get("do") != "type":
         return page.get_by_text(a["text"], exact=a.get("exact", False)).first
     if "role" in a:
         return page.get_by_role(a["role"], name=a.get("name")).first
@@ -164,7 +166,11 @@ async def _locate(page, a: dict):
         return page.get_by_label(a["label"]).first
     if "placeholder" in a:
         return page.get_by_placeholder(a["placeholder"]).first
-    return page.locator(a["sel"]).first
+    if "sel" in a:
+        return page.locator(a["sel"]).first
+    if a.get("do") == "type":
+        return page.locator("input:visible, textarea:visible, [contenteditable=true]").first
+    raise ShortsError(f"action {a.get('do')} needs text/role/label/placeholder/sel")
 
 
 async def run_actions(page, actions: list[dict], ref: str, dpr: float, t0_box: list, clicks: list, notes: list,
@@ -274,6 +280,7 @@ async def capture(browser, scene: dict, w: int, h: int, fps: int, out_len: float
     finally:
         if crashed:
             notes.append("page crashed in headless mode, kept the frames before the crash")
+    t_end = time.time()
     await sc.stop()
     if not sc.frames:
         shot = await page.screenshot(type="jpeg", quality=90)
@@ -284,7 +291,7 @@ async def capture(browser, scene: dict, w: int, h: int, fps: int, out_len: float
     t0 = t0_box[0]
     camera = Camera.from_clicks(w, h, clicks) if src.get("zoom_on_click", True) and clicks else None
     out = work / f"center-{scene['id']}.mp4"
-    _, held = frames_to_clip(sc.frames, t0, out, w, h, fps, out_len, speed, camera)
+    _, held = frames_to_clip(sc.frames, t0, out, w, h, fps, out_len, speed, camera, t_end)
     if held > 1.0:
         notes.append(f"recording ended {held:.1f}s before the voice; last frame held")
     out_clicks = [speed.out_at(c[0]) for c in clicks if speed.out_at(c[0]) < out_len]
@@ -307,6 +314,7 @@ async def probe(url: str, out_dir: Path) -> dict:
                 await page.wait_for_load_state("load", timeout=15000)
             except Exception:
                 pass
+            await page.wait_for_timeout(2500)  # SPAs render after "load"
             res["status"] = resp.status if resp else None
             res["title"] = await page.title()
             res["blocked"] = await check_blocked(page, resp)

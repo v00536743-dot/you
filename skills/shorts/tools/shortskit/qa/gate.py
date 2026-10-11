@@ -210,7 +210,7 @@ def run_gate(d: Path, strict: bool = False) -> dict:
         img = np.asarray(Image.open(p).convert("RGBA"))
         g = F.glow_score(img)
         gr = F.gradient_score(img)
-        if g > 0.45:
+        if g > 4.0:
             glows.append(f"{p.name} ({g:.2f})")
         if gr["gradient"]:
             grads.append(f"{p.name} (run {gr['run']}, delta {gr['delta']})")

@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "language": {"chat": "ru", "video": "ru"},
+  "platforms": ["youtube_shorts", "tiktok"],
+  "source": "site",
+  "layout": "three",
+  "panels": {"top": "assets/footage/own-game-loop.mp4"},
+  "handle": "VioraStudio",
+  "links": {"telegram": "https://t.me/VioraStudio"},
+  "qr": true,
+  "brand": {"preset": "viora"},
+  "voice": {"engine": "auto", "voice": "ru-male-1", "speed": 1.05},
+  "music": {"source": "assets/audio/bed.mp3"},
+  "title_style": "loud 2, one emoji at most",
+  "pending": ["panels"],
+  "rejected": [{"value": "neon style", "date": "2026-10-11"}],
+  "chosen_titles": [{"value": "ИИ СДЕЛАЛ 8 ПУШЕК БЕЗ 3D-ШНИКА 😱", "date": "2026-10-11"}],
+  "updated": "2026-10-11T00:00:00+00:00"
+}
