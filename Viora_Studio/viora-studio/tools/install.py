@@ -86,6 +86,7 @@ REQUIRED = (
     os.path.join("tools", "viora.py"),
     os.path.join("viora-research", "SKILL.md"),
     os.path.join("viora-video", "SKILL.md"),
+    os.path.join("viora-shorts", "SKILL.md"),
 )
 
 

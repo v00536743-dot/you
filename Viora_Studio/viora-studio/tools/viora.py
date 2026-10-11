@@ -116,6 +116,12 @@ TASK_FILES = (
     (("пример", "образец", "как было"), "reference/examples.md"),
     (("github", "гитхаб", "репозитор"), "reference/github.md"),
     (("ресерч", "research", "найди в интернете", "проверь факт", "источник", "актуальн"), "viora-research/LITE.md"),
+    # Чужое видео разбираем, своё делаем: сначала слова разбора, потом слова ролика.
+    (("перескажи", "транскрипт", "таймкод", "чужой ролик", "чужое видео", "разбери видео",
+      "посмотри видео"), "viora-video/LITE.md"),
+    (("делай ролик", "сделай ролик", "ролик, а не пост", "ролик а не пост", "ролик", "видос",
+      "рилс", "тикток", "эдит", "обложк", "название ролика", "смонтир", "сделай видео"),
+     "viora-shorts/LITE.md"),
     (("видео", "youtube", "ютуб", "транскрипт", "таймкод", "перескажи"), "viora-video/LITE.md"),
 )
 
@@ -219,6 +225,17 @@ def route_text(task):
     if len(short) > 120:
         short = short[:117] + "..."
     rows = ["ЗАДАЧА: %s" % short]
+
+    if path.startswith("viora-shorts"):
+        rows += [
+            "Это ролик, а не пост: модуль viora-shorts",
+            "Читай ровно один файл (%s): %s" % (why, path),
+            "Команда: python3 tools/reel.py farm <файл, текст или ссылки>",
+            "Нет настроек: команда напечатает вопросы одним сообщением и выйдет с кодом 3",
+            "Сценарий голосом: python3 tools/reel.py script <сырьё> --out script.json, потом farm --script",
+            "Названия, описание, закреп, обложки и анонс #шортс ферма соберёт и проверит сама",
+        ]
+        return rows, rubric, path
 
     if rubric:
         frame, backup, length, items, _ = ROUTES[rubric]
@@ -589,7 +606,8 @@ DOCTOR_TOOLS = ("lint_post.py", "score_post.py", "split_post.py", "lint_chat.py"
                 "memory.py", "research.py", "watch.py", "build_prompt.py", "sizes.py",
                 "install.py", "validate_skill.py", "run_evals.py", "package.py",
                 "check_all.sh", "tg.py", "tg_watch.py", "life.py",
-                "schedule.py", "agent.py", "autostart.py")
+                "schedule.py", "agent.py", "autostart.py", "reel.py", "lint_video_meta.py",
+                "sync_engine.py")
 DOCTOR_MEMORY = (os.path.join("memory", "metrics.md"), os.path.join("memory", "post-log.md"),
                  os.path.join("memory", "used-greetings.md"), os.path.join("memory", "decisions.md"))
 # Эти строки не роняют прогон: без сети и yt-dlp посты пишутся как обычно.
@@ -663,9 +681,10 @@ def doctor_rows(offline=False):
                  "все %d на месте" % len(DOCTOR_TOOLS) if not gone else "нет: " + ", ".join(gone),
                  "" if not gone else "распакуй скилл целиком"))
 
-    subs = [n for n in ("viora-research", "viora-video") if os.path.isdir(os.path.join(SKILL, n))]
-    rows.append(("под-скиллы", len(subs) == 2, ", ".join(subs) or "нет",
-                 "" if len(subs) == 2 else "нет папки под-скилла"))
+    wanted_subs = ("viora-research", "viora-video", "viora-shorts")
+    subs = [n for n in wanted_subs if os.path.isdir(os.path.join(SKILL, n))]
+    rows.append(("под-скиллы", len(subs) == len(wanted_subs), ", ".join(subs) or "нет",
+                 "" if len(subs) == len(wanted_subs) else "нет папки под-скилла"))
 
     thin = []
     for rel in DOCTOR_MEMORY:
@@ -800,12 +819,12 @@ def own_selftest():
     for name in ("lint_post.py", "score_post.py", "split_post.py", "lint_chat.py",
                  "memory.py", "research.py", "watch.py", "check_all.sh",
                  "install.py", "validate_skill.py", "run_evals.py", "package.py",
-                 "life.py", "schedule.py"):
+                 "life.py", "schedule.py", "reel.py", "lint_video_meta.py", "sync_engine.py"):
         checks.append(("на месте %s" % name,
                        os.path.exists(os.path.join(HERE, name))))
 
     wanted = ([item[4] for item in ROUTES.values()]
-              + ["viora-research/LITE.md", "viora-video/LITE.md",
+              + ["viora-research/LITE.md", "viora-video/LITE.md", "viora-shorts/LITE.md",
                  "reference/edit-pass.md"])
     for name in wanted:
         checks.append(("на месте %s" % name,

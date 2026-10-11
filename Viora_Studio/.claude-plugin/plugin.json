@@ -1,7 +1,7 @@
 {
   "name": "viora-studio",
-  "version": "7.0.0",
-  "description": "Посты и статьи для Telegram-канала VIORA STUDIO голосом badVIno: разрез на пост плюс telegra.ph, ресерч, видео, линтер и оценка поста.",
+  "version": "8.0.0",
+  "description": "Посты и статьи для Telegram-канала VIORA STUDIO голосом badVIno: разрез на пост плюс telegra.ph, ресерч, видео, линтер и оценка поста, ролики для YouTube Shorts и TikTok из сырья автора.",
   "author": {
     "name": "badVIno"
   },
@@ -14,11 +14,13 @@
     "copywriting",
     "russian",
     "seo",
-    "research"
+    "research",
+    "shorts"
   ],
   "skills": [
     "./viora-studio",
     "./viora-studio/viora-research",
-    "./viora-studio/viora-video"
+    "./viora-studio/viora-video",
+    "./viora-studio/viora-shorts"
   ]
 }

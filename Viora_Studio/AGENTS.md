@@ -3,7 +3,7 @@
 Это рабочая папка бренда VIORA STUDIO. Здесь лежит скилл, который пишет посты
 в Telegram-канал автора, ресерчит интернет и смотрит видео.
 
-Версия скилла: 7.0.0. Язык работы: русский.
+Версия скилла: 8.0.0. Язык работы: русский.
 
 ## ПРАВИЛО НОЛЬ. Читай раньше всего остального
 
@@ -46,10 +46,10 @@ Claude Code, Codex, Cursor, Antigravity.
 
 | Кто ты | Что читаешь | Размер |
 |---|---|---|
-| Слабая или быстрая модель, маленькое окно, режим автодополнения | `viora-studio/QUICKCARD.txt` | 23 КБ |
-| Обычная модель, есть доступ к файлам | `viora-studio/SKILL.md` | 32 КБ |
+| Слабая или быстрая модель, маленькое окно, режим автодополнения | `viora-studio/QUICKCARD.txt` | 24 КБ |
+| Обычная модель, есть доступ к файлам | `viora-studio/SKILL.md` | 33 КБ |
 | Сложная задача, нужны детали | `SKILL.md`, дальше по `viora-studio/ROUTER.md` | по одному файлу |
-| Среда без файловой системы, только чат | вставить `viora-studio/PROMPT-CORE.txt` | 40 КБ |
+| Среда без файловой системы, только чат | вставить `viora-studio/PROMPT-CORE.txt` | 41 КБ |
 
 Признак того, что тебе хватит QUICKCARD: ты не уверена, что удержишь двадцать
 правил одновременно. Тогда не держи их. Держи семь и гоняй линтер, он знает всё
@@ -67,6 +67,8 @@ Claude Code, Codex, Cursor, Antigravity.
 | Собрать статью на telegra.ph | `viora-studio/reference/telegraph.md` |
 | Найти инфу в интернете, проверить сервис, посмотреть чужие посты | `viora-studio/viora-research/SKILL.md` |
 | Посмотреть видео на YouTube, разобрать чужой ролик | `viora-studio/viora-video/SKILL.md` |
+| С этим делай ролик, а не пост: шортс, рилс, тикток | `viora-studio/viora-shorts/SKILL.md`, команда `python3 tools/reel.py farm` |
+| Обложка ролика | `viora-studio/reference/cover.md` |
 | Сделать пост красивее, разобрать вёрстку | `viora-studio/reference/beauty.md` |
 | Убрать ИИ-слова, вычистить текст | `viora-studio/reference/antislop.md` |
 | Пост правильный, но сухой, без души | `viora-studio/reference/soul.md` |
@@ -151,7 +153,7 @@ python3 tools/install.py --target /путь/до/проекта --dry-run
 # проверить упаковку скилла по спеке Agent Skills
 python3 tools/validate_skill.py
 
-# прогнать 49 эталонов поведения
+# прогнать 57 эталонов поведения
 python3 tools/run_evals.py
 
 # проверить среду: питон, файлы, память, сеть, yt-dlp
@@ -200,7 +202,8 @@ Viora Studio/
     PROMPT-FULL.txt            всё одним файлом
     reference/                 тир 2: детали по одной теме на файл
     viora-research/            интернет-ресерч
-    viora-video/               просмотр видео
+    viora-video/               просмотр чужих видео
+    viora-shorts/              свои ролики: бренд, контракт движка, код, тесты
     memory/                    цифры, решения, профиль автора, напоминания
     evals/                     эталоны поведения и фикстуры
     tools/                     линтеры, резчик, ресерч, видео, мост, сторож, агент, сборка

@@ -95,9 +95,21 @@ REQUIRED_FILES = (
     os.path.join("tools", "life.py"),
     os.path.join("tools", "schedule.py"),
     os.path.join("tools", "check_all.sh"),
+    os.path.join("tools", "reel.py"),
+    os.path.join("tools", "lint_video_meta.py"),
+    os.path.join("tools", "sync_engine.py"),
+    os.path.join("reference", "cover.md"),
+    os.path.join("memory", "video-prefs.json"),
+    os.path.join("viora-shorts", "LITE.md"),
+    os.path.join("viora-shorts", "ENGINE_VERSION"),
+    os.path.join("viora-shorts", "contract", "plan.schema.json"),
+    os.path.join("viora-shorts", "brand", "viora.json"),
+    os.path.join("viora-shorts", "brand", "mono.json"),
+    os.path.join("viora-shorts", "brand", "fonts", "OFL.txt"),
+    os.path.join("viora-shorts", "tests", "fake_engine.py"),
 )
 
-SUBSKILLS = ("viora-research", "viora-video")
+SUBSKILLS = ("viora-research", "viora-video", "viora-shorts")
 DISCOVERY = (
     os.path.join(".claude", "skills"),
     os.path.join(".agents", "skills"),

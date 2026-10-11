@@ -122,9 +122,23 @@ post_out=$(python3 tools/post.py --selftest) || fail=1
 echo "$post_out" | tail -1
 echo
 
+echo "== ролики: линтер названий и описаний =="
+python3 tools/lint_video_meta.py --selftest || fail=1
+echo
+
+echo "== ролики: вшивка движка SHORTS =="
+python3 tools/sync_engine.py --selftest || fail=1
+python3 tools/sync_engine.py --check || fail=1
+echo
+
+echo "== ролики: модуль viora-shorts (unit, интеграция, e2e на заглушке движка) =="
+python3 tools/reel.py selftest || fail=1
+echo
+
 echo "== доступность скриптов ресерча и видео =="
 python3 tools/research.py --version || fail=1
 python3 tools/watch.py --version || fail=1
+python3 tools/reel.py --version || fail=1
 echo "сеть и yt-dlp проверяются отдельно: python3 tools/research.py --doctor и python3 tools/watch.py --doctor"
 echo
 

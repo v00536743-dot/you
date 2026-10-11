@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "language": null,
+  "platforms": null,
+  "sources": null,
+  "layout": null,
+  "panels": {
+    "top": {
+      "source": null
+    },
+    "bottom": {
+      "handle": "BADVINO"
+    }
+  },
+  "links": {
+    "telegram": "https://t.me/VioraStudio",
+    "youtube": "https://www.youtube.com/@badVIno-VS",
+    "chat": "https://t.me/viorames",
+    "handle": "BADVINO"
+  },
+  "qr": null,
+  "brand": null,
+  "voice": null,
+  "music": {
+    "source": null,
+    "duck_db": -10
+  },
+  "html": {
+    "speed": [],
+    "sound": "page"
+  },
+  "title_style": {
+    "chosen": [],
+    "rejected": []
+  },
+  "history": {
+    "styles": [],
+    "lengths": []
+  },
+  "pending": []
+}

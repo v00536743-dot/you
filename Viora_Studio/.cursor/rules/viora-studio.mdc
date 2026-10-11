@@ -4,7 +4,7 @@ globs: ["**/*.md", "**/*.txt"]
 alwaysApply: true
 ---
 
-# VIORA STUDIO 7.0.0
+# VIORA STUDIO 8.0.0
 
 Правило проекта для Cursor. Действует всегда, когда агент работает
 в этом каталоге: посты в Telegram-канал VIORA STUDIO, ресерч интернета, разбор видео.

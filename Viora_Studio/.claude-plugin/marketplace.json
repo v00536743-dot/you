@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "Скиллы VIORA STUDIO",
-    "version": "7.0.0"
+    "version": "8.0.0"
   },
   "plugins": [
     {
       "name": "viora-studio",
       "source": "./",
       "description": "Пишет посты и статьи для канала VIORA STUDIO голосом автора.",
-      "version": "7.0.0",
+      "version": "8.0.0",
       "author": {
         "name": "badVIno"
       },

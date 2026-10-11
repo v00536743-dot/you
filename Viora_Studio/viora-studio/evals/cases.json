@@ -913,6 +913,121 @@
       "contains": [
         "провалилось 0"
       ]
+    },
+    {
+      "id": "route-rolik-a-ne-post",
+      "why": "«с этим делай ролик, а не пост» ведёт в модуль роликов и даёт команду фермы",
+      "args": [
+        "tools/viora.py",
+        "route",
+        "с этим делай ролик, а не пост"
+      ],
+      "exit": 0,
+      "contains": [
+        "Это ролик, а не пост",
+        "viora-shorts/LITE.md",
+        "python3 tools/reel.py farm"
+      ],
+      "forbidden": [
+        "viora-video",
+        "ship draft.txt"
+      ]
+    },
+    {
+      "id": "route-tiktok",
+      "why": "тикток и рилс это тоже свой ролик",
+      "args": [
+        "tools/viora.py",
+        "route",
+        "сделай рилс и тикток из подборки"
+      ],
+      "exit": 0,
+      "contains": [
+        "viora-shorts/LITE.md"
+      ]
+    },
+    {
+      "id": "route-obloshka",
+      "why": "обложка ролика уходит в модуль роликов",
+      "args": [
+        "tools/viora.py",
+        "route",
+        "нужна обложка и название ролика"
+      ],
+      "exit": 0,
+      "contains": [
+        "viora-shorts/LITE.md"
+      ]
+    },
+    {
+      "id": "route-chuzhoy-rolik",
+      "why": "разбор чужого ролика остаётся за viora-video",
+      "args": [
+        "tools/viora.py",
+        "route",
+        "перескажи чужой ролик с ютуба"
+      ],
+      "exit": 0,
+      "contains": [
+        "viora-video/LITE.md"
+      ],
+      "forbidden": [
+        "viora-shorts"
+      ]
+    },
+    {
+      "id": "video-meta-selftest",
+      "why": "линтер названий и описаний ролика ловит каждое нарушение шаблона автора",
+      "args": [
+        "tools/lint_video_meta.py",
+        "--selftest"
+      ],
+      "exit": 0,
+      "contains": [
+        "провалилось 0"
+      ]
+    },
+    {
+      "id": "reel-intake-4-nahodki",
+      "why": "мост пост -> ролик: builditapp выпадает честно, шпаргалка помечена как найденная поиском",
+      "args": [
+        "tools/reel.py",
+        "intake",
+        "viora-shorts/tests/fixtures/post-4-nahodki.txt",
+        "--offline"
+      ],
+      "exit": 0,
+      "contains": [
+        "Сырьё: post",
+        "x builditapp",
+        "адрес найден поиском, подтверди",
+        "Часть 1: Мегашпаргалка по Linux, learn-anything, cad-search"
+      ]
+    },
+    {
+      "id": "reel-plan-example",
+      "why": "пример плана из контракта проходит нашу проверку схемы",
+      "args": [
+        "tools/reel.py",
+        "check",
+        "viora-shorts/contract/plan.example.json"
+      ],
+      "exit": 0,
+      "contains": [
+        "План чистый."
+      ]
+    },
+    {
+      "id": "sync-engine-selftest",
+      "why": "вшивка движка не тащит видео, секреты и prefs автора и ловит ручную правку",
+      "args": [
+        "tools/sync_engine.py",
+        "--selftest"
+      ],
+      "exit": 0,
+      "contains": [
+        "провалилось 0"
+      ]
     }
   ]
 }

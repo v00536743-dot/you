@@ -84,6 +84,8 @@ REQUIRED = (
     os.path.join(SKILL_NAME, "memory", "metrics.md"),
     os.path.join(SKILL_NAME, "viora-research", "SKILL.md"),
     os.path.join(SKILL_NAME, "viora-video", "SKILL.md"),
+    os.path.join(SKILL_NAME, "viora-shorts", "SKILL.md"),
+    os.path.join(SKILL_NAME, "tools", "reel.py"),
 )
 
 # Три ссылки, из-за которых и написан этот скрипт.

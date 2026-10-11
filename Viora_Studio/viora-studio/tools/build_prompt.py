@@ -66,6 +66,8 @@ FULL_ORDER = [
     "reference/greetings.md",
     "reference/examples.md",
     "reference/shorts.md",
+    "reference/cover.md",
+    "viora-shorts/SKILL.md",
     "reference/seo.md",
     "reference/crosspost.md",
     "reference/growth.md",
@@ -75,6 +77,7 @@ FULL_ORDER = [
 CORE_NAME = "PROMPT-CORE.txt"
 FULL_NAME = "PROMPT-FULL.txt"
 # Потолок поднят в 7.0.0: ядру добавлены блоки soul и simple.
+# В 8.0.0 не тронут: видео-правила живут в viora-shorts, в ядре только три строки маршрута.
 MAX_CORE_CHARS = 25000
 
 
@@ -128,6 +131,9 @@ def build_core():
                 "Нет опыта автора в сырье - не спрашиваем и не выдумываем.",
                 "Непонятный термин - объясняем одной строкой или блоком «Простыми словами:».",
                 "Метрики сильнее правила, кроме запрета на выдуманные факты.",
+                "Автор пишет «делай ролик, а не пост»: это модуль viora-shorts, команда",
+                "python3 tools/reel.py farm <сырьё>. Без файлов: сценарий 20-40 с, результат",
+                "в первой фразе, ссылка «в закрепе», а не «в описании».",
             ]
         )
     )
