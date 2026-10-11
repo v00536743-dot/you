@@ -1,0 +1,230 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SHORTS plan",
+  "description": "Contract between the skills. SHORTS owns the schema, Viora Studio 8.0.0 produces plans against it. Change only together and bump schema_version. v1 additions in SHORTS 1.0.0 are optional fields only (see CHANGELOG).",
+  "type": "object",
+  "required": ["schema_version", "meta", "layout", "brand", "scenes"],
+  "properties": {
+    "schema_version": {"const": "1"},
+    "meta": {
+      "type": "object",
+      "required": ["name", "language", "platforms"],
+      "properties": {
+        "name": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "language": {"type": "string", "minLength": 2},
+        "platforms": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"enum": ["youtube_shorts", "tiktok", "reels", "youtube"]}
+        },
+        "duration_target": {
+          "type": "array",
+          "items": {"type": "number"},
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "emotion": {"type": "string"},
+        "audience": {"type": "string"},
+        "loop": {"type": "boolean"},
+        "fps": {"enum": [30, 60], "description": "optional, default 30"}
+      }
+    },
+    "layout": {
+      "type": "object",
+      "required": ["mode"],
+      "properties": {
+        "mode": {
+          "enum": ["three", "top_center", "center_bottom", "center_only"]
+        },
+        "top": {
+          "type": "object",
+          "properties": {
+            "height_pct": {"type": "number", "maximum": 20},
+            "source": {"type": "string", "description": "video file, html:<file.html>, or color:#hex (a solid colour is an empty panel and fails QA)"},
+            "start": {"type": "number", "minimum": 0, "description": "optional offset into the top video, s"}
+          }
+        },
+        "bottom": {
+          "type": "object",
+          "properties": {
+            "height_pct": {"type": "number", "maximum": 20},
+            "handle": {"type": "string"},
+            "links": {"type": "array", "items": {"type": "string"}},
+            "tagline": {"type": "string", "description": "optional short line under the handle"},
+            "logo": {"type": "string", "description": "optional logo image path"}
+          }
+        },
+        "cta_in_center": {
+          "type": "array",
+          "maxItems": 3,
+          "items": {
+            "type": "object",
+            "required": ["t", "kind"],
+            "properties": {
+              "t": {"type": "number", "minimum": 0},
+              "duration": {"type": "number", "minimum": 1.5, "maximum": 3},
+              "kind": {"enum": ["handle", "qr", "text"]},
+              "text": {"type": "string"},
+              "url": {"type": "string"},
+              "y": {"type": "number", "description": "optional centre y override in px; QA checks it stays in the safe zone"}
+            }
+          }
+        }
+      }
+    },
+    "brand": {
+      "type": "object",
+      "required": ["preset"],
+      "properties": {
+        "preset": {"type": "string", "description": "mono, editorial, terminal, punch, viora, or a path to brand.json"},
+        "palette": {
+          "type": "object",
+          "properties": {
+            "bg": {"type": "string"},
+            "fg": {"type": "string"},
+            "accent": {"type": "string"}
+          }
+        },
+        "fonts": {
+          "type": "object",
+          "properties": {
+            "display": {"type": "string"},
+            "body": {"type": "string"},
+            "logo": {"type": "string"},
+            "reason": {"type": "string", "description": "why a common default font (Inter, Arial...) was chosen on purpose"}
+          }
+        },
+        "line_width": {"type": "number"},
+        "radius": {"type": "number"},
+        "logo": {"type": "object", "properties": {"color": {"type": "string"}, "mono": {"type": "string"}}},
+        "emotion_default": {"type": "string"},
+        "tone": {"type": "string"},
+        "label_style": {"enum": ["outline", "plate"]},
+        "upper": {"type": "boolean"},
+        "effects": {
+          "type": "object",
+          "description": "Slop effects. Off by default. If switched on, the QA gate fails the video on purpose.",
+          "properties": {
+            "text_glow": {"type": "boolean"},
+            "gradient_plate": {"type": "boolean"}
+          }
+        }
+      }
+    },
+    "captions": {
+      "type": "object",
+      "properties": {
+        "enabled": {"type": "boolean"},
+        "max_words": {"type": "integer", "minimum": 1, "maximum": 4},
+        "highlight": {"enum": ["accent", "none"]},
+        "subs": {"type": "object", "additionalProperties": {"type": "string"}},
+        "size": {"type": "number", "description": "em size in px, min 64"},
+        "y": {"type": "number", "description": "optional baseline override in px; QA checks the safe zone"},
+        "upper": {"type": "boolean"}
+      }
+    },
+    "audio": {
+      "type": "object",
+      "properties": {
+        "voice": {
+          "type": "object",
+          "properties": {
+            "engine": {"type": "string"},
+            "voice": {"type": "string"},
+            "speed": {"type": "number"}
+          }
+        },
+        "music": {
+          "type": "object",
+          "properties": {
+            "source": {"type": "string"},
+            "duck_db": {"type": "number"},
+            "start": {"type": "number", "minimum": 0},
+            "gain_db": {"type": "number"}
+          }
+        },
+        "target_lufs": {"type": "number"},
+        "sfx_auto": {"type": "boolean", "description": "click on clicks, whoosh on cuts, pop on CTA (default true)"}
+      }
+    },
+    "fx": {
+      "type": "object",
+      "description": "optional beat effects for edits",
+      "properties": {
+        "punch": {"type": "array", "items": {"type": "number"}, "description": "times of zoom punches, s"},
+        "flash": {"type": "array", "items": {"type": "number"}, "description": "times of 2-frame brightness flashes, s"}
+      }
+    },
+    "scenes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "source"],
+        "properties": {
+          "id": {"type": "string"},
+          "say": {"type": "string"},
+          "on_screen_text": {"type": "string"},
+          "why": {"type": "string"},
+          "duration": {"type": "number", "exclusiveMinimum": 0, "description": "output length when there is no voice, s"},
+          "transcript": {
+            "type": "array",
+            "description": "word timings of real speech in this scene (relative to scene start), used for captions when there is no say",
+            "items": {"type": "object", "required": ["w", "s", "e"], "properties": {"w": {"type": "string"}, "s": {"type": "number"}, "e": {"type": "number"}}}
+          },
+          "source": {
+            "type": "object",
+            "required": ["type"],
+            "properties": {
+              "type": {
+                "enum": ["site", "html", "video", "film", "text", "images"]
+              },
+              "ref": {"type": "string"},
+              "actions": {"type": "array", "items": {"type": "object"}},
+              "in": {"type": "number", "minimum": 0},
+              "out": {"type": "number", "minimum": 0},
+              "crop_x": {"type": "number", "minimum": 0, "maximum": 1},
+              "keep_audio": {"type": "boolean"},
+              "viewport": {"description": "mobile | desktop | {w,h} in CSS px"},
+              "mode": {"enum": ["deterministic", "realtime"]},
+              "images": {"type": "array", "items": {"type": "string"}},
+              "focus": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2},
+              "zoom_on_click": {"type": "boolean"}
+            }
+          },
+          "speed": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["t", "rate"],
+              "properties": {
+                "t": {"type": "number"},
+                "rate": {"type": "number", "exclusiveMinimum": 0}
+              }
+            }
+          },
+          "sfx": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["t", "name"],
+              "properties": {
+                "t": {"type": "number"},
+                "name": {"type": "string"}
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "topic": {"type": "string"},
+        "hashtags": {"type": "array", "items": {"type": "string"}},
+        "cover_text": {"type": "string"},
+        "utm": {"type": "boolean"}
+      }
+    }
+  }
+}
