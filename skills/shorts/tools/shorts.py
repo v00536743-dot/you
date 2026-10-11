@@ -197,7 +197,8 @@ def cmd_edit(a) -> int:
     from shortskit.adapters.film import edit_plan
 
     p = edit_plan(video=a.video, music=a.music, length=a.length, name=a.name, title=a.title, lang=a.lang,
-                  n=a.n, query=a.query)
+                  n=a.n, query=a.query, links=a.link or None, handle=a.handle or "", brand=a.brand,
+                  platforms=a.platforms)
     Path(a.output).write_text(json.dumps(p, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(a.output)
     return 0
@@ -207,7 +208,7 @@ def cmd_clips(a) -> int:
     from shortskit.adapters.film import clips_plans
 
     files = clips_plans(video=a.video, out_dir=Path(a.output), n=a.n, length=a.length, lang=a.lang,
-                        transcript=a.transcript)
+                        transcript=a.transcript, brand=a.brand, platforms=a.platforms)
     _print([str(f) for f in files])
     return 0
 
@@ -245,10 +246,13 @@ def main(argv: list[str] | None = None) -> int:
     s = sub.add_parser("edit"); s.add_argument("--video"); s.add_argument("--query"); s.add_argument("--music", required=True)
     s.add_argument("--length", type=float, default=24.0); s.add_argument("--name", default="film-edit")
     s.add_argument("--title", default=""); s.add_argument("--lang", default="ru"); s.add_argument("-n", type=int, default=10)
+    s.add_argument("--handle"); s.add_argument("--link", nargs="*"); s.add_argument("--brand", default="mono")
+    s.add_argument("--platforms", nargs="*", default=["youtube_shorts"])
     s.add_argument("-o", "--output", default="plan.json"); s.set_defaults(fn=cmd_edit)
     s = sub.add_parser("clips"); s.add_argument("--video", required=True); s.add_argument("-n", type=int, default=3)
     s.add_argument("--length", type=float, default=30.0); s.add_argument("--lang", default="ru")
     s.add_argument("--transcript", help="words json [{w,s,e}] (from whisper); without it moments come from loudness and cuts")
+    s.add_argument("--brand", default="mono"); s.add_argument("--platforms", nargs="*", default=["youtube_shorts"])
     s.add_argument("-o", "--output", default="out/clips"); s.set_defaults(fn=cmd_clips)
 
     a = ap.parse_args(argv)

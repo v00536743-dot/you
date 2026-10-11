@@ -1,0 +1,545 @@
+{
+  "engine": "shorts",
+  "version": "1.0.0",
+  "name": "tos-edit",
+  "video": "tos-edit.mp4",
+  "fps": 30,
+  "duration": 20.267,
+  "language": "en",
+  "platforms": [
+    "youtube_shorts",
+    "tiktok"
+  ],
+  "duration_target": [
+    14.0,
+    26.0
+  ],
+  "loop": true,
+  "layout": {
+    "mode": "center_only",
+    "top": null,
+    "center": {
+      "x": 0,
+      "y": 0,
+      "w": 1080,
+      "h": 1920
+    },
+    "bottom": null,
+    "safe": {
+      "rect": {
+        "x": 120,
+        "y": 288,
+        "w": 768,
+        "h": 960
+      },
+      "exclusions": [
+        {
+          "x": 780,
+          "y": 840,
+          "w": 300,
+          "h": 1080
+        }
+      ],
+      "platforms": [
+        "youtube_shorts",
+        "tiktok"
+      ]
+    },
+    "caption_band": {
+      "x": 120,
+      "y": 928,
+      "w": 660,
+      "h": 320
+    },
+    "label_box": {
+      "x": 120,
+      "y": 304,
+      "w": 768,
+      "h": 240
+    },
+    "cta_box": {
+      "x": 120,
+      "y": 304,
+      "w": 660,
+      "h": 608
+    },
+    "center_pct": 100.0
+  },
+  "brand": {
+    "name": "punch",
+    "palette": {
+      "bg": "#000000",
+      "fg": "#FFFFFF",
+      "accent": "#FFD60A"
+    },
+    "fonts": {
+      "display": "/tmp/hoplite/workspace/skills/shorts/assets/fonts/Oswald-Bold.ttf",
+      "body": "/tmp/hoplite/workspace/skills/shorts/assets/fonts/Manrope-Bold.ttf",
+      "logo": "/tmp/hoplite/workspace/skills/shorts/assets/fonts/Oswald-Bold.ttf"
+    },
+    "font_families": {
+      "display": "Oswald Bold",
+      "body": "Manrope Bold"
+    },
+    "caption": {
+      "fill": "#FFFFFF",
+      "accent": "#FFD60A",
+      "outline": "#000000",
+      "highlight_mode": "color"
+    },
+    "line_width": 4,
+    "radius": 0,
+    "label_style": "plate",
+    "upper": true,
+    "effects": {},
+    "fonts_reason": "",
+    "warnings": []
+  },
+  "top": {
+    "kind": "none"
+  },
+  "bottom": null,
+  "scenes": [
+    {
+      "id": "shot-01",
+      "type": "film",
+      "start": 0.0,
+      "length": 1.068,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": "TEARS OF STEEL"
+    },
+    {
+      "id": "shot-02",
+      "type": "film",
+      "start": 1.068,
+      "length": 1.068,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": ""
+    },
+    {
+      "id": "shot-03",
+      "type": "film",
+      "start": 2.136,
+      "length": 1.068,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": ""
+    },
+    {
+      "id": "shot-04",
+      "type": "film",
+      "start": 3.204,
+      "length": 1.068,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": ""
+    },
+    {
+      "id": "shot-05",
+      "type": "film",
+      "start": 4.272,
+      "length": 1.091,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": ""
+    },
+    {
+      "id": "shot-06",
+      "type": "film",
+      "start": 5.363,
+      "length": 1.069,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": ""
+    },
+    {
+      "id": "shot-07",
+      "type": "film",
+      "start": 6.432,
+      "length": 1.068,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": ""
+    },
+    {
+      "id": "shot-08",
+      "type": "film",
+      "start": 7.5,
+      "length": 1.068,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": ""
+    },
+    {
+      "id": "shot-09",
+      "type": "film",
+      "start": 8.568,
+      "length": 1.068,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": ""
+    },
+    {
+      "id": "shot-10",
+      "type": "film",
+      "start": 9.636,
+      "length": 1.068,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": ""
+    },
+    {
+      "id": "shot-11",
+      "type": "film",
+      "start": 10.704,
+      "length": 1.091,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": ""
+    },
+    {
+      "id": "shot-12",
+      "type": "film",
+      "start": 11.795,
+      "length": 1.069,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": ""
+    },
+    {
+      "id": "shot-13",
+      "type": "film",
+      "start": 12.864,
+      "length": 1.068,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": ""
+    },
+    {
+      "id": "shot-14",
+      "type": "film",
+      "start": 13.932,
+      "length": 1.068,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": ""
+    },
+    {
+      "id": "shot-15",
+      "type": "film",
+      "start": 15.0,
+      "length": 1.068,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": ""
+    },
+    {
+      "id": "shot-16",
+      "type": "film",
+      "start": 16.068,
+      "length": 1.068,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": ""
+    },
+    {
+      "id": "shot-17",
+      "type": "film",
+      "start": 17.136,
+      "length": 1.068,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": ""
+    },
+    {
+      "id": "shot-18",
+      "type": "film",
+      "start": 18.204,
+      "length": 1.068,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": ""
+    },
+    {
+      "id": "shot-19",
+      "type": "film",
+      "start": 19.272,
+      "length": 1.0,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": ""
+    }
+  ],
+  "overlays": [
+    {
+      "kind": "label",
+      "box": [
+        136,
+        304,
+        867,
+        500
+      ],
+      "text": "TEARS OF STEEL",
+      "min_font": 104,
+      "pairs": [
+        [
+          "#000000",
+          "#FFD60A",
+          7.0
+        ]
+      ],
+      "url": "",
+      "qr_box": null,
+      "t0": 0.0,
+      "t1": 1.068
+    },
+    {
+      "kind": "cta_handle",
+      "box": [
+        128,
+        496,
+        772,
+        727
+      ],
+      "text": "@VioraStudio",
+      "min_font": 96,
+      "pairs": [
+        [
+          "#FFFFFF",
+          "#000000",
+          7.0
+        ]
+      ],
+      "url": "",
+      "qr_box": null,
+      "t0": 10.0,
+      "t1": 12.0
+    },
+    {
+      "kind": "cta_qr",
+      "box": [
+        176,
+        328,
+        717,
+        892
+      ],
+      "text": "t.me/VioraStudio",
+      "min_font": 56,
+      "pairs": [
+        [
+          "#000000",
+          "#FFFFFF",
+          7.0
+        ]
+      ],
+      "url": "https://t.me/VioraStudio",
+      "qr_box": [
+        243,
+        360,
+        650,
+        767
+      ],
+      "t0": 16.8,
+      "t1": 19.8
+    }
+  ],
+  "captions": {
+    "enabled": false,
+    "chunks": [],
+    "words_spoken": [],
+    "fill": "#FFFFFF",
+    "accent": "#FFD60A",
+    "outline": "#000000",
+    "highlight": "accent"
+  },
+  "events": [
+    {
+      "t": 0.0,
+      "kind": "scene",
+      "id": "shot-01"
+    },
+    {
+      "t": 0.0,
+      "kind": "label"
+    },
+    {
+      "t": 1.068,
+      "kind": "scene",
+      "id": "shot-02"
+    },
+    {
+      "t": 2.136,
+      "kind": "scene",
+      "id": "shot-03"
+    },
+    {
+      "t": 2.136,
+      "kind": "punch"
+    },
+    {
+      "t": 3.204,
+      "kind": "scene",
+      "id": "shot-04"
+    },
+    {
+      "t": 4.272,
+      "kind": "scene",
+      "id": "shot-05"
+    },
+    {
+      "t": 4.272,
+      "kind": "punch"
+    },
+    {
+      "t": 5.363,
+      "kind": "scene",
+      "id": "shot-06"
+    },
+    {
+      "t": 6.432,
+      "kind": "scene",
+      "id": "shot-07"
+    },
+    {
+      "t": 6.432,
+      "kind": "punch"
+    },
+    {
+      "t": 7.5,
+      "kind": "scene",
+      "id": "shot-08"
+    },
+    {
+      "t": 8.568,
+      "kind": "scene",
+      "id": "shot-09"
+    },
+    {
+      "t": 8.568,
+      "kind": "punch"
+    },
+    {
+      "t": 9.636,
+      "kind": "scene",
+      "id": "shot-10"
+    },
+    {
+      "t": 10.0,
+      "kind": "cta_handle"
+    },
+    {
+      "t": 10.703999999999999,
+      "kind": "scene",
+      "id": "shot-11"
+    },
+    {
+      "t": 10.704,
+      "kind": "punch"
+    },
+    {
+      "t": 11.794999999999998,
+      "kind": "scene",
+      "id": "shot-12"
+    },
+    {
+      "t": 12.863999999999997,
+      "kind": "scene",
+      "id": "shot-13"
+    },
+    {
+      "t": 12.864,
+      "kind": "punch"
+    },
+    {
+      "t": 13.931999999999997,
+      "kind": "scene",
+      "id": "shot-14"
+    },
+    {
+      "t": 14.999999999999996,
+      "kind": "scene",
+      "id": "shot-15"
+    },
+    {
+      "t": 15.0,
+      "kind": "punch"
+    },
+    {
+      "t": 16.067999999999998,
+      "kind": "scene",
+      "id": "shot-16"
+    },
+    {
+      "t": 16.8,
+      "kind": "cta_qr"
+    },
+    {
+      "t": 17.136,
+      "kind": "scene",
+      "id": "shot-17"
+    },
+    {
+      "t": 17.136,
+      "kind": "punch"
+    },
+    {
+      "t": 18.204,
+      "kind": "scene",
+      "id": "shot-18"
+    },
+    {
+      "t": 19.272,
+      "kind": "punch"
+    },
+    {
+      "t": 19.272000000000002,
+      "kind": "scene",
+      "id": "shot-19"
+    }
+  ],
+  "sfx": [],
+  "audio": {
+    "voice": false
+  },
+  "fx": {
+    "punch": [
+      2.136,
+      4.272,
+      6.432,
+      8.568,
+      10.704,
+      12.864,
+      15.0,
+      17.136,
+      19.272
+    ],
+    "flash": [
+      10.704
+    ]
+  },
+  "effects": {},
+  "issues": [],
+  "render_seconds": 95.6,
+  "forced": false
+}

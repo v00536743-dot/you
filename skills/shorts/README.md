@@ -41,6 +41,7 @@ tools/shortskit/           движок: engine/ (layout, brand, tts, captions, 
                            adapters/ (site, html, media, film, text_images), qa/, meta/, memory, planner, doctor
 assets/                    шрифты OFL, пресеты бренда, своя музыка и геймплей (CC0), исходники
 examples/                  планы демо-роликов
+demos/                     результаты 4 демо: QA, подписи, контактные листы, обложки (видео не в git)
 memory/                    prefs.example.json, experiments.md, metrics.md (личные файлы в .gitignore)
 tests/                     unit, integration (офлайн-фикстуры), e2e, плохие случаи; network помечены
 evals/cases.json           эталонные случаи для модели

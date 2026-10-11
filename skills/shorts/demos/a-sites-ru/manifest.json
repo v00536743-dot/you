@@ -1,0 +1,1347 @@
+{
+  "engine": "shorts",
+  "version": "1.0.0",
+  "name": "two-free-sites",
+  "video": "two-free-sites.mp4",
+  "fps": 30,
+  "duration": 26.267,
+  "language": "ru",
+  "platforms": [
+    "youtube_shorts",
+    "tiktok"
+  ],
+  "duration_target": [
+    20,
+    40
+  ],
+  "loop": true,
+  "layout": {
+    "mode": "three",
+    "top": {
+      "x": 0,
+      "y": 0,
+      "w": 1080,
+      "h": 384
+    },
+    "center": {
+      "x": 0,
+      "y": 384,
+      "w": 1080,
+      "h": 1232
+    },
+    "bottom": {
+      "x": 0,
+      "y": 1616,
+      "w": 1080,
+      "h": 304
+    },
+    "safe": {
+      "rect": {
+        "x": 120,
+        "y": 288,
+        "w": 768,
+        "h": 960
+      },
+      "exclusions": [
+        {
+          "x": 780,
+          "y": 840,
+          "w": 300,
+          "h": 1080
+        }
+      ],
+      "platforms": [
+        "youtube_shorts",
+        "tiktok"
+      ]
+    },
+    "caption_band": {
+      "x": 120,
+      "y": 928,
+      "w": 660,
+      "h": 320
+    },
+    "label_box": {
+      "x": 120,
+      "y": 304,
+      "w": 768,
+      "h": 240
+    },
+    "cta_box": {
+      "x": 120,
+      "y": 304,
+      "w": 660,
+      "h": 608
+    },
+    "center_pct": 64.17
+  },
+  "brand": {
+    "name": "viora",
+    "palette": {
+      "bg": "#000000",
+      "fg": "#F5F5F5",
+      "accent": "#FF6A1A"
+    },
+    "fonts": {
+      "display": "/tmp/hoplite/workspace/skills/shorts/assets/fonts/Montserrat-ExtraBold.ttf",
+      "body": "/tmp/hoplite/workspace/skills/shorts/assets/fonts/Jost-Medium.ttf",
+      "logo": "/tmp/hoplite/workspace/skills/shorts/assets/fonts/Jost-Light.ttf"
+    },
+    "font_families": {
+      "display": "Montserrat ExtraBold",
+      "body": "Jost Medium"
+    },
+    "caption": {
+      "fill": "#FFFFFF",
+      "accent": "#FF6A1A",
+      "outline": "#000000",
+      "highlight_mode": "color"
+    },
+    "line_width": 4,
+    "radius": 0,
+    "label_style": "plate",
+    "upper": true,
+    "effects": {},
+    "fonts_reason": "",
+    "warnings": []
+  },
+  "top": {
+    "kind": "video",
+    "path": "/tmp/hoplite/workspace/skills/shorts/assets/footage/own-game-loop.mp4",
+    "start": 0.0
+  },
+  "bottom": {
+    "handle": "VioraStudio",
+    "links": [
+      "https://t.me/VioraStudio"
+    ]
+  },
+  "scenes": [
+    {
+      "id": "hook",
+      "type": "site",
+      "start": 0.0,
+      "length": 4.142,
+      "skipped": "",
+      "notes": [],
+      "say": "Два бесплатных сайта, и оба вам пригодятся.",
+      "on_screen_text": "2 САЙТА БЕСПЛАТНО"
+    },
+    {
+      "id": "site-1",
+      "type": "site",
+      "start": 4.142,
+      "length": 8.726,
+      "skipped": "",
+      "notes": [],
+      "say": "Первый, лёрн энисинг. Пишешь тему, например линукс, и получаешь подборку: книги, курсы, ссылки.",
+      "on_screen_text": "1 LEARN-ANYTHING"
+    },
+    {
+      "id": "site-2",
+      "type": "site",
+      "start": 12.868,
+      "length": 7.55,
+      "skipped": "",
+      "notes": [],
+      "say": "Второй, кэд лукап. Описываешь деталь обычными словами и получаешь готовые 3D модели.",
+      "on_screen_text": "2 CAD LOOKUP"
+    },
+    {
+      "id": "loop",
+      "type": "site",
+      "start": 20.418,
+      "length": 5.846,
+      "skipped": "",
+      "notes": [],
+      "say": "Оба бесплатные. Ссылка на остальные находки в закрепе и в канале.",
+      "on_screen_text": ""
+    }
+  ],
+  "overlays": [
+    {
+      "kind": "label",
+      "box": [
+        128,
+        304,
+        881,
+        598
+      ],
+      "text": "2 САЙТА БЕСПЛАТНО",
+      "min_font": 100,
+      "pairs": [
+        [
+          "#000000",
+          "#FF6A1A",
+          7.0
+        ]
+      ],
+      "url": "",
+      "qr_box": null,
+      "t0": 0.0,
+      "t1": 4.142
+    },
+    {
+      "kind": "label",
+      "box": [
+        176,
+        304,
+        828,
+        608
+      ],
+      "text": "1 LEARN-ANYTHING",
+      "min_font": 104,
+      "pairs": [
+        [
+          "#000000",
+          "#FF6A1A",
+          7.0
+        ]
+      ],
+      "url": "",
+      "qr_box": null,
+      "t0": 4.142,
+      "t1": 12.868
+    },
+    {
+      "kind": "label",
+      "box": [
+        232,
+        304,
+        773,
+        608
+      ],
+      "text": "2 CAD LOOKUP",
+      "min_font": 104,
+      "pairs": [
+        [
+          "#000000",
+          "#FF6A1A",
+          7.0
+        ]
+      ],
+      "url": "",
+      "qr_box": null,
+      "t0": 12.868,
+      "t1": 20.418
+    },
+    {
+      "kind": "cta_handle",
+      "box": [
+        128,
+        464,
+        772,
+        751
+      ],
+      "text": "@VioraStudio t.me/VioraStudio",
+      "min_font": 56,
+      "pairs": [
+        [
+          "#F5F5F5",
+          "#000000",
+          7.0
+        ],
+        [
+          "#FF6A1A",
+          "#000000",
+          4.5
+        ]
+      ],
+      "url": "",
+      "qr_box": null,
+      "t0": 14.0,
+      "t1": 16.5
+    },
+    {
+      "kind": "cta_qr",
+      "box": [
+        200,
+        320,
+        700,
+        888
+      ],
+      "text": "t.me/VioraStudio",
+      "min_font": 56,
+      "pairs": [
+        [
+          "#000000",
+          "#F5F5F5",
+          7.0
+        ]
+      ],
+      "url": "https://t.me/VioraStudio",
+      "qr_box": [
+        246,
+        352,
+        653,
+        759
+      ],
+      "t0": 23.264,
+      "t1": 26.264
+    }
+  ],
+  "captions": {
+    "enabled": true,
+    "chunks": [
+      {
+        "text": "Два бесплатных",
+        "start": 0.1,
+        "end": 1.026,
+        "box": [
+          164,
+          986,
+          736,
+          1222
+        ],
+        "size": 72,
+        "lines": 2,
+        "overflow": false,
+        "words": [
+          {
+            "w": "Два",
+            "s": 0.1,
+            "e": 0.517,
+            "scene": "hook"
+          },
+          {
+            "w": "бесплатных",
+            "s": 0.517,
+            "e": 1.026,
+            "scene": "hook"
+          }
+        ]
+      },
+      {
+        "text": "сайта,",
+        "start": 1.026,
+        "end": 1.443,
+        "box": [
+          296,
+          1098,
+          604,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "сайта,",
+            "s": 1.026,
+            "e": 1.443,
+            "scene": "hook"
+          }
+        ]
+      },
+      {
+        "text": "и оба вам",
+        "start": 1.651,
+        "end": 2.253,
+        "box": [
+          217,
+          1098,
+          683,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "и",
+            "s": 1.651,
+            "e": 1.836,
+            "scene": "hook"
+          },
+          {
+            "w": "оба",
+            "s": 1.836,
+            "e": 2.079,
+            "scene": "hook"
+          },
+          {
+            "w": "вам",
+            "s": 2.079,
+            "e": 2.253,
+            "scene": "hook"
+          }
+        ]
+      },
+      {
+        "text": "пригодятся.",
+        "start": 2.253,
+        "end": 2.97,
+        "box": [
+          168,
+          1098,
+          732,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "пригодятся.",
+            "s": 2.253,
+            "e": 2.97,
+            "scene": "hook"
+          }
+        ]
+      },
+      {
+        "text": "Первый,",
+        "start": 4.242,
+        "end": 4.717,
+        "box": [
+          261,
+          1098,
+          639,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "Первый,",
+            "s": 4.242,
+            "e": 4.717,
+            "scene": "site-1"
+          }
+        ]
+      },
+      {
+        "text": "learn-anything.",
+        "start": 4.96,
+        "end": 5.955,
+        "box": [
+          232,
+          986,
+          668,
+          1222
+        ],
+        "size": 72,
+        "lines": 2,
+        "overflow": false,
+        "words": [
+          {
+            "w": "learn-anything.",
+            "s": 4.96,
+            "e": 5.955
+          }
+        ]
+      },
+      {
+        "text": "Пишешь тему,",
+        "start": 6.738,
+        "end": 7.421,
+        "box": [
+          256,
+          986,
+          644,
+          1222
+        ],
+        "size": 72,
+        "lines": 2,
+        "overflow": false,
+        "words": [
+          {
+            "w": "Пишешь",
+            "s": 6.738,
+            "e": 7.132,
+            "scene": "site-1"
+          },
+          {
+            "w": "тему,",
+            "s": 7.132,
+            "e": 7.421,
+            "scene": "site-1"
+          }
+        ]
+      },
+      {
+        "text": "например Linux,",
+        "start": 7.664,
+        "end": 8.555,
+        "box": [
+          216,
+          986,
+          684,
+          1222
+        ],
+        "size": 72,
+        "lines": 2,
+        "overflow": false,
+        "words": [
+          {
+            "w": "например",
+            "s": 7.664,
+            "e": 8.069,
+            "scene": "site-1"
+          },
+          {
+            "w": "Linux,",
+            "s": 8.069,
+            "e": 8.555
+          }
+        ]
+      },
+      {
+        "text": "и получаешь подборку:",
+        "start": 8.787,
+        "end": 9.817,
+        "box": [
+          145,
+          986,
+          755,
+          1222
+        ],
+        "size": 72,
+        "lines": 2,
+        "overflow": false,
+        "words": [
+          {
+            "w": "и",
+            "s": 8.787,
+            "e": 8.879,
+            "scene": "site-1"
+          },
+          {
+            "w": "получаешь",
+            "s": 8.879,
+            "e": 9.285,
+            "scene": "site-1"
+          },
+          {
+            "w": "подборку:",
+            "s": 9.285,
+            "e": 9.817,
+            "scene": "site-1"
+          }
+        ]
+      },
+      {
+        "text": "книги,",
+        "start": 9.944,
+        "end": 10.419,
+        "box": [
+          298,
+          1098,
+          602,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "книги,",
+            "s": 9.944,
+            "e": 10.419,
+            "scene": "site-1"
+          }
+        ]
+      },
+      {
+        "text": "курсы,",
+        "start": 10.558,
+        "end": 10.986,
+        "box": [
+          291,
+          1098,
+          609,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "курсы,",
+            "s": 10.558,
+            "e": 10.986,
+            "scene": "site-1"
+          }
+        ]
+      },
+      {
+        "text": "ссылки.",
+        "start": 11.113,
+        "end": 11.704,
+        "box": [
+          260,
+          1098,
+          640,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "ссылки.",
+            "s": 11.113,
+            "e": 11.704,
+            "scene": "site-1"
+          }
+        ]
+      },
+      {
+        "text": "Второй,",
+        "start": 12.968,
+        "end": 13.581,
+        "box": [
+          269,
+          1098,
+          631,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "Второй,",
+            "s": 12.968,
+            "e": 13.581,
+            "scene": "site-2"
+          }
+        ]
+      },
+      {
+        "text": "CAD Lookup.",
+        "start": 13.813,
+        "end": 14.496,
+        "box": [
+          177,
+          1098,
+          723,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "CAD Lookup.",
+            "s": 13.813,
+            "e": 14.496
+          }
+        ]
+      },
+      {
+        "text": "Описываешь деталь",
+        "start": 15.349,
+        "end": 16.332,
+        "box": [
+          145,
+          986,
+          755,
+          1222
+        ],
+        "size": 72,
+        "lines": 2,
+        "overflow": false,
+        "words": [
+          {
+            "w": "Описываешь",
+            "s": 15.349,
+            "e": 15.997,
+            "scene": "site-2"
+          },
+          {
+            "w": "деталь",
+            "s": 15.997,
+            "e": 16.332,
+            "scene": "site-2"
+          }
+        ]
+      },
+      {
+        "text": "обычными словами",
+        "start": 16.332,
+        "end": 17.339,
+        "box": [
+          192,
+          986,
+          708,
+          1222
+        ],
+        "size": 72,
+        "lines": 2,
+        "overflow": false,
+        "words": [
+          {
+            "w": "обычными",
+            "s": 16.332,
+            "e": 16.865,
+            "scene": "site-2"
+          },
+          {
+            "w": "словами",
+            "s": 16.865,
+            "e": 17.339,
+            "scene": "site-2"
+          }
+        ]
+      },
+      {
+        "text": "и получаешь",
+        "start": 17.339,
+        "end": 17.93,
+        "box": [
+          145,
+          1098,
+          755,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "и",
+            "s": 17.339,
+            "e": 17.501,
+            "scene": "site-2"
+          },
+          {
+            "w": "получаешь",
+            "s": 17.501,
+            "e": 17.93,
+            "scene": "site-2"
+          }
+        ]
+      },
+      {
+        "text": "готовые 3D модели.",
+        "start": 17.93,
+        "end": 19.237,
+        "box": [
+          191,
+          986,
+          709,
+          1222
+        ],
+        "size": 72,
+        "lines": 2,
+        "overflow": false,
+        "words": [
+          {
+            "w": "готовые",
+            "s": 17.93,
+            "e": 18.369,
+            "scene": "site-2"
+          },
+          {
+            "w": "3D",
+            "s": 18.369,
+            "e": 18.67,
+            "scene": "site-2"
+          },
+          {
+            "w": "модели.",
+            "s": 18.67,
+            "e": 19.237,
+            "scene": "site-2"
+          }
+        ]
+      },
+      {
+        "text": "Оба бесплатные.",
+        "start": 20.518,
+        "end": 21.536,
+        "box": [
+          155,
+          986,
+          745,
+          1222
+        ],
+        "size": 72,
+        "lines": 2,
+        "overflow": false,
+        "words": [
+          {
+            "w": "Оба",
+            "s": 20.518,
+            "e": 20.865,
+            "scene": "loop"
+          },
+          {
+            "w": "бесплатные.",
+            "s": 20.865,
+            "e": 21.536,
+            "scene": "loop"
+          }
+        ]
+      },
+      {
+        "text": "Ссылка на остальные",
+        "start": 22.32,
+        "end": 23.327,
+        "box": [
+          190,
+          986,
+          710,
+          1222
+        ],
+        "size": 72,
+        "lines": 2,
+        "overflow": false,
+        "words": [
+          {
+            "w": "Ссылка",
+            "s": 22.32,
+            "e": 22.864,
+            "scene": "loop"
+          },
+          {
+            "w": "на",
+            "s": 22.864,
+            "e": 22.945,
+            "scene": "loop"
+          },
+          {
+            "w": "остальные",
+            "s": 22.945,
+            "e": 23.327,
+            "scene": "loop"
+          }
+        ]
+      },
+      {
+        "text": "находки в закрепе",
+        "start": 23.327,
+        "end": 24.345,
+        "box": [
+          208,
+          986,
+          692,
+          1222
+        ],
+        "size": 72,
+        "lines": 2,
+        "overflow": false,
+        "words": [
+          {
+            "w": "находки",
+            "s": 23.327,
+            "e": 23.767,
+            "scene": "loop"
+          },
+          {
+            "w": "в",
+            "s": 23.767,
+            "e": 23.801,
+            "scene": "loop"
+          },
+          {
+            "w": "закрепе",
+            "s": 23.801,
+            "e": 24.345,
+            "scene": "loop"
+          }
+        ]
+      },
+      {
+        "text": "и в канале.",
+        "start": 24.345,
+        "end": 25.074,
+        "box": [
+          189,
+          1098,
+          711,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "и",
+            "s": 24.345,
+            "e": 24.484,
+            "scene": "loop"
+          },
+          {
+            "w": "в",
+            "s": 24.484,
+            "e": 24.53,
+            "scene": "loop"
+          },
+          {
+            "w": "канале.",
+            "s": 24.53,
+            "e": 25.074,
+            "scene": "loop"
+          }
+        ]
+      }
+    ],
+    "words_spoken": [
+      {
+        "w": "Два",
+        "s": 0.1,
+        "e": 0.517,
+        "scene": "hook"
+      },
+      {
+        "w": "бесплатных",
+        "s": 0.517,
+        "e": 1.026,
+        "scene": "hook"
+      },
+      {
+        "w": "сайта,",
+        "s": 1.026,
+        "e": 1.443,
+        "scene": "hook"
+      },
+      {
+        "w": "и",
+        "s": 1.651,
+        "e": 1.836,
+        "scene": "hook"
+      },
+      {
+        "w": "оба",
+        "s": 1.836,
+        "e": 2.079,
+        "scene": "hook"
+      },
+      {
+        "w": "вам",
+        "s": 2.079,
+        "e": 2.253,
+        "scene": "hook"
+      },
+      {
+        "w": "пригодятся.",
+        "s": 2.253,
+        "e": 2.97,
+        "scene": "hook"
+      },
+      {
+        "w": "Первый,",
+        "s": 4.242,
+        "e": 4.717,
+        "scene": "site-1"
+      },
+      {
+        "w": "лёрн",
+        "s": 4.96,
+        "e": 5.342,
+        "scene": "site-1"
+      },
+      {
+        "w": "энисинг.",
+        "s": 5.342,
+        "e": 5.955,
+        "scene": "site-1"
+      },
+      {
+        "w": "Пишешь",
+        "s": 6.738,
+        "e": 7.132,
+        "scene": "site-1"
+      },
+      {
+        "w": "тему,",
+        "s": 7.132,
+        "e": 7.421,
+        "scene": "site-1"
+      },
+      {
+        "w": "например",
+        "s": 7.664,
+        "e": 8.069,
+        "scene": "site-1"
+      },
+      {
+        "w": "линукс,",
+        "s": 8.069,
+        "e": 8.555,
+        "scene": "site-1"
+      },
+      {
+        "w": "и",
+        "s": 8.787,
+        "e": 8.879,
+        "scene": "site-1"
+      },
+      {
+        "w": "получаешь",
+        "s": 8.879,
+        "e": 9.285,
+        "scene": "site-1"
+      },
+      {
+        "w": "подборку:",
+        "s": 9.285,
+        "e": 9.817,
+        "scene": "site-1"
+      },
+      {
+        "w": "книги,",
+        "s": 9.944,
+        "e": 10.419,
+        "scene": "site-1"
+      },
+      {
+        "w": "курсы,",
+        "s": 10.558,
+        "e": 10.986,
+        "scene": "site-1"
+      },
+      {
+        "w": "ссылки.",
+        "s": 11.113,
+        "e": 11.704,
+        "scene": "site-1"
+      },
+      {
+        "w": "Второй,",
+        "s": 12.968,
+        "e": 13.581,
+        "scene": "site-2"
+      },
+      {
+        "w": "кэд",
+        "s": 13.813,
+        "e": 14.033,
+        "scene": "site-2"
+      },
+      {
+        "w": "лукап.",
+        "s": 14.033,
+        "e": 14.496,
+        "scene": "site-2"
+      },
+      {
+        "w": "Описываешь",
+        "s": 15.349,
+        "e": 15.997,
+        "scene": "site-2"
+      },
+      {
+        "w": "деталь",
+        "s": 15.997,
+        "e": 16.332,
+        "scene": "site-2"
+      },
+      {
+        "w": "обычными",
+        "s": 16.332,
+        "e": 16.865,
+        "scene": "site-2"
+      },
+      {
+        "w": "словами",
+        "s": 16.865,
+        "e": 17.339,
+        "scene": "site-2"
+      },
+      {
+        "w": "и",
+        "s": 17.339,
+        "e": 17.501,
+        "scene": "site-2"
+      },
+      {
+        "w": "получаешь",
+        "s": 17.501,
+        "e": 17.93,
+        "scene": "site-2"
+      },
+      {
+        "w": "готовые",
+        "s": 17.93,
+        "e": 18.369,
+        "scene": "site-2"
+      },
+      {
+        "w": "3D",
+        "s": 18.369,
+        "e": 18.67,
+        "scene": "site-2"
+      },
+      {
+        "w": "модели.",
+        "s": 18.67,
+        "e": 19.237,
+        "scene": "site-2"
+      },
+      {
+        "w": "Оба",
+        "s": 20.518,
+        "e": 20.865,
+        "scene": "loop"
+      },
+      {
+        "w": "бесплатные.",
+        "s": 20.865,
+        "e": 21.536,
+        "scene": "loop"
+      },
+      {
+        "w": "Ссылка",
+        "s": 22.32,
+        "e": 22.864,
+        "scene": "loop"
+      },
+      {
+        "w": "на",
+        "s": 22.864,
+        "e": 22.945,
+        "scene": "loop"
+      },
+      {
+        "w": "остальные",
+        "s": 22.945,
+        "e": 23.327,
+        "scene": "loop"
+      },
+      {
+        "w": "находки",
+        "s": 23.327,
+        "e": 23.767,
+        "scene": "loop"
+      },
+      {
+        "w": "в",
+        "s": 23.767,
+        "e": 23.801,
+        "scene": "loop"
+      },
+      {
+        "w": "закрепе",
+        "s": 23.801,
+        "e": 24.345,
+        "scene": "loop"
+      },
+      {
+        "w": "и",
+        "s": 24.345,
+        "e": 24.484,
+        "scene": "loop"
+      },
+      {
+        "w": "в",
+        "s": 24.484,
+        "e": 24.53,
+        "scene": "loop"
+      },
+      {
+        "w": "канале.",
+        "s": 24.53,
+        "e": 25.074,
+        "scene": "loop"
+      }
+    ],
+    "fill": "#FFFFFF",
+    "accent": "#FF6A1A",
+    "outline": "#000000",
+    "highlight": "accent"
+  },
+  "events": [
+    {
+      "t": 0.0,
+      "kind": "scene",
+      "id": "hook"
+    },
+    {
+      "t": 0.0,
+      "kind": "label"
+    },
+    {
+      "t": 0.1,
+      "kind": "caption"
+    },
+    {
+      "t": 1.026,
+      "kind": "caption"
+    },
+    {
+      "t": 1.651,
+      "kind": "caption"
+    },
+    {
+      "t": 2.253,
+      "kind": "caption"
+    },
+    {
+      "t": 4.1419999999999995,
+      "kind": "scene",
+      "id": "site-1"
+    },
+    {
+      "t": 4.1419999999999995,
+      "kind": "label"
+    },
+    {
+      "t": 4.242,
+      "kind": "caption"
+    },
+    {
+      "t": 4.96,
+      "kind": "caption"
+    },
+    {
+      "t": 5.679775993347167,
+      "kind": "click"
+    },
+    {
+      "t": 6.738,
+      "kind": "caption"
+    },
+    {
+      "t": 7.664,
+      "kind": "caption"
+    },
+    {
+      "t": 8.537726442337036,
+      "kind": "click"
+    },
+    {
+      "t": 8.787,
+      "kind": "caption"
+    },
+    {
+      "t": 9.944,
+      "kind": "caption"
+    },
+    {
+      "t": 10.558,
+      "kind": "caption"
+    },
+    {
+      "t": 11.113,
+      "kind": "caption"
+    },
+    {
+      "t": 12.867999999999999,
+      "kind": "scene",
+      "id": "site-2"
+    },
+    {
+      "t": 12.867999999999999,
+      "kind": "label"
+    },
+    {
+      "t": 12.968,
+      "kind": "caption"
+    },
+    {
+      "t": 13.786977737426756,
+      "kind": "click"
+    },
+    {
+      "t": 13.813,
+      "kind": "caption"
+    },
+    {
+      "t": 14.0,
+      "kind": "cta_handle"
+    },
+    {
+      "t": 15.349,
+      "kind": "caption"
+    },
+    {
+      "t": 16.332,
+      "kind": "caption"
+    },
+    {
+      "t": 17.339,
+      "kind": "caption"
+    },
+    {
+      "t": 17.93,
+      "kind": "caption"
+    },
+    {
+      "t": 20.418,
+      "kind": "scene",
+      "id": "loop"
+    },
+    {
+      "t": 20.518,
+      "kind": "caption"
+    },
+    {
+      "t": 21.16089894104004,
+      "kind": "click"
+    },
+    {
+      "t": 22.32,
+      "kind": "caption"
+    },
+    {
+      "t": 23.264,
+      "kind": "cta_qr"
+    },
+    {
+      "t": 23.327,
+      "kind": "caption"
+    },
+    {
+      "t": 24.345,
+      "kind": "caption"
+    }
+  ],
+  "sfx": [
+    {
+      "t": 0.0,
+      "name": "hit"
+    },
+    {
+      "t": 4.022,
+      "name": "whoosh"
+    },
+    {
+      "t": 5.68,
+      "name": "click"
+    },
+    {
+      "t": 8.538,
+      "name": "click"
+    },
+    {
+      "t": 12.748,
+      "name": "whoosh"
+    },
+    {
+      "t": 13.787,
+      "name": "click"
+    },
+    {
+      "t": 14.0,
+      "name": "pop"
+    },
+    {
+      "t": 20.298,
+      "name": "whoosh"
+    },
+    {
+      "t": 21.161,
+      "name": "click"
+    },
+    {
+      "t": 23.264,
+      "name": "pop"
+    }
+  ],
+  "audio": {
+    "voice": true,
+    "music_gain_db": -10.1,
+    "duck_db": -6.0,
+    "separation_db": 10.0,
+    "voice_minus_music_db": 9.7
+  },
+  "fx": {},
+  "effects": {},
+  "issues": [],
+  "render_seconds": 101.2,
+  "forced": false
+}

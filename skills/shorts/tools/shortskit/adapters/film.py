@@ -52,8 +52,12 @@ def transcribe(path: Path, lang: str | None = None, model: str = "base") -> list
         from faster_whisper import WhisperModel
     except ImportError as e:
         raise ShortsError("faster-whisper is not installed: `uv pip install faster-whisper`, or pass --transcript") from e
+    # decode with ffmpeg ourselves: avoids PyAV version issues inside faster-whisper
+    raw = subprocess.run(["ffmpeg", "-loglevel", "error", "-i", str(path), "-vn", "-ac", "1", "-ar", "16000",
+                          "-f", "f32le", "-"], capture_output=True, check=True).stdout
+    audio = np.frombuffer(raw, np.float32)
     wm = WhisperModel(model, device="cpu", compute_type="int8")
-    segs, _ = wm.transcribe(str(path), language=lang, word_timestamps=True, vad_filter=True)
+    segs, _ = wm.transcribe(audio, language=lang, word_timestamps=True, vad_filter=True)
     words = [{"w": w.word.strip(), "s": round(w.start, 3), "e": round(w.end, 3)} for s in segs for w in (s.words or [])
              if w.word.strip()]
     key.write_text(json.dumps(words, ensure_ascii=False), encoding="utf-8")
@@ -250,6 +254,7 @@ def edit_plan(video: str | None, music: str, length: float = 24.0, name: str = "
         "fx": {"punch": downs[1:], "flash": downs[len(downs) // 2: len(downs) // 2 + 1]},
         "scenes": scenes,
         "metadata": {"topic": title, "source_video": video, "moments": moments[:n],
+                     "hashtags": ["shorts", "edit", "movie", "film"] + ([re.sub(r"\W", "", title.lower())] if title else []),
                      "music": {"tempo": b["tempo"], "start": m_start, "cuts": cuts}},
     }
     return plan
@@ -285,9 +290,17 @@ def clips_plans(video: str, out_dir: Path, n: int = 3, length: float = 30.0, lan
         if sent_starts:
             s = min(sent_starts, key=lambda x: abs(x - s) if x <= s + 2 else 1e9)
             e = s + length
-            ends = [w["e"] for w in words if s < w["e"] <= e + 1.5 and re.search(r"[.!?]$", w["w"])]
+            # end on a sentence end if the clip keeps >= 60% of the target, else after the last whole word
+            ends = [w["e"] for w in words if s + 0.6 * length <= w["e"] <= e + 1.5 and re.search(r"[.!?]$", w["w"])]
             if ends:
-                e = max(x for x in ends if x <= e + 1.5)
+                e = max(ends)
+            else:
+                last = [w["e"] for w in words if s < w["e"] <= e + 0.2]
+                inside = [w for w in words if w["s"] < e < w["e"]]
+                if inside:
+                    e = inside[0]["e"] + 0.05
+                elif last and e - max(last) < 1.0:
+                    e = max(last) + 0.05
         # split into 3 scenes so the plan has structure (and punch-in at each cut)
         nsc = 3
         bounds = [s + (e - s) * i / nsc for i in range(nsc + 1)]

@@ -1,0 +1,830 @@
+{
+  "engine": "shorts",
+  "version": "1.0.0",
+  "name": "tos-clip-1",
+  "video": "tos-clip-1.mp4",
+  "fps": 30,
+  "duration": 27.667,
+  "language": "en",
+  "platforms": [
+    "youtube_shorts"
+  ],
+  "duration_target": [
+    20.0,
+    45.0
+  ],
+  "loop": true,
+  "layout": {
+    "mode": "center_bottom",
+    "top": null,
+    "center": {
+      "x": 0,
+      "y": 0,
+      "w": 1080,
+      "h": 1616
+    },
+    "bottom": {
+      "x": 0,
+      "y": 1616,
+      "w": 1080,
+      "h": 304
+    },
+    "safe": {
+      "rect": {
+        "x": 48,
+        "y": 288,
+        "w": 840,
+        "h": 960
+      },
+      "exclusions": [],
+      "platforms": [
+        "youtube_shorts"
+      ]
+    },
+    "caption_band": {
+      "x": 48,
+      "y": 928,
+      "w": 840,
+      "h": 320
+    },
+    "label_box": {
+      "x": 48,
+      "y": 304,
+      "w": 840,
+      "h": 240
+    },
+    "cta_box": {
+      "x": 48,
+      "y": 304,
+      "w": 840,
+      "h": 608
+    },
+    "center_pct": 84.17
+  },
+  "brand": {
+    "name": "viora",
+    "palette": {
+      "bg": "#000000",
+      "fg": "#F5F5F5",
+      "accent": "#FF6A1A"
+    },
+    "fonts": {
+      "display": "/tmp/hoplite/workspace/skills/shorts/assets/fonts/Montserrat-ExtraBold.ttf",
+      "body": "/tmp/hoplite/workspace/skills/shorts/assets/fonts/Jost-Medium.ttf",
+      "logo": "/tmp/hoplite/workspace/skills/shorts/assets/fonts/Jost-Light.ttf"
+    },
+    "font_families": {
+      "display": "Montserrat ExtraBold",
+      "body": "Jost Medium"
+    },
+    "caption": {
+      "fill": "#FFFFFF",
+      "accent": "#FF6A1A",
+      "outline": "#000000",
+      "highlight_mode": "color"
+    },
+    "line_width": 4,
+    "radius": 0,
+    "label_style": "plate",
+    "upper": true,
+    "effects": {},
+    "fonts_reason": "",
+    "warnings": []
+  },
+  "top": {
+    "kind": "none"
+  },
+  "bottom": {
+    "handle": "VioraStudio",
+    "links": [
+      "https://t.me/VioraStudio"
+    ]
+  },
+  "scenes": [
+    {
+      "id": "part-1",
+      "type": "video",
+      "start": 0.0,
+      "length": 9.227,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": "YOU BROKE MY HEART"
+    },
+    {
+      "id": "part-2",
+      "type": "video",
+      "start": 9.227,
+      "length": 9.653,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": ""
+    },
+    {
+      "id": "part-3",
+      "type": "video",
+      "start": 18.88,
+      "length": 8.8,
+      "skipped": "",
+      "notes": [],
+      "say": "",
+      "on_screen_text": ""
+    }
+  ],
+  "overlays": [
+    {
+      "kind": "label",
+      "box": [
+        104,
+        304,
+        833,
+        608
+      ],
+      "text": "YOU BROKE MY HEART",
+      "min_font": 104,
+      "pairs": [
+        [
+          "#000000",
+          "#FF6A1A",
+          7.0
+        ]
+      ],
+      "url": "",
+      "qr_box": null,
+      "t0": 0.0,
+      "t1": 9.227
+    },
+    {
+      "kind": "cta_handle",
+      "box": [
+        56,
+        456,
+        880,
+        767
+      ],
+      "text": "@VioraStudio t.me/VioraStudio",
+      "min_font": 56,
+      "pairs": [
+        [
+          "#F5F5F5",
+          "#000000",
+          7.0
+        ],
+        [
+          "#FF6A1A",
+          "#000000",
+          4.5
+        ]
+      ],
+      "url": "",
+      "qr_box": null,
+      "t0": 12.0,
+      "t1": 14.0
+    },
+    {
+      "kind": "cta_qr",
+      "box": [
+        216,
+        320,
+        716,
+        888
+      ],
+      "text": "t.me/VioraStudio",
+      "min_font": 56,
+      "pairs": [
+        [
+          "#000000",
+          "#F5F5F5",
+          7.0
+        ]
+      ],
+      "url": "https://t.me/VioraStudio",
+      "qr_box": [
+        262,
+        352,
+        669,
+        759
+      ],
+      "t0": 24.68,
+      "t1": 27.68
+    }
+  ],
+  "captions": {
+    "enabled": true,
+    "chunks": [
+      {
+        "text": "Why did",
+        "start": 0.0,
+        "end": 0.38,
+        "box": [
+          285,
+          1098,
+          651,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "Why",
+            "s": 0.0,
+            "e": 0.3,
+            "scene": "part-1"
+          },
+          {
+            "w": "did",
+            "s": 0.3,
+            "e": 0.38,
+            "scene": "part-1"
+          }
+        ]
+      },
+      {
+        "text": "you do this?",
+        "start": 0.38,
+        "end": 0.8,
+        "box": [
+          191,
+          1098,
+          745,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "you",
+            "s": 0.38,
+            "e": 0.5,
+            "scene": "part-1"
+          },
+          {
+            "w": "do",
+            "s": 0.5,
+            "e": 0.64,
+            "scene": "part-1"
+          },
+          {
+            "w": "this?",
+            "s": 0.64,
+            "e": 0.8,
+            "scene": "part-1"
+          }
+        ]
+      },
+      {
+        "text": "We already",
+        "start": 1.92,
+        "end": 2.62,
+        "box": [
+          203,
+          1098,
+          733,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "We",
+            "s": 1.92,
+            "e": 2.36,
+            "scene": "part-1"
+          },
+          {
+            "w": "already",
+            "s": 2.36,
+            "e": 2.62,
+            "scene": "part-1"
+          }
+        ]
+      },
+      {
+        "text": "tried that one.",
+        "start": 2.62,
+        "end": 3.48,
+        "box": [
+          130,
+          1098,
+          806,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "tried",
+            "s": 2.62,
+            "e": 3.06,
+            "scene": "part-1"
+          },
+          {
+            "w": "that",
+            "s": 3.06,
+            "e": 3.26,
+            "scene": "part-1"
+          },
+          {
+            "w": "one.",
+            "s": 3.26,
+            "e": 3.48,
+            "scene": "part-1"
+          }
+        ]
+      },
+      {
+        "text": "Yeah!",
+        "start": 14.24,
+        "end": 14.6,
+        "box": [
+          345,
+          1098,
+          591,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "Yeah!",
+            "s": 14.24,
+            "e": 14.6,
+            "scene": "part-2"
+          }
+        ]
+      },
+      {
+        "text": "You broke",
+        "start": 18.39,
+        "end": 18.88,
+        "box": [
+          233,
+          1098,
+          703,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "You",
+            "s": 18.39,
+            "e": 18.87,
+            "scene": "part-2"
+          },
+          {
+            "w": "broke",
+            "s": 18.87,
+            "e": 18.88,
+            "scene": "part-2"
+          }
+        ]
+      },
+      {
+        "text": "my heart.",
+        "start": 19.23,
+        "end": 19.83,
+        "box": [
+          253,
+          1098,
+          683,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "my",
+            "s": 19.23,
+            "e": 19.61,
+            "scene": "part-3"
+          },
+          {
+            "w": "heart.",
+            "s": 19.61,
+            "e": 19.83,
+            "scene": "part-3"
+          }
+        ]
+      },
+      {
+        "text": "You forgot",
+        "start": 22.22,
+        "end": 22.84,
+        "box": [
+          209,
+          1098,
+          727,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "You",
+            "s": 22.22,
+            "e": 22.42,
+            "scene": "part-3"
+          },
+          {
+            "w": "forgot",
+            "s": 22.42,
+            "e": 22.84,
+            "scene": "part-3"
+          }
+        ]
+      },
+      {
+        "text": "me on earth.",
+        "start": 22.84,
+        "end": 23.54,
+        "box": [
+          183,
+          1098,
+          753,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "me",
+            "s": 22.84,
+            "e": 23.14,
+            "scene": "part-3"
+          },
+          {
+            "w": "on",
+            "s": 23.14,
+            "e": 23.36,
+            "scene": "part-3"
+          },
+          {
+            "w": "earth.",
+            "s": 23.36,
+            "e": 23.54,
+            "scene": "part-3"
+          }
+        ]
+      },
+      {
+        "text": "No.",
+        "start": 24.26,
+        "end": 24.74,
+        "box": [
+          394,
+          1098,
+          542,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "No.",
+            "s": 24.26,
+            "e": 24.74,
+            "scene": "part-3"
+          }
+        ]
+      },
+      {
+        "text": "I should",
+        "start": 24.74,
+        "end": 26.0,
+        "box": [
+          277,
+          1098,
+          659,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "I",
+            "s": 24.74,
+            "e": 25.76,
+            "scene": "part-3"
+          },
+          {
+            "w": "should",
+            "s": 25.76,
+            "e": 26.0,
+            "scene": "part-3"
+          }
+        ]
+      },
+      {
+        "text": "just brush you.",
+        "start": 26.0,
+        "end": 27.68,
+        "box": [
+          120,
+          1098,
+          816,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "just",
+            "s": 26.0,
+            "e": 26.38,
+            "scene": "part-3"
+          },
+          {
+            "w": "brush",
+            "s": 26.38,
+            "e": 26.96,
+            "scene": "part-3"
+          },
+          {
+            "w": "you.",
+            "s": 26.96,
+            "e": 27.68,
+            "scene": "part-3"
+          }
+        ]
+      }
+    ],
+    "words_spoken": [
+      {
+        "w": "Why",
+        "s": 0.0,
+        "e": 0.3,
+        "scene": "part-1"
+      },
+      {
+        "w": "did",
+        "s": 0.3,
+        "e": 0.38,
+        "scene": "part-1"
+      },
+      {
+        "w": "you",
+        "s": 0.38,
+        "e": 0.5,
+        "scene": "part-1"
+      },
+      {
+        "w": "do",
+        "s": 0.5,
+        "e": 0.64,
+        "scene": "part-1"
+      },
+      {
+        "w": "this?",
+        "s": 0.64,
+        "e": 0.8,
+        "scene": "part-1"
+      },
+      {
+        "w": "We",
+        "s": 1.92,
+        "e": 2.36,
+        "scene": "part-1"
+      },
+      {
+        "w": "already",
+        "s": 2.36,
+        "e": 2.62,
+        "scene": "part-1"
+      },
+      {
+        "w": "tried",
+        "s": 2.62,
+        "e": 3.06,
+        "scene": "part-1"
+      },
+      {
+        "w": "that",
+        "s": 3.06,
+        "e": 3.26,
+        "scene": "part-1"
+      },
+      {
+        "w": "one.",
+        "s": 3.26,
+        "e": 3.48,
+        "scene": "part-1"
+      },
+      {
+        "w": "Yeah!",
+        "s": 14.24,
+        "e": 14.6,
+        "scene": "part-2"
+      },
+      {
+        "w": "You",
+        "s": 18.39,
+        "e": 18.87,
+        "scene": "part-2"
+      },
+      {
+        "w": "broke",
+        "s": 18.87,
+        "e": 18.88,
+        "scene": "part-2"
+      },
+      {
+        "w": "my",
+        "s": 19.23,
+        "e": 19.61,
+        "scene": "part-3"
+      },
+      {
+        "w": "heart.",
+        "s": 19.61,
+        "e": 19.83,
+        "scene": "part-3"
+      },
+      {
+        "w": "You",
+        "s": 22.22,
+        "e": 22.42,
+        "scene": "part-3"
+      },
+      {
+        "w": "forgot",
+        "s": 22.42,
+        "e": 22.84,
+        "scene": "part-3"
+      },
+      {
+        "w": "me",
+        "s": 22.84,
+        "e": 23.14,
+        "scene": "part-3"
+      },
+      {
+        "w": "on",
+        "s": 23.14,
+        "e": 23.36,
+        "scene": "part-3"
+      },
+      {
+        "w": "earth.",
+        "s": 23.36,
+        "e": 23.54,
+        "scene": "part-3"
+      },
+      {
+        "w": "No.",
+        "s": 24.26,
+        "e": 24.74,
+        "scene": "part-3"
+      },
+      {
+        "w": "I",
+        "s": 24.74,
+        "e": 25.76,
+        "scene": "part-3"
+      },
+      {
+        "w": "should",
+        "s": 25.76,
+        "e": 26.0,
+        "scene": "part-3"
+      },
+      {
+        "w": "just",
+        "s": 26.0,
+        "e": 26.38,
+        "scene": "part-3"
+      },
+      {
+        "w": "brush",
+        "s": 26.38,
+        "e": 26.96,
+        "scene": "part-3"
+      },
+      {
+        "w": "you.",
+        "s": 26.96,
+        "e": 27.68,
+        "scene": "part-3"
+      }
+    ],
+    "fill": "#FFFFFF",
+    "accent": "#FF6A1A",
+    "outline": "#000000",
+    "highlight": "accent"
+  },
+  "events": [
+    {
+      "t": 0.0,
+      "kind": "scene",
+      "id": "part-1"
+    },
+    {
+      "t": 0.0,
+      "kind": "caption"
+    },
+    {
+      "t": 0.0,
+      "kind": "label"
+    },
+    {
+      "t": 0.38,
+      "kind": "caption"
+    },
+    {
+      "t": 1.92,
+      "kind": "caption"
+    },
+    {
+      "t": 2.62,
+      "kind": "caption"
+    },
+    {
+      "t": 9.227,
+      "kind": "scene",
+      "id": "part-2"
+    },
+    {
+      "t": 9.227,
+      "kind": "punch"
+    },
+    {
+      "t": 12.0,
+      "kind": "cta_handle"
+    },
+    {
+      "t": 14.24,
+      "kind": "caption"
+    },
+    {
+      "t": 18.39,
+      "kind": "caption"
+    },
+    {
+      "t": 18.88,
+      "kind": "punch"
+    },
+    {
+      "t": 18.880000000000003,
+      "kind": "scene",
+      "id": "part-3"
+    },
+    {
+      "t": 19.23,
+      "kind": "caption"
+    },
+    {
+      "t": 22.22,
+      "kind": "caption"
+    },
+    {
+      "t": 22.84,
+      "kind": "caption"
+    },
+    {
+      "t": 24.26,
+      "kind": "caption"
+    },
+    {
+      "t": 24.680000000000003,
+      "kind": "cta_qr"
+    },
+    {
+      "t": 24.74,
+      "kind": "caption"
+    },
+    {
+      "t": 26.0,
+      "kind": "caption"
+    }
+  ],
+  "sfx": [],
+  "audio": {
+    "voice": false,
+    "music_gain_db": -4.2,
+    "duck_db": -6.0,
+    "separation_db": 10.0
+  },
+  "fx": {
+    "punch": [
+      9.227,
+      18.88
+    ]
+  },
+  "effects": {},
+  "issues": [],
+  "render_seconds": 98.1,
+  "forced": false
+}

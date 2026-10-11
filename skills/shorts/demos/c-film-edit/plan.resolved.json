@@ -1,0 +1,422 @@
+{
+  "schema_version": "1",
+  "meta": {
+    "name": "tos-edit",
+    "language": "en",
+    "platforms": [
+      "youtube_shorts",
+      "tiktok"
+    ],
+    "duration_target": [
+      14.0,
+      26.0
+    ],
+    "emotion": "energy",
+    "audience": "film fans",
+    "loop": true,
+    "fps": 30
+  },
+  "layout": {
+    "mode": "center_only",
+    "cta_in_center": [
+      {
+        "t": 10.0,
+        "duration": 2.0,
+        "kind": "handle",
+        "text": "VioraStudio"
+      },
+      {
+        "t": 16.8,
+        "duration": 3.0,
+        "kind": "qr",
+        "url": "https://t.me/VioraStudio"
+      }
+    ]
+  },
+  "brand": {
+    "preset": "punch"
+  },
+  "captions": {
+    "enabled": true,
+    "max_words": 3,
+    "highlight": "accent",
+    "subs": {}
+  },
+  "audio": {
+    "voice": {
+      "engine": "auto"
+    },
+    "music": {
+      "source": "assets/audio/bed.mp3",
+      "start": 2.183
+    },
+    "target_lufs": -14,
+    "sfx_auto": false
+  },
+  "fx": {
+    "punch": [
+      2.136,
+      4.272,
+      6.432,
+      8.568,
+      10.704,
+      12.864,
+      15.0,
+      17.136,
+      19.272
+    ],
+    "flash": [
+      10.704
+    ]
+  },
+  "scenes": [
+    {
+      "id": "shot-01",
+      "why": "moment score 0.946",
+      "duration": 1.068,
+      "source": {
+        "type": "film",
+        "ref": "/tmp/media/tos720.mov",
+        "in": 482.47,
+        "out": 483.53
+      },
+      "on_screen_text": "TEARS OF STEEL"
+    },
+    {
+      "id": "shot-02",
+      "why": "moment score 0.898",
+      "duration": 1.068,
+      "source": {
+        "type": "film",
+        "ref": "/tmp/media/tos720.mov",
+        "in": 593.97,
+        "out": 595.03
+      }
+    },
+    {
+      "id": "shot-03",
+      "why": "moment score 0.886",
+      "duration": 1.068,
+      "source": {
+        "type": "film",
+        "ref": "/tmp/media/tos720.mov",
+        "in": 378.47,
+        "out": 379.53
+      }
+    },
+    {
+      "id": "shot-04",
+      "why": "moment score 0.866",
+      "duration": 1.068,
+      "source": {
+        "type": "film",
+        "ref": "/tmp/media/tos720.mov",
+        "in": 502.97,
+        "out": 504.03
+      }
+    },
+    {
+      "id": "shot-05",
+      "why": "moment score 0.858",
+      "duration": 1.091,
+      "source": {
+        "type": "film",
+        "ref": "/tmp/media/tos720.mov",
+        "in": 213.95,
+        "out": 215.05
+      }
+    },
+    {
+      "id": "shot-06",
+      "why": "moment score 0.847",
+      "duration": 1.069,
+      "source": {
+        "type": "film",
+        "ref": "/tmp/media/tos720.mov",
+        "in": 489.47,
+        "out": 490.53
+      }
+    },
+    {
+      "id": "shot-07",
+      "why": "moment score 0.823",
+      "duration": 1.068,
+      "source": {
+        "type": "film",
+        "ref": "/tmp/media/tos720.mov",
+        "in": 369.97,
+        "out": 371.03
+      }
+    },
+    {
+      "id": "shot-08",
+      "why": "moment score 0.781",
+      "duration": 1.068,
+      "source": {
+        "type": "film",
+        "ref": "/tmp/media/tos720.mov",
+        "in": 387.97,
+        "out": 389.03
+      }
+    },
+    {
+      "id": "shot-09",
+      "why": "moment score 0.772",
+      "duration": 1.068,
+      "source": {
+        "type": "film",
+        "ref": "/tmp/media/tos720.mov",
+        "in": 468.47,
+        "out": 469.53
+      }
+    },
+    {
+      "id": "shot-10",
+      "why": "moment score 0.752",
+      "duration": 1.068,
+      "source": {
+        "type": "film",
+        "ref": "/tmp/media/tos720.mov",
+        "in": 479.47,
+        "out": 480.53
+      }
+    },
+    {
+      "id": "shot-11",
+      "why": "moment score 0.946",
+      "duration": 1.091,
+      "source": {
+        "type": "film",
+        "ref": "/tmp/media/tos720.mov",
+        "in": 484.05,
+        "out": 485.14
+      }
+    },
+    {
+      "id": "shot-12",
+      "why": "moment score 0.898; slow-mo on the peak",
+      "duration": 1.069,
+      "source": {
+        "type": "film",
+        "ref": "/tmp/media/tos720.mov",
+        "in": 595.53,
+        "out": 596.06
+      },
+      "speed": [
+        {
+          "t": 0,
+          "rate": 0.5
+        }
+      ]
+    },
+    {
+      "id": "shot-13",
+      "why": "moment score 0.886",
+      "duration": 1.068,
+      "source": {
+        "type": "film",
+        "ref": "/tmp/media/tos720.mov",
+        "in": 380.03,
+        "out": 381.1
+      }
+    },
+    {
+      "id": "shot-14",
+      "why": "moment score 0.866",
+      "duration": 1.068,
+      "source": {
+        "type": "film",
+        "ref": "/tmp/media/tos720.mov",
+        "in": 504.53,
+        "out": 505.6
+      }
+    },
+    {
+      "id": "shot-15",
+      "why": "moment score 0.858",
+      "duration": 1.068,
+      "source": {
+        "type": "film",
+        "ref": "/tmp/media/tos720.mov",
+        "in": 215.53,
+        "out": 216.6
+      }
+    },
+    {
+      "id": "shot-16",
+      "why": "moment score 0.847",
+      "duration": 1.068,
+      "source": {
+        "type": "film",
+        "ref": "/tmp/media/tos720.mov",
+        "in": 491.03,
+        "out": 492.1
+      }
+    },
+    {
+      "id": "shot-17",
+      "why": "moment score 0.823",
+      "duration": 1.068,
+      "source": {
+        "type": "film",
+        "ref": "/tmp/media/tos720.mov",
+        "in": 371.53,
+        "out": 372.6
+      }
+    },
+    {
+      "id": "shot-18",
+      "why": "moment score 0.781",
+      "duration": 1.068,
+      "source": {
+        "type": "film",
+        "ref": "/tmp/media/tos720.mov",
+        "in": 389.53,
+        "out": 390.6
+      }
+    },
+    {
+      "id": "shot-19",
+      "why": "moment score 0.772",
+      "duration": 0.728,
+      "source": {
+        "type": "film",
+        "ref": "/tmp/media/tos720.mov",
+        "in": 469.86,
+        "out": 470.59
+      }
+    }
+  ],
+  "metadata": {
+    "topic": "TEARS OF STEEL",
+    "source_video": "/tmp/media/tos720.mov",
+    "moments": [
+      {
+        "start": 481.5,
+        "end": 485.0,
+        "peak": 483.0,
+        "score": 0.946,
+        "signals": {
+          "loudness": 0.896,
+          "cuts": 1.0
+        }
+      },
+      {
+        "start": 593.5,
+        "end": 597.0,
+        "peak": 594.5,
+        "score": 0.898,
+        "signals": {
+          "loudness": 0.867,
+          "cuts": 0.942
+        }
+      },
+      {
+        "start": 376.0,
+        "end": 379.5,
+        "peak": 379.0,
+        "score": 0.886,
+        "signals": {
+          "loudness": 0.795,
+          "cuts": 0.987
+        }
+      },
+      {
+        "start": 502.0,
+        "end": 505.5,
+        "peak": 503.5,
+        "score": 0.866,
+        "signals": {
+          "loudness": 0.97,
+          "cuts": 0.774
+        }
+      },
+      {
+        "start": 213.0,
+        "end": 216.5,
+        "peak": 214.5,
+        "score": 0.858,
+        "signals": {
+          "loudness": 0.942,
+          "cuts": 0.779
+        }
+      },
+      {
+        "start": 488.0,
+        "end": 491.5,
+        "peak": 490.0,
+        "score": 0.847,
+        "signals": {
+          "loudness": 0.92,
+          "cuts": 0.781
+        }
+      },
+      {
+        "start": 369.0,
+        "end": 372.5,
+        "peak": 370.5,
+        "score": 0.823,
+        "signals": {
+          "loudness": 0.689,
+          "cuts": 0.92
+        }
+      },
+      {
+        "start": 385.5,
+        "end": 389.0,
+        "peak": 388.5,
+        "score": 0.781,
+        "signals": {
+          "loudness": 0.71,
+          "cuts": 0.86
+        }
+      },
+      {
+        "start": 467.0,
+        "end": 470.5,
+        "peak": 469.0,
+        "score": 0.772,
+        "signals": {
+          "loudness": 0.911,
+          "cuts": 0.654
+        }
+      },
+      {
+        "start": 477.0,
+        "end": 480.5,
+        "peak": 480.0,
+        "score": 0.752,
+        "signals": {
+          "loudness": 0.97,
+          "cuts": 0.593
+        }
+      }
+    ],
+    "music": {
+      "tempo": 112.35,
+      "start": 2.183,
+      "cuts": [
+        0.0,
+        1.068,
+        2.136,
+        3.204,
+        4.272,
+        5.363,
+        6.432,
+        7.5,
+        8.568,
+        9.636,
+        10.704,
+        11.795,
+        12.864,
+        13.932,
+        15.0,
+        16.068,
+        17.136,
+        18.204,
+        19.272,
+        20.0
+      ]
+    }
+  }
+}

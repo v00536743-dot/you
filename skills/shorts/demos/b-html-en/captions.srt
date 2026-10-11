@@ -1,0 +1,27 @@
+1
+00:00:00,107 --> 00:00:02,926
+This whole animation is one HTML file.
+
+2
+00:00:03,517 --> 00:00:06,110
+The engine steps its clock, so slow motion
+
+3
+00:00:05,922 --> 00:00:06,836
+stays smooth.
+
+4
+00:00:07,443 --> 00:00:09,179
+Speed it up when the part is boring.
+
+5
+00:00:09,785 --> 00:00:12,426
+Write code, get frames, post the video.
+
+6
+00:00:13,027 --> 00:00:15,537
+The link is pinned, and the file is in the
+
+7
+00:00:15,349 --> 00:00:15,941
+channel.

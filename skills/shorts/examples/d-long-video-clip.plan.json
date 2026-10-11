@@ -1,0 +1,259 @@
+{
+  "schema_version": "1",
+  "meta": {
+    "name": "tos-clip-1",
+    "language": "en",
+    "platforms": [
+      "youtube_shorts"
+    ],
+    "duration_target": [
+      20.0,
+      45.0
+    ],
+    "loop": true
+  },
+  "layout": {
+    "mode": "center_bottom",
+    "bottom": {
+      "height_pct": 16,
+      "handle": "VioraStudio",
+      "links": [
+        "https://t.me/VioraStudio"
+      ]
+    },
+    "cta_in_center": [
+      {
+        "t": 12,
+        "duration": 2.0,
+        "kind": "handle",
+        "text": "VioraStudio"
+      },
+      {
+        "t": 99,
+        "duration": 3,
+        "kind": "qr",
+        "url": "https://t.me/VioraStudio"
+      }
+    ]
+  },
+  "brand": {
+    "preset": "viora"
+  },
+  "captions": {
+    "enabled": true,
+    "max_words": 3,
+    "highlight": "accent"
+  },
+  "audio": {
+    "voice": {
+      "engine": "auto"
+    },
+    "target_lufs": -14,
+    "sfx_auto": false,
+    "music": {
+      "source": "assets/audio/bed.mp3"
+    }
+  },
+  "fx": {
+    "punch": [
+      9.227,
+      18.88
+    ]
+  },
+  "scenes": [
+    {
+      "id": "part-1",
+      "why": "window score 0.65",
+      "duration": 9.227,
+      "source": {
+        "type": "video",
+        "ref": "/tmp/media/tos720.mov",
+        "in": 364.87,
+        "out": 374.097,
+        "keep_audio": true
+      },
+      "transcript": [
+        {
+          "w": "Why",
+          "s": 0.0,
+          "e": 0.3
+        },
+        {
+          "w": "did",
+          "s": 0.3,
+          "e": 0.38
+        },
+        {
+          "w": "you",
+          "s": 0.38,
+          "e": 0.5
+        },
+        {
+          "w": "do",
+          "s": 0.5,
+          "e": 0.64
+        },
+        {
+          "w": "this?",
+          "s": 0.64,
+          "e": 0.8
+        },
+        {
+          "w": "We",
+          "s": 1.92,
+          "e": 2.36
+        },
+        {
+          "w": "already",
+          "s": 2.36,
+          "e": 2.62
+        },
+        {
+          "w": "tried",
+          "s": 2.62,
+          "e": 3.06
+        },
+        {
+          "w": "that",
+          "s": 3.06,
+          "e": 3.26
+        },
+        {
+          "w": "one.",
+          "s": 3.26,
+          "e": 3.48
+        }
+      ],
+      "on_screen_text": "YOU BROKE MY HEART"
+    },
+    {
+      "id": "part-2",
+      "why": "window score 0.65",
+      "duration": 9.653,
+      "source": {
+        "type": "video",
+        "ref": "/tmp/media/tos720.mov",
+        "in": 374.097,
+        "out": 383.75,
+        "keep_audio": true
+      },
+      "transcript": [
+        {
+          "w": "Yeah!",
+          "s": 5.013,
+          "e": 5.373
+        },
+        {
+          "w": "You",
+          "s": 9.163,
+          "e": 9.643
+        },
+        {
+          "w": "broke",
+          "s": 9.643,
+          "e": 9.653
+        }
+      ]
+    },
+    {
+      "id": "part-3",
+      "why": "window score 0.65",
+      "duration": 8.8,
+      "source": {
+        "type": "video",
+        "ref": "/tmp/media/tos720.mov",
+        "in": 383.75,
+        "out": 392.55,
+        "keep_audio": true
+      },
+      "transcript": [
+        {
+          "w": "my",
+          "s": 0.35,
+          "e": 0.73
+        },
+        {
+          "w": "heart.",
+          "s": 0.73,
+          "e": 0.95
+        },
+        {
+          "w": "You",
+          "s": 3.34,
+          "e": 3.54
+        },
+        {
+          "w": "forgot",
+          "s": 3.54,
+          "e": 3.96
+        },
+        {
+          "w": "me",
+          "s": 3.96,
+          "e": 4.26
+        },
+        {
+          "w": "on",
+          "s": 4.26,
+          "e": 4.48
+        },
+        {
+          "w": "earth.",
+          "s": 4.48,
+          "e": 4.66
+        },
+        {
+          "w": "No.",
+          "s": 5.38,
+          "e": 5.86
+        },
+        {
+          "w": "I",
+          "s": 5.86,
+          "e": 6.88
+        },
+        {
+          "w": "should",
+          "s": 6.88,
+          "e": 7.12
+        },
+        {
+          "w": "just",
+          "s": 7.12,
+          "e": 7.5
+        },
+        {
+          "w": "brush",
+          "s": 7.5,
+          "e": 8.08
+        },
+        {
+          "w": "you.",
+          "s": 8.08,
+          "e": 8.8
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "source_video": "/tmp/media/tos720.mov",
+    "window": [
+      364.87,
+      392.55
+    ],
+    "signals": {
+      "loudness": 0.727,
+      "cuts": 0.795,
+      "speech": 0.244
+    },
+    "transcript_words": 262,
+    "topic": "Tears of Steel: the breakup scene",
+    "hashtags": [
+      "shorts",
+      "tearsofsteel",
+      "blender",
+      "scifi",
+      "movie"
+    ]
+  }
+}

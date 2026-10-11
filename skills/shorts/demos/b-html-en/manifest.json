@@ -1,0 +1,1245 @@
+{
+  "engine": "shorts",
+  "version": "1.0.0",
+  "name": "one-html-file",
+  "video": "one-html-file.mp4",
+  "fps": 30,
+  "duration": 16.433,
+  "language": "en",
+  "platforms": [
+    "youtube_shorts",
+    "tiktok",
+    "reels"
+  ],
+  "duration_target": [
+    12,
+    40
+  ],
+  "loop": true,
+  "layout": {
+    "mode": "top_center",
+    "top": {
+      "x": 0,
+      "y": 0,
+      "w": 1080,
+      "h": 384
+    },
+    "center": {
+      "x": 0,
+      "y": 384,
+      "w": 1080,
+      "h": 1536
+    },
+    "bottom": null,
+    "safe": {
+      "rect": {
+        "x": 120,
+        "y": 288,
+        "w": 768,
+        "h": 960
+      },
+      "exclusions": [
+        {
+          "x": 780,
+          "y": 840,
+          "w": 300,
+          "h": 1080
+        }
+      ],
+      "platforms": [
+        "youtube_shorts",
+        "tiktok",
+        "reels"
+      ]
+    },
+    "caption_band": {
+      "x": 120,
+      "y": 928,
+      "w": 660,
+      "h": 320
+    },
+    "label_box": {
+      "x": 120,
+      "y": 304,
+      "w": 768,
+      "h": 240
+    },
+    "cta_box": {
+      "x": 120,
+      "y": 304,
+      "w": 660,
+      "h": 608
+    },
+    "center_pct": 80.0
+  },
+  "brand": {
+    "name": "terminal",
+    "palette": {
+      "bg": "#0B0F0C",
+      "fg": "#E6E6E6",
+      "accent": "#3DDC84"
+    },
+    "fonts": {
+      "display": "/tmp/hoplite/workspace/skills/shorts/assets/fonts/JetBrainsMono-Bold.ttf",
+      "body": "/tmp/hoplite/workspace/skills/shorts/assets/fonts/JetBrainsMono-Medium.ttf",
+      "logo": "/tmp/hoplite/workspace/skills/shorts/assets/fonts/JetBrainsMono-Medium.ttf"
+    },
+    "font_families": {
+      "display": "JetBrains Mono Bold",
+      "body": "JetBrains Mono Medium"
+    },
+    "caption": {
+      "fill": "#FFFFFF",
+      "accent": "#3DDC84",
+      "outline": "#000000",
+      "highlight_mode": "color"
+    },
+    "line_width": 4,
+    "radius": 0,
+    "label_style": "plate",
+    "upper": false,
+    "effects": {},
+    "fonts_reason": "terminal preset: monospace is the point of the style",
+    "warnings": []
+  },
+  "top": {
+    "kind": "html",
+    "path": "/tmp/hoplite/workspace/skills/shorts/out/demo-b/work/top.mp4",
+    "src": "html:../assets/footage/game-loop.html"
+  },
+  "bottom": null,
+  "scenes": [
+    {
+      "id": "hook",
+      "type": "html",
+      "start": 0.0,
+      "length": 3.422,
+      "skipped": "",
+      "notes": [
+        "html rendered deterministically via vt"
+      ],
+      "say": "This whole animation is one HTML file.",
+      "on_screen_text": "ONE HTML FILE"
+    },
+    {
+      "id": "slowmo",
+      "type": "html",
+      "start": 3.422,
+      "length": 3.926,
+      "skipped": "",
+      "notes": [
+        "html rendered deterministically via vt"
+      ],
+      "say": "The engine steps its clock, so slow motion stays smooth.",
+      "on_screen_text": ""
+    },
+    {
+      "id": "fast",
+      "type": "html",
+      "start": 7.348,
+      "length": 2.342,
+      "skipped": "",
+      "notes": [
+        "html rendered deterministically via vt"
+      ],
+      "say": "Speed it up when the part is boring.",
+      "on_screen_text": "2X SPEED"
+    },
+    {
+      "id": "how",
+      "type": "text",
+      "start": 9.69,
+      "length": 3.23,
+      "skipped": "",
+      "notes": [
+        "kinetic text: 3 phrases"
+      ],
+      "say": "Write code, get frames, post the video.",
+      "on_screen_text": ""
+    },
+    {
+      "id": "loop",
+      "type": "html",
+      "start": 12.92,
+      "length": 3.518,
+      "skipped": "",
+      "notes": [
+        "html rendered deterministically via vt"
+      ],
+      "say": "The link is pinned, and the file is in the channel.",
+      "on_screen_text": ""
+    }
+  ],
+  "overlays": [
+    {
+      "kind": "label",
+      "box": [
+        224,
+        304,
+        791,
+        630
+      ],
+      "text": "ONE HTML FILE",
+      "min_font": 104,
+      "pairs": [
+        [
+          "#0B0F0C",
+          "#3DDC84",
+          7.0
+        ]
+      ],
+      "url": "",
+      "qr_box": null,
+      "t0": 0.0,
+      "t1": 3.422
+    },
+    {
+      "kind": "label",
+      "box": [
+        224,
+        304,
+        791,
+        483
+      ],
+      "text": "2X SPEED",
+      "min_font": 104,
+      "pairs": [
+        [
+          "#0B0F0C",
+          "#3DDC84",
+          7.0
+        ]
+      ],
+      "url": "",
+      "qr_box": null,
+      "t0": 7.348,
+      "t1": 9.69
+    },
+    {
+      "kind": "cta_handle",
+      "box": [
+        128,
+        464,
+        772,
+        752
+      ],
+      "text": "@VioraStudio t.me/VioraStudio",
+      "min_font": 56,
+      "pairs": [
+        [
+          "#E6E6E6",
+          "#0B0F0C",
+          7.0
+        ],
+        [
+          "#3DDC84",
+          "#0B0F0C",
+          4.5
+        ]
+      ],
+      "url": "",
+      "qr_box": null,
+      "t0": 7.5,
+      "t1": 9.5
+    },
+    {
+      "kind": "cta_qr",
+      "box": [
+        144,
+        328,
+        753,
+        890
+      ],
+      "text": "t.me/VioraStudio",
+      "min_font": 56,
+      "pairs": [
+        [
+          "#0B0F0C",
+          "#E6E6E6",
+          7.0
+        ]
+      ],
+      "url": "https://t.me/VioraStudio",
+      "qr_box": [
+        245,
+        360,
+        652,
+        767
+      ],
+      "t0": 13.438,
+      "t1": 16.438
+    }
+  ],
+  "captions": {
+    "enabled": true,
+    "chunks": [
+      {
+        "text": "This whole animation",
+        "start": 0.107,
+        "end": 1.024,
+        "box": [
+          228,
+          1020,
+          672,
+          1222
+        ],
+        "size": 72,
+        "lines": 2,
+        "overflow": false,
+        "words": [
+          {
+            "w": "This",
+            "s": 0.107,
+            "e": 0.25,
+            "scene": "hook"
+          },
+          {
+            "w": "whole",
+            "s": 0.262,
+            "e": 0.452,
+            "scene": "hook"
+          },
+          {
+            "w": "animation",
+            "s": 0.464,
+            "e": 1.024,
+            "scene": "hook"
+          }
+        ]
+      },
+      {
+        "text": "is one HTML",
+        "start": 1.131,
+        "end": 2.333,
+        "box": [
+          207,
+          1115,
+          693,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "is",
+            "s": 1.131,
+            "e": 1.238,
+            "scene": "hook"
+          },
+          {
+            "w": "one",
+            "s": 1.25,
+            "e": 1.595,
+            "scene": "hook"
+          },
+          {
+            "w": "HTML",
+            "s": 1.726,
+            "e": 2.333,
+            "scene": "hook"
+          }
+        ]
+      },
+      {
+        "text": "file.",
+        "start": 2.345,
+        "end": 2.726,
+        "box": [
+          336,
+          1115,
+          564,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "file.",
+            "s": 2.345,
+            "e": 2.726,
+            "scene": "hook"
+          }
+        ]
+      },
+      {
+        "text": "The engine",
+        "start": 3.517,
+        "end": 3.886,
+        "box": [
+          228,
+          1115,
+          672,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "The",
+            "s": 3.517,
+            "e": 3.589,
+            "scene": "slowmo"
+          },
+          {
+            "w": "engine",
+            "s": 3.601,
+            "e": 3.886,
+            "scene": "slowmo"
+          }
+        ]
+      },
+      {
+        "text": "steps its clock,",
+        "start": 3.898,
+        "end": 4.743,
+        "box": [
+          250,
+          1020,
+          650,
+          1222
+        ],
+        "size": 72,
+        "lines": 2,
+        "overflow": false,
+        "words": [
+          {
+            "w": "steps",
+            "s": 3.898,
+            "e": 4.196,
+            "scene": "slowmo"
+          },
+          {
+            "w": "its",
+            "s": 4.208,
+            "e": 4.315,
+            "scene": "slowmo"
+          },
+          {
+            "w": "clock,",
+            "s": 4.327,
+            "e": 4.743,
+            "scene": "slowmo"
+          }
+        ]
+      },
+      {
+        "text": "so slow motion",
+        "start": 4.993,
+        "end": 5.91,
+        "box": [
+          142,
+          1115,
+          758,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "so",
+            "s": 4.993,
+            "e": 5.16,
+            "scene": "slowmo"
+          },
+          {
+            "w": "slow",
+            "s": 5.172,
+            "e": 5.47,
+            "scene": "slowmo"
+          },
+          {
+            "w": "motion",
+            "s": 5.482,
+            "e": 5.91,
+            "scene": "slowmo"
+          }
+        ]
+      },
+      {
+        "text": "stays smooth.",
+        "start": 5.922,
+        "end": 6.636,
+        "box": [
+          164,
+          1115,
+          736,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "stays",
+            "s": 5.922,
+            "e": 6.232,
+            "scene": "slowmo"
+          },
+          {
+            "w": "smooth.",
+            "s": 6.243,
+            "e": 6.636,
+            "scene": "slowmo"
+          }
+        ]
+      },
+      {
+        "text": "Speed it up",
+        "start": 7.443,
+        "end": 8.003,
+        "box": [
+          207,
+          1115,
+          693,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "Speed",
+            "s": 7.443,
+            "e": 7.729,
+            "scene": "fast"
+          },
+          {
+            "w": "it",
+            "s": 7.741,
+            "e": 7.812,
+            "scene": "fast"
+          },
+          {
+            "w": "up",
+            "s": 7.824,
+            "e": 8.003,
+            "scene": "fast"
+          }
+        ]
+      },
+      {
+        "text": "when the part",
+        "start": 8.11,
+        "end": 8.491,
+        "box": [
+          164,
+          1115,
+          736,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "when",
+            "s": 8.11,
+            "e": 8.205,
+            "scene": "fast"
+          },
+          {
+            "w": "the",
+            "s": 8.217,
+            "e": 8.288,
+            "scene": "fast"
+          },
+          {
+            "w": "part",
+            "s": 8.3,
+            "e": 8.491,
+            "scene": "fast"
+          }
+        ]
+      },
+      {
+        "text": "is boring.",
+        "start": 8.503,
+        "end": 8.979,
+        "box": [
+          228,
+          1115,
+          672,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "is",
+            "s": 8.503,
+            "e": 8.598,
+            "scene": "fast"
+          },
+          {
+            "w": "boring.",
+            "s": 8.61,
+            "e": 8.979,
+            "scene": "fast"
+          }
+        ]
+      },
+      {
+        "text": "Write code,",
+        "start": 9.785,
+        "end": 10.309,
+        "box": [
+          207,
+          1115,
+          693,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "Write",
+            "s": 9.785,
+            "e": 9.952,
+            "scene": "how"
+          },
+          {
+            "w": "code,",
+            "s": 9.964,
+            "e": 10.309,
+            "scene": "how"
+          }
+        ]
+      },
+      {
+        "text": "get frames,",
+        "start": 10.571,
+        "end": 11.273,
+        "box": [
+          207,
+          1115,
+          693,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "get",
+            "s": 10.571,
+            "e": 10.714,
+            "scene": "how"
+          },
+          {
+            "w": "frames,",
+            "s": 10.726,
+            "e": 11.273,
+            "scene": "how"
+          }
+        ]
+      },
+      {
+        "text": "post the video.",
+        "start": 11.452,
+        "end": 12.226,
+        "box": [
+          272,
+          1020,
+          628,
+          1222
+        ],
+        "size": 72,
+        "lines": 2,
+        "overflow": false,
+        "words": [
+          {
+            "w": "post",
+            "s": 11.452,
+            "e": 11.726,
+            "scene": "how"
+          },
+          {
+            "w": "the",
+            "s": 11.738,
+            "e": 11.809,
+            "scene": "how"
+          },
+          {
+            "w": "video.",
+            "s": 11.821,
+            "e": 12.226,
+            "scene": "how"
+          }
+        ]
+      },
+      {
+        "text": "The link",
+        "start": 13.027,
+        "end": 13.337,
+        "box": [
+          272,
+          1115,
+          628,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "The",
+            "s": 13.027,
+            "e": 13.099,
+            "scene": "loop"
+          },
+          {
+            "w": "link",
+            "s": 13.11,
+            "e": 13.337,
+            "scene": "loop"
+          }
+        ]
+      },
+      {
+        "text": "is pinned,",
+        "start": 13.408,
+        "end": 14.015,
+        "box": [
+          228,
+          1115,
+          672,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "is",
+            "s": 13.408,
+            "e": 13.539,
+            "scene": "loop"
+          },
+          {
+            "w": "pinned,",
+            "s": 13.551,
+            "e": 14.015,
+            "scene": "loop"
+          }
+        ]
+      },
+      {
+        "text": "and the file",
+        "start": 14.301,
+        "end": 14.98,
+        "box": [
+          185,
+          1115,
+          715,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "and",
+            "s": 14.301,
+            "e": 14.372,
+            "scene": "loop"
+          },
+          {
+            "w": "the",
+            "s": 14.384,
+            "e": 14.456,
+            "scene": "loop"
+          },
+          {
+            "w": "file",
+            "s": 14.468,
+            "e": 14.98,
+            "scene": "loop"
+          }
+        ]
+      },
+      {
+        "text": "is in",
+        "start": 15.075,
+        "end": 15.265,
+        "box": [
+          336,
+          1115,
+          564,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "is",
+            "s": 15.075,
+            "e": 15.194,
+            "scene": "loop"
+          },
+          {
+            "w": "in",
+            "s": 15.206,
+            "e": 15.265,
+            "scene": "loop"
+          }
+        ]
+      },
+      {
+        "text": "the channel.",
+        "start": 15.277,
+        "end": 15.741,
+        "box": [
+          185,
+          1115,
+          715,
+          1222
+        ],
+        "size": 72,
+        "lines": 1,
+        "overflow": false,
+        "words": [
+          {
+            "w": "the",
+            "s": 15.277,
+            "e": 15.337,
+            "scene": "loop"
+          },
+          {
+            "w": "channel.",
+            "s": 15.349,
+            "e": 15.741,
+            "scene": "loop"
+          }
+        ]
+      }
+    ],
+    "words_spoken": [
+      {
+        "w": "This",
+        "s": 0.107,
+        "e": 0.25,
+        "scene": "hook"
+      },
+      {
+        "w": "whole",
+        "s": 0.262,
+        "e": 0.452,
+        "scene": "hook"
+      },
+      {
+        "w": "animation",
+        "s": 0.464,
+        "e": 1.024,
+        "scene": "hook"
+      },
+      {
+        "w": "is",
+        "s": 1.131,
+        "e": 1.238,
+        "scene": "hook"
+      },
+      {
+        "w": "one",
+        "s": 1.25,
+        "e": 1.595,
+        "scene": "hook"
+      },
+      {
+        "w": "HTML",
+        "s": 1.726,
+        "e": 2.333,
+        "scene": "hook"
+      },
+      {
+        "w": "file.",
+        "s": 2.345,
+        "e": 2.726,
+        "scene": "hook"
+      },
+      {
+        "w": "The",
+        "s": 3.517,
+        "e": 3.589,
+        "scene": "slowmo"
+      },
+      {
+        "w": "engine",
+        "s": 3.601,
+        "e": 3.886,
+        "scene": "slowmo"
+      },
+      {
+        "w": "steps",
+        "s": 3.898,
+        "e": 4.196,
+        "scene": "slowmo"
+      },
+      {
+        "w": "its",
+        "s": 4.208,
+        "e": 4.315,
+        "scene": "slowmo"
+      },
+      {
+        "w": "clock,",
+        "s": 4.327,
+        "e": 4.743,
+        "scene": "slowmo"
+      },
+      {
+        "w": "so",
+        "s": 4.993,
+        "e": 5.16,
+        "scene": "slowmo"
+      },
+      {
+        "w": "slow",
+        "s": 5.172,
+        "e": 5.47,
+        "scene": "slowmo"
+      },
+      {
+        "w": "motion",
+        "s": 5.482,
+        "e": 5.91,
+        "scene": "slowmo"
+      },
+      {
+        "w": "stays",
+        "s": 5.922,
+        "e": 6.232,
+        "scene": "slowmo"
+      },
+      {
+        "w": "smooth.",
+        "s": 6.243,
+        "e": 6.636,
+        "scene": "slowmo"
+      },
+      {
+        "w": "Speed",
+        "s": 7.443,
+        "e": 7.729,
+        "scene": "fast"
+      },
+      {
+        "w": "it",
+        "s": 7.741,
+        "e": 7.812,
+        "scene": "fast"
+      },
+      {
+        "w": "up",
+        "s": 7.824,
+        "e": 8.003,
+        "scene": "fast"
+      },
+      {
+        "w": "when",
+        "s": 8.11,
+        "e": 8.205,
+        "scene": "fast"
+      },
+      {
+        "w": "the",
+        "s": 8.217,
+        "e": 8.288,
+        "scene": "fast"
+      },
+      {
+        "w": "part",
+        "s": 8.3,
+        "e": 8.491,
+        "scene": "fast"
+      },
+      {
+        "w": "is",
+        "s": 8.503,
+        "e": 8.598,
+        "scene": "fast"
+      },
+      {
+        "w": "boring.",
+        "s": 8.61,
+        "e": 8.979,
+        "scene": "fast"
+      },
+      {
+        "w": "Write",
+        "s": 9.785,
+        "e": 9.952,
+        "scene": "how"
+      },
+      {
+        "w": "code,",
+        "s": 9.964,
+        "e": 10.309,
+        "scene": "how"
+      },
+      {
+        "w": "get",
+        "s": 10.571,
+        "e": 10.714,
+        "scene": "how"
+      },
+      {
+        "w": "frames,",
+        "s": 10.726,
+        "e": 11.273,
+        "scene": "how"
+      },
+      {
+        "w": "post",
+        "s": 11.452,
+        "e": 11.726,
+        "scene": "how"
+      },
+      {
+        "w": "the",
+        "s": 11.738,
+        "e": 11.809,
+        "scene": "how"
+      },
+      {
+        "w": "video.",
+        "s": 11.821,
+        "e": 12.226,
+        "scene": "how"
+      },
+      {
+        "w": "The",
+        "s": 13.027,
+        "e": 13.099,
+        "scene": "loop"
+      },
+      {
+        "w": "link",
+        "s": 13.11,
+        "e": 13.337,
+        "scene": "loop"
+      },
+      {
+        "w": "is",
+        "s": 13.408,
+        "e": 13.539,
+        "scene": "loop"
+      },
+      {
+        "w": "pinned,",
+        "s": 13.551,
+        "e": 14.015,
+        "scene": "loop"
+      },
+      {
+        "w": "and",
+        "s": 14.301,
+        "e": 14.372,
+        "scene": "loop"
+      },
+      {
+        "w": "the",
+        "s": 14.384,
+        "e": 14.456,
+        "scene": "loop"
+      },
+      {
+        "w": "file",
+        "s": 14.468,
+        "e": 14.98,
+        "scene": "loop"
+      },
+      {
+        "w": "is",
+        "s": 15.075,
+        "e": 15.194,
+        "scene": "loop"
+      },
+      {
+        "w": "in",
+        "s": 15.206,
+        "e": 15.265,
+        "scene": "loop"
+      },
+      {
+        "w": "the",
+        "s": 15.277,
+        "e": 15.337,
+        "scene": "loop"
+      },
+      {
+        "w": "channel.",
+        "s": 15.349,
+        "e": 15.741,
+        "scene": "loop"
+      }
+    ],
+    "fill": "#FFFFFF",
+    "accent": "#3DDC84",
+    "outline": "#000000",
+    "highlight": "accent"
+  },
+  "events": [
+    {
+      "t": 0.0,
+      "kind": "scene",
+      "id": "hook"
+    },
+    {
+      "t": 0.0,
+      "kind": "label"
+    },
+    {
+      "t": 0.107,
+      "kind": "caption"
+    },
+    {
+      "t": 1.131,
+      "kind": "caption"
+    },
+    {
+      "t": 2.345,
+      "kind": "caption"
+    },
+    {
+      "t": 3.422,
+      "kind": "scene",
+      "id": "slowmo"
+    },
+    {
+      "t": 3.517,
+      "kind": "caption"
+    },
+    {
+      "t": 3.898,
+      "kind": "caption"
+    },
+    {
+      "t": 4.993,
+      "kind": "caption"
+    },
+    {
+      "t": 5.922,
+      "kind": "caption"
+    },
+    {
+      "t": 7.348000000000001,
+      "kind": "scene",
+      "id": "fast"
+    },
+    {
+      "t": 7.348000000000001,
+      "kind": "label"
+    },
+    {
+      "t": 7.443,
+      "kind": "caption"
+    },
+    {
+      "t": 7.5,
+      "kind": "cta_handle"
+    },
+    {
+      "t": 8.11,
+      "kind": "caption"
+    },
+    {
+      "t": 8.503,
+      "kind": "caption"
+    },
+    {
+      "t": 9.690000000000001,
+      "kind": "scene",
+      "id": "how"
+    },
+    {
+      "t": 9.785,
+      "kind": "caption"
+    },
+    {
+      "t": 10.571,
+      "kind": "caption"
+    },
+    {
+      "t": 11.452,
+      "kind": "caption"
+    },
+    {
+      "t": 12.920000000000002,
+      "kind": "scene",
+      "id": "loop"
+    },
+    {
+      "t": 13.027,
+      "kind": "caption"
+    },
+    {
+      "t": 13.408,
+      "kind": "caption"
+    },
+    {
+      "t": 13.438000000000002,
+      "kind": "cta_qr"
+    },
+    {
+      "t": 14.301,
+      "kind": "caption"
+    },
+    {
+      "t": 15.075,
+      "kind": "caption"
+    },
+    {
+      "t": 15.277,
+      "kind": "caption"
+    }
+  ],
+  "sfx": [
+    {
+      "t": 0.0,
+      "name": "hit"
+    },
+    {
+      "t": 3.302,
+      "name": "whoosh"
+    },
+    {
+      "t": 7.228,
+      "name": "whoosh"
+    },
+    {
+      "t": 7.5,
+      "name": "pop"
+    },
+    {
+      "t": 9.57,
+      "name": "whoosh"
+    },
+    {
+      "t": 12.8,
+      "name": "whoosh"
+    },
+    {
+      "t": 13.438,
+      "name": "pop"
+    }
+  ],
+  "audio": {
+    "voice": true,
+    "music_gain_db": -10.7,
+    "duck_db": -6.0,
+    "separation_db": 10.0,
+    "voice_minus_music_db": 9.9
+  },
+  "fx": {},
+  "effects": {},
+  "issues": [],
+  "render_seconds": 80.6,
+  "forced": false
+}
