@@ -607,7 +607,7 @@ DOCTOR_TOOLS = ("lint_post.py", "score_post.py", "split_post.py", "lint_chat.py"
                 "install.py", "validate_skill.py", "run_evals.py", "package.py",
                 "check_all.sh", "tg.py", "tg_watch.py", "life.py",
                 "schedule.py", "agent.py", "autostart.py", "reel.py", "lint_video_meta.py",
-                "sync_engine.py")
+                "sync_engine.py", "make_sfx.py")
 DOCTOR_MEMORY = (os.path.join("memory", "metrics.md"), os.path.join("memory", "post-log.md"),
                  os.path.join("memory", "used-greetings.md"), os.path.join("memory", "decisions.md"))
 # Эти строки не роняют прогон: без сети и yt-dlp посты пишутся как обычно.

@@ -16,3 +16,6 @@ Thumbs.db
 # Личные ключи и строки сессии. Никогда не в репозиторий.
 secrets/
 *.env
+
+# Подложка роликов собирается по запросу: python3 tools/make_sfx.py --music
+viora-studio/viora-shorts/assets/audio/bed-pulse.wav

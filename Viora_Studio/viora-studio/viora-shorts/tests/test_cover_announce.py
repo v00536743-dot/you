@@ -39,10 +39,41 @@ class Covers(unittest.TestCase):
             shutil.rmtree(out)
 
     def test_low_contrast_caught(self):
-        layout = {"size": (1280, 720), "boxes": [], "texts": ["VIORA", "ДВА СЛОВА"], "headline_px": 120,
-                  "palette": {"bg": "#000000", "fg": "#333333", "accent": "#E63946"}}
+        tokens = dict(plan.brand_tokens("viora"), palette={"bg": "#000000", "fg": "#333333", "accent": "#E63946"})
+        _, layout = cover.compose("minimal", facts(), tokens)
         bad = {c["id"]: c["ok"] for c in cover.checks(layout)}
         self.assertFalse(bad["contrast"])
+
+    def test_small_text_caught(self):
+        _, layout = cover.compose("minimal", facts(), plan.brand_tokens("viora"))
+        layout["texts"][1]["px"] = 30
+        bad = {c["id"]: c["ok"] for c in cover.checks(layout)}
+        self.assertFalse(bad["thumb-320"])
+
+    def test_missing_ink_caught(self):
+        from PIL import Image
+        _, layout = cover.compose("minimal", facts(), plan.brand_tokens("viora"))
+        layout["final"] = layout["base"].copy()
+        bad = {c["id"]: c["ok"] for c in cover.checks(layout)}
+        self.assertFalse(bad["ink"])
+
+    def test_shot_hero_and_mono_gray(self):
+        from PIL import Image
+        out = tempfile.mkdtemp()
+        try:
+            shot = os.path.join(out, "shot.png")
+            img = Image.new("RGB", (1280, 800), "#202060")
+            for x in range(0, 1280, 40):
+                img.paste((230, 57, 70), (x, 0, x + 12, 800))
+            img.save(shot)
+            rows = cover.render_set(facts(), plan.brand_tokens("viora"), os.path.join(out, "v"), shot=shot)
+            self.assertTrue(all(r["shot"] for r in rows))
+            self.assertTrue(all(all(c["ok"] for c in r["checks"]) for r in rows), rows)
+            cover.render_set(facts(), plan.brand_tokens("mono"), os.path.join(out, "m"), shot=shot)
+            hero = Image.open(os.path.join(out, "m", "cover-hero.png")).convert("RGB")
+            self.assertTrue(all(r == g == b for _, (r, g, b) in hero.getcolors(1 << 20)))
+        finally:
+            shutil.rmtree(out)
 
 
 class Prompt(unittest.TestCase):

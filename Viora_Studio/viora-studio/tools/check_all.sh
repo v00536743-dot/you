@@ -126,6 +126,10 @@ echo "== ролики: линтер названий и описаний =="
 python3 tools/lint_video_meta.py --selftest || fail=1
 echo
 
+echo "== ролики: свои звуки =="
+python3 tools/make_sfx.py --selftest || fail=1
+echo
+
 echo "== ролики: вшивка движка SHORTS =="
 python3 tools/sync_engine.py --selftest || fail=1
 python3 tools/sync_engine.py --check || fail=1

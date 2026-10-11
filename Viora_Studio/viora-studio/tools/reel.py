@@ -18,6 +18,7 @@
     python3 tools/reel.py prefs remind              одна строка про незаполненное
     python3 tools/reel.py prefs reset               «сбрось настройки»
     python3 tools/reel.py prefs choose-title "..."  запомнить выбор автора
+    python3 tools/reel.py announce out/x --video-url URL   ссылка на вышедший ролик в анонс
     python3 tools/reel.py log out/x                 записать вышедший ролик в журнал
     python3 tools/reel.py due                       какие замеры пора снять
     python3 tools/reel.py measure NAME 24h shown=1200 viewed_pct=71 avg_pct=64 likes=30 subs=4 clicks=9
@@ -206,6 +207,20 @@ def cmd_log(args) -> int:
     return 0
 
 
+def cmd_announce(args) -> int:
+    try:
+        result = farm.refresh_announce(args.folder, args.video_url)
+    except ValueError as error:
+        print(error)
+        return 1
+    print("ссылка вставлена" if result["changed"] else result["note"])
+    for item in result["issues"]:
+        print("%s %s: %s" % (item["level"], item["code"], item["message"]))
+    errors = [i for i in result["issues"] if i["level"] == "ERROR"]
+    print(open(os.path.join(args.folder, "announce.txt"), encoding="utf-8").read())
+    return 1 if errors else 0
+
+
 def cmd_due(args) -> int:
     rows = journal.due(args.today)
     if not rows:
@@ -268,7 +283,7 @@ def main(argv=None) -> int:
     p.add_argument("--link", action="append", help="имя=ссылка для пункта без адреса")
     p.add_argument("--part", type=int)
     p.add_argument("--speed", help="карта скоростей HTML: 0-5:1,5-12:2.5")
-    p.add_argument("--sound", choices=("page", "sfx", "music", "mute"))
+    p.add_argument("--sound", choices=("page", "mix", "sfx", "music", "mute"))
     p.add_argument("--video-url")
     p.add_argument("--post-url")
     p.add_argument("--log", action="store_true", help="записать в журнал, если ролик готов")
@@ -305,6 +320,11 @@ def main(argv=None) -> int:
     p.add_argument("--title")
     p.add_argument("--date")
     p.set_defaults(func=cmd_log)
+
+    p = sub.add_parser("announce", help="вставить ссылку на вышедший ролик в анонс")
+    p.add_argument("folder")
+    p.add_argument("--video-url", required=True)
+    p.set_defaults(func=cmd_announce)
 
     p = sub.add_parser("due")
     p.add_argument("--today")

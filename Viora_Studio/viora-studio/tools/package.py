@@ -53,7 +53,7 @@ SKILL_NAME = "viora-studio"
 
 SKIP_DIRS = {".git", ".github", "__pycache__", "dist", "out", ".venv",
              "node_modules", ".pytest_cache", ".idea", ".mypy_cache"}
-SKIP_NAMES = {".DS_Store", "Thumbs.db", ".viora-install.json"}
+SKIP_NAMES = {".DS_Store", "Thumbs.db", ".viora-install.json", "bed-pulse.wav"}
 SKIP_PATTERNS = ("*.pyc", "*.pyo", "*.log", "*.tmp", "*.swp", "*.orig", "*.rej")
 
 # Без этих файлов поставка битая, собирать её нельзя.

@@ -18,7 +18,7 @@ import re
 from dataclasses import dataclass, field, asdict
 from typing import Any, Dict, List, Optional, Tuple
 
-SOUNDS = ("page", "sfx", "music", "mute")
+SOUNDS = ("page", "mix", "sfx", "music", "mute")
 
 
 @dataclass
@@ -146,7 +146,7 @@ def output_length(start: float, end: float, speed: List[Dict[str, float]]) -> fl
 
 
 def capture_mode(info: HtmlInfo, sound: str) -> str:
-    if sound == "page" and (info.has_webaudio or info.has_media):
+    if sound in ("page", "mix") and (info.has_webaudio or info.has_media):
         return "realtime"
     return "deterministic"
 
@@ -156,7 +156,7 @@ def capture_action(info: HtmlInfo, sound: str, start: float, end: float, fps: in
     mode = capture_mode(info, sound)
     action: Dict[str, Any] = {
         "do": "capture", "mode": mode, "from": round(start, 2), "to": round(end, 2), "fps": fps,
-        "sound": sound if (sound != "page" or mode == "realtime") else "sfx",
+        "sound": sound if (sound not in ("page", "mix") or mode == "realtime") else "sfx",
         "seek_hook": info.seek_hook,
     }
     if info.needs_click:

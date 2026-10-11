@@ -1,12 +1,12 @@
 {
-  "status": "ready",
+  "status": "plan-ready",
   "out": "a-post/4-besplatnye-nahodki-shpargalka-po-linux",
   "name": "4-besplatnye-nahodki-shpargalka-po-linux",
   "kind": "post",
   "lang": "ru",
   "part": 1,
   "parts": 1,
-  "seconds": 26.8,
+  "seconds": 30.0,
   "engine": "/usr/bin/python3 viora-shorts/tests/fake_engine.py",
   "engine_version": "движок не вшит: слой работает с заглушкой tests/fake_engine.py",
   "fake_engine": true,
@@ -36,12 +36,14 @@
   "announce_issues": [],
   "srt": "тайминги слов от заглушки движка",
   "covers": [
-    "cover-minimal.png",
+    "cover-hero.png",
     "cover-punch.png",
-    "cover-frame.png",
-    "cover-minimal-9x16.png"
+    "cover-minimal.png",
+    "cover-poster-9x16.png"
   ],
+  "cover_shot": true,
   "image_generator": false,
+  "video_url": null,
   "checklist": [
     {
       "n": "1",

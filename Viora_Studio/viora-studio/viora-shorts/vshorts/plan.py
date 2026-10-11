@@ -28,6 +28,16 @@ AUDIENCE = {
 }
 
 
+def _make_bed(path: str) -> None:
+    import importlib.util
+    tool = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "tools", "make_sfx.py")
+    spec = importlib.util.spec_from_file_location("viora_make_sfx", tool)
+    module = importlib.util.module_from_spec(spec)
+    assert spec and spec.loader
+    spec.loader.exec_module(module)
+    module.music(path)
+
+
 def brand_tokens(preset: str, root: Optional[str] = None) -> Dict[str, Any]:
     path = os.path.join(mod_root(root), "brand", "%s.json" % preset)
     data = read_json(path)
@@ -42,6 +52,8 @@ def known_presets(root: Optional[str] = None) -> List[str]:
 
 
 def _rel(path: str, base_dir: Optional[str]) -> str:
+    if path.startswith("html:"):
+        return "html:" + _rel(path[5:], base_dir)
     if not base_dir:
         return path
     try:
@@ -149,11 +161,17 @@ def html_scenes(script: Script, info: Any, sound: str, speed_map: List[Dict[str,
             start, end = best_window(info, beat.seconds)
         else:
             start, end = 0.0, beat.seconds
-        actions = [capture_action(info, sound, start, end)] + demo_inputs(info, start, end)
+        keys = demo_inputs(info, start, end)
+        actions = [capture_action(info, sound, start, end)] + keys
+        sfx = [{"t": 0.0, "name": "hit" if beat.kind == "hook" else "whoosh"}]
+        if sound in ("sfx", "mix"):
+            sfx += [{"t": a["t"], "name": "click"} for a in keys]
+        if beat.item and beat.item.get("best"):
+            sfx.append({"t": round(min(1.0, beat.seconds / 3), 2), "name": "hit"})
         scene: Dict[str, Any] = {
             "id": beat.id, "say": beat.say, "why": beat.why, "x_duration_hint": beat.seconds,
             "source": {"type": "html", "ref": ref, "actions": actions},
-            "sfx": [{"t": 0.0, "name": "hit" if beat.kind == "hook" else "whoosh"}],
+            "sfx": sfx,
         }
         if beat.on_screen:
             scene["on_screen_text"] = beat.on_screen
@@ -209,7 +227,8 @@ def build(script: Script, prefs: Dict[str, Any], raw: Optional[Raw] = None, *,
         notes.append("top")
     layout: Dict[str, Any] = {"mode": mode}
     if mode in ("three", "top_center"):
-        layout["top"] = {"height_pct": PANEL_TOP, "source": _rel(top, base_dir) if os.path.exists(str(top)) else top}
+        local = top[5:] if top.startswith("html:") else top
+        layout["top"] = {"height_pct": PANEL_TOP, "source": _rel(top, base_dir) if os.path.exists(local) else top}
     if mode in ("three", "center_bottom"):
         layout["bottom"] = {"height_pct": PANEL_BOTTOM, "handle": handle,
                             "links": [links[k] for k in ("telegram", "youtube") if links.get(k)]}
@@ -237,7 +256,16 @@ def build(script: Script, prefs: Dict[str, Any], raw: Optional[Raw] = None, *,
                   "speed": float(voice.get("speed", 1.05))},
         "target_lufs": -14,
     }
+    sfx_dir = os.path.join(mod_root(root), "assets", "audio", "sfx")
+    if os.path.isdir(sfx_dir):
+        # Имена sfx в сценах (click, pop, whoosh, hit) это файлы этой папки. Движок может взять свои.
+        audio["x_sfx_dir"] = _rel(sfx_dir, base_dir)
     music = (prefs.get("music") or {}).get("source")
+    if music == "builtin":
+        bed = os.path.join(mod_root(root), "assets", "audio", "bed-pulse.wav")
+        if not os.path.exists(bed):
+            _make_bed(bed)
+        music = bed
     if music:
         audio["music"] = {"source": _rel(music, base_dir) if os.path.exists(music) else music,
                           "duck_db": float((prefs.get("music") or {}).get("duck_db", -10))}

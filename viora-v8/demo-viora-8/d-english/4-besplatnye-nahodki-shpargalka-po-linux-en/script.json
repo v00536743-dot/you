@@ -13,7 +13,7 @@
     {
       "id": "item-1",
       "kind": "item",
-      "say": "A Linux cheat sheet: files, processes, permissions, SSH, systemd, grep, sed and awk, all with examples.",
+      "say": "A Linux cheat sheet: from file permissions to interview questions, with examples everywhere.",
       "on_screen": "1 LINUX CHEAT SHEET",
       "why": "value: show the page",
       "item": {

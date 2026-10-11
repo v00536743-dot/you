@@ -1,6 +1,6 @@
 import unittest
 
-from helpers import fixture
+from helpers import fixture, read
 from vshorts import intake, meta, probe, script
 
 
@@ -20,7 +20,9 @@ class Build(unittest.TestCase):
         s = script.build(raw, items, noun="находка")
         self.assertEqual(script.errors(script.lint(s, raw.text)), [])
         self.assertEqual([b.kind for b in s.beats], ["hook", "item", "item", "item", "cta"])
-        self.assertTrue(s.beats[0].say.startswith("Три бесплатные находки"))
+        self.assertTrue(s.beats[0].say.startswith("Шпаргалка по Linux"), s.beats[0].say)
+        self.assertNotIn("learn-anything", s.beats[0].say)
+        self.assertEqual(s.beats[1].item["name"], "Мегашпаргалка по Linux")
         self.assertTrue(20 <= script.total(s) <= 40)
         self.assertEqual(s.subs["лёрн"], "learn-anything")
         self.assertEqual(s.subs["энисинг"], "")
@@ -101,6 +103,41 @@ class Lint(unittest.TestCase):
         raw, s = self.base()
         s.lang = "en"
         self.assertIn("E-LANG", codes(s, raw.text))
+
+
+    def test_reads_list_caught(self):
+        raw, s = self.base()
+        s.beats[1].say = "Шпаргалка. Файлы, процессы, права, память, сеть."
+        self.assertIn("E-READS-LIST", codes(s, raw.text))
+
+    def test_hook_list_caught(self):
+        raw, s = self.base()
+        names = [b.item["name"] for b in s.beats if b.item]
+        s.beats[0].say = "Сайты: %s." % ", ".join(names)
+        self.assertIn("E-HOOK-LIST", codes(s, raw.text))
+
+    def test_normal_sentence_not_a_list(self):
+        self.assertLess(script.list_run("Пишешь, что хочешь выучить, и получаешь готовый план: гайды, видео, роадмапы."), 4)
+        self.assertGreaterEqual(script.list_run("База: файлы, процессы, права, память, сеть."), 4)
+
+    def test_skeleton_never_reads_lists(self):
+        import os
+        from helpers import POSTS
+        for name in os.listdir(POSTS):
+            if not name[:4].isdigit():
+                continue
+            raw = intake.detect(read(os.path.join(POSTS, name)))
+            if not raw.items:
+                continue
+            for item in raw.items:
+                item.url = item.url or "https://example.dev/%d" % id(item)
+            parts = probe.select(probe.check_items(raw.items, offline=True))
+            if not parts:
+                continue
+            s = script.build(raw, [c.item for c in parts[0]])
+            found = codes(s, raw.text)
+            self.assertNotIn("E-READS-LIST", found, name)
+            self.assertNotIn("E-HOOK-LIST", found, name)
 
 
 class Captions(unittest.TestCase):

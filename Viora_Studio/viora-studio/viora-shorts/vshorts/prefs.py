@@ -209,6 +209,8 @@ def set_value(data: Dict[str, Any], key: str, value: str, root: Optional[str] = 
             raise ValueError("раскладка одна из: %s" % ", ".join(MODES))
         data["layout"] = value
     elif key == "top":
+        if value.startswith("color:"):
+            raise ValueError("верхняя панель цветом это пустая панель: дай видео или html:файл.html")
         data.setdefault("panels", {}).setdefault("top", {})["source"] = value or None
         _drop_pending(data, "top")
     elif key == "qr":
@@ -257,8 +259,8 @@ def set_value(data: Dict[str, Any], key: str, value: str, root: Optional[str] = 
             raise ValueError("ссылка начинается с http")
         data.setdefault("links", {})[name] = value
     elif key == "html.sound":
-        if value not in ("page", "sfx", "music", "mute"):
-            raise ValueError("звук HTML: page, sfx, music или mute")
+        if value not in ("page", "mix", "sfx", "music", "mute"):
+            raise ValueError("звук HTML: page, mix (страница и наши щелчки), sfx, music или mute")
         data.setdefault("html", {})["sound"] = value
     else:
         raise ValueError("не знаю настройку %s" % key)

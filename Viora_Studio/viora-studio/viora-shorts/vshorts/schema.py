@@ -17,6 +17,9 @@ TYPES = {
     "number": (int, float), "integer": int, "null": type(None),
 }
 HEX = re.compile(r"^#[0-9A-Fa-f]{6}$")
+# Признаки слопа в токенах и стилях плана (COMMON.md раздел 2). Пиксели проверяет движок.
+SLOP_RE = re.compile(r"(glow|blur|drop.?shadow|text.?shadow|gradient|neon|bloom|lens.?flare|"
+                     r"свечени|градиент|неон|блюр)", re.I)
 
 
 def load_schema(root: Optional[str] = None) -> Dict[str, Any]:
@@ -118,6 +121,8 @@ def check_rules(plan: Dict[str, Any], expect_qr_url: Optional[str] = None,
         add("ERROR", "E-TOP-EMPTY", "верхняя панель без видео: пустая панель хуже, чем её отсутствие")
     if has_top and re.search(r"(ball|шар|gradient|градиент)", str(top.get("source", "")), re.I):
         add("ERROR", "E-TOP-SLOP", "в верхней панели абстрактный фон, нужен живой кадр")
+    if has_top and str(top.get("source", "")).startswith("color:"):
+        add("ERROR", "E-TOP-COLOR", "верхняя панель залита цветом: это пустая панель, движок её не пропустит")
     if not has_top and top:
         add("WARN", "W-TOP-IGNORED", "раскладка %s без верха, а top задан" % mode)
 
@@ -177,6 +182,25 @@ def check_rules(plan: Dict[str, Any], expect_qr_url: Optional[str] = None,
     for role, font in fonts.items():
         if re.search(r"(dejavu|arial|helvetica|liberation|times)", str(font), re.I):
             add("ERROR", "E-FONT-DEFAULT", "шрифт %s по умолчанию: берём шрифт бренда" % role)
+
+    for section in ("brand", "captions", "layout"):
+        hits = set()
+        stack = [plan.get(section, {})]
+        while stack:
+            node = stack.pop()
+            if isinstance(node, dict):
+                for key, value in node.items():
+                    if key == "source":
+                        continue  # путь к видео верхней панели ловит E-TOP-SLOP
+                    if SLOP_RE.search(str(key)):
+                        hits.add(str(key))
+                    stack.append(value)
+            elif isinstance(node, list):
+                stack.extend(node)
+            elif isinstance(node, str) and SLOP_RE.search(node):
+                hits.add(node[:40])
+        if hits:
+            add("ERROR", "E-SLOP", "%s: признаки слопа (%s): свечение, градиенты и неон запрещены" % (section, ", ".join(sorted(hits))))
 
     captions = plan.get("captions", {})
     if captions.get("enabled") is False:

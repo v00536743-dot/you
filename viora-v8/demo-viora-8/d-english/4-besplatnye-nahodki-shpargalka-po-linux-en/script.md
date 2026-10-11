@@ -5,7 +5,7 @@
   ЭКРАН: 3 FREE FINDS
 
 [0:03-0:09] item-1
-  ГОЛОС: A Linux cheat sheet: files, processes, permissions, SSH, systemd, grep, sed and awk, all with examples.
+  ГОЛОС: A Linux cheat sheet: from file permissions to interview questions, with examples everywhere.
   ЭКРАН: 1 LINUX CHEAT SHEET
 
 [0:09-0:15] item-2

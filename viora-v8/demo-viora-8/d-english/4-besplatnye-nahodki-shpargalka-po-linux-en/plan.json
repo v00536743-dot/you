@@ -16,7 +16,11 @@
     "loop": true
   },
   "layout": {
-    "mode": "center_bottom",
+    "mode": "three",
+    "top": {
+      "height_pct": 20,
+      "source": "html:../../../../Viora_Studio/viora-studio/viora-shorts/tests/fixtures/top-loop.html"
+    },
     "bottom": {
       "height_pct": 18,
       "handle": "BADVINO",
@@ -66,7 +70,8 @@
       "voice": "en-US-AndrewMultilingualNeural",
       "speed": 1.05
     },
-    "target_lufs": -14
+    "target_lufs": -14,
+    "x_sfx_dir": "../../../../Viora_Studio/viora-studio/viora-shorts/assets/audio/sfx"
   },
   "scenes": [
     {
@@ -109,7 +114,7 @@
     },
     {
       "id": "item-1",
-      "say": "A Linux cheat sheet: files, processes, permissions, SSH, systemd, grep, sed and awk, all with examples.",
+      "say": "A Linux cheat sheet: from file permissions to interview questions, with examples everywhere.",
       "why": "value: show the page",
       "x_duration_hint": 6.0,
       "on_screen_text": "1 LINUX CHEAT SHEET",

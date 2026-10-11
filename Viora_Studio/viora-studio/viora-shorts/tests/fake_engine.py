@@ -79,7 +79,12 @@ def qa(out_dir: str) -> int:
         {"id": "no_dashes", "ok": not re.search("[\u2014\u2013]", json.dumps(plan, ensure_ascii=False)), "detail": "rule zero"},
     ]
     passed = all(c["ok"] for c in checks)
-    report = {"fake": True, "passed": passed, "checks": checks,
+    # FAKE_ENGINE_REAL=1 изображает настоящий движок: только чтобы тесты прошли ветку «готово» и журнал.
+    real = os.environ.get("FAKE_ENGINE_REAL") == "1"
+    if real:
+        checks += [{"id": name, "ok": True, "detail": "simulated"} for name in
+                   ("first_frame", "motion", "pause", "safe_zone", "qr_decode", "anti_slop", "lufs", "captions_sync")]
+    report = {"fake": not real, "passed": passed, "checks": checks,
               "not_checked": ["first_frame", "motion", "safe_zone_pixels", "qr_decode", "lufs", "anti_slop_pixels"]}
     json.dump(report, open(os.path.join(out_dir, "qa.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=2)
     print(json.dumps(report, ensure_ascii=False))

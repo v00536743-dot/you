@@ -1,9 +1,11 @@
-"""Обложки: три варианта 1280x720 и первый кадр 1080x1920 в стиле VIORA.
+"""Обложки: три варианта 1280x720 и постер первого кадра 1080x1920 в стиле VIORA.
 
 Текст всегда рисует код настоящим шрифтом бренда: нейросеть пишет кириллицу
-с ошибками (research/design-rules.md). Картинку без текста может дать генератор
-или честный кадр из ролика. Нет ни того, ни другого: предмет-символ линией.
+с ошибками (research/design-rules.md). Герой обложки это настоящий кадр:
+скриншот самого живого сайта из ролика (vshorts/shot.py) или кадр готового видео.
+Нет ни того, ни другого: предмет-символ линией, как в минимал-обложках канала.
 
+Затемнение кадра равномерное (умножение на число), без градиентов и свечения.
 Pillow нужен только здесь. Нет Pillow: отдаём промпт обложки и говорим об этом.
 """
 
@@ -20,6 +22,10 @@ TALL = (1080, 1920)
 TIMESTAMP_ZONE = (1280 - 230, 720 - 110)
 # Рабочая зона Shorts для 1080x1920 (contract/safe_zones.json, youtube_shorts).
 SAFE_TALL = {"top": 288, "bottom": 672, "left": 48, "right": 192}
+# Текст на 320 px ширины: меньше 14 px глаз в ленте не читает. Логотип это знак, не текст.
+MIN_TEXT_AT_320 = 14
+MIN_HEADLINE_AT_320 = 24
+MIN_CONTRAST = 4.5
 NOMINATIVE = {"учёбы": "УЧЁБА", "Майнкрафта": "МАЙНКРАФТ", "нейросетей": "НЕЙРОСЕТИ",
               "дизайна": "ДИЗАЙН", "кода": "КОД", "веба": "ВЕБ"}
 
@@ -38,16 +44,20 @@ def _hex(color: str) -> Tuple[int, int, int]:
 
 
 def _lum(rgb: Tuple[int, int, int]) -> float:
-    def channel(c: int) -> float:
+    def channel(c: float) -> float:
         v = c / 255
         return v / 12.92 if v <= 0.03928 else ((v + 0.055) / 1.055) ** 2.4
     r, g, b = (channel(c) for c in rgb)
     return 0.2126 * r + 0.7152 * g + 0.0722 * b
 
 
+def _ratio(la: float, lb: float) -> float:
+    hi, lo = max(la, lb), min(la, lb)
+    return round((hi + 0.05) / (lo + 0.05), 2)
+
+
 def contrast(a: str, b: str) -> float:
-    la, lb = sorted((_lum(_hex(a)), _lum(_hex(b))), reverse=True)
-    return round((la + 0.05) / (lb + 0.05), 2)
+    return _ratio(_lum(_hex(a)), _lum(_hex(b)))
 
 
 def _font(tokens: Dict[str, Any], role: str, size: int, root: Optional[str]) -> Any:
@@ -58,30 +68,97 @@ def _font(tokens: Dict[str, Any], role: str, size: int, root: Optional[str]) -> 
     return ImageFont.truetype(path, size)
 
 
-def _tracked(draw: Any, xy: Tuple[int, int], text: str, font: Any, fill: Any, tracking: float) -> Tuple[int, int, int, int]:
-    """Текст с разрядкой: в Pillow нет letter-spacing, ставим буквы по одной."""
-    x, y = xy
-    size = font.size
-    left = x
-    for ch in text:
-        draw.text((x, y), ch, font=font, fill=fill)
-        x += font.getlength(ch) + tracking * size
-    box = font.getbbox(text or " ")
-    return left, y + box[1], int(x), y + box[3]
-
-
-def _fit_font(tokens: Dict[str, Any], text: str, max_w: int, start: int, root: Optional[str], role: str = "display") -> Any:
+def _fit_font(tokens: Dict[str, Any], text: str, max_w: int, start: int, root: Optional[str],
+              role: str = "display", floor: int = 56, tracking: float = 0.0) -> Any:
     size = start
-    while size > 24:
+    while size > floor:
         font = _font(tokens, role, size, root)
-        if font.getlength(text) <= max_w:
+        if _width(font, text, tracking) <= max_w:
             return font
         size -= 4
-    return _font(tokens, role, size, root)
+    return _font(tokens, role, floor, root)
 
 
-def _symbol(draw: Any, box: Tuple[int, int, int, int], fg: Tuple[int, int, int], accent: Tuple[int, int, int], line: int) -> None:
+def _fit_tracked(tokens: Dict[str, Any], text: str, max_w: int, start: int, root: Optional[str],
+                 tracking: float) -> Tuple[Any, float]:
+    """Подпись с разрядкой: сначала сжимаем разрядку, потом шрифт, но не ниже 56 px."""
+    spacing = tracking
+    while spacing > 0.04 and _width(_font(tokens, "body", 56, root), text, spacing) > max_w:
+        spacing = round(spacing - 0.04, 2)
+    return _fit_font(tokens, text, max_w, start, root, "body", 56, spacing), spacing
+
+
+def _width(font: Any, text: str, tracking: float = 0.0) -> float:
+    if not tracking:
+        return font.getlength(text)
+    return sum(font.getlength(ch) for ch in text) + tracking * font.size * max(0, len(text) - 1)
+
+
+class Canvas:
+    """Картинка плюс разметка текстов: по ней работают проверки."""
+
+    def __init__(self, size: Tuple[int, int], tokens: Dict[str, Any], root: Optional[str]):
+        from PIL import Image, ImageDraw
+        self.size = size
+        self.tokens = tokens
+        self.root = root
+        pal = tokens["palette"]
+        self.bg, self.fg, self.accent = _hex(pal["bg"]), _hex(pal["fg"]), _hex(pal["accent"])
+        self.img = Image.new("RGB", size, self.bg)
+        self.draw = ImageDraw.Draw(self.img)
+        self.texts: List[Dict[str, Any]] = []
+        self.base = None
+
+    def freeze_background(self) -> None:
+        """Снимок фона до текста: по нему честно меряем контраст под каждой надписью."""
+        self.base = self.img.copy()
+
+    def text(self, xy: Tuple[int, int], text: str, font: Any, fill: Tuple[int, int, int],
+             role: str = "text", tracking: float = 0.0) -> Tuple[int, int, int, int]:
+        x, y = xy
+        if tracking:
+            cx = x
+            for ch in text:
+                self.draw.text((cx, y), ch, font=font, fill=fill)
+                cx += font.getlength(ch) + tracking * font.size
+            box = font.getbbox(text)
+            bbox = (x, y + box[1], int(cx - tracking * font.size), y + box[3])
+        else:
+            self.draw.text((x, y), text, font=font, fill=fill)
+            bbox = self.draw.textbbox((x, y), text, font=font)
+        self.texts.append({"text": text, "box": bbox, "px": font.size, "fill": fill, "role": role})
+        return bbox
+
+    def plate(self, box: Tuple[int, int, int, int], color: Tuple[int, int, int]) -> None:
+        self.draw.rectangle(box, fill=color)
+
+
+def _paste_shot(canvas: Canvas, shot: str, box: Tuple[int, int, int, int], dim: float, frame: bool) -> None:
+    """Кадр сайта в прямоугольник: обрезка по центру, равномерное затемнение, тонкая рамка."""
+    from PIL import Image, ImageOps
+    x0, y0, x1, y1 = box
+    img = Image.open(shot).convert("RGB")
+    img = ImageOps.fit(img, (x1 - x0, y1 - y0), method=Image.LANCZOS, centering=(0.5, 0.42))
+    pal = canvas.tokens["palette"]
+    if all(v[1:3] == v[3:5] == v[5:7] for v in (s.upper() for s in pal.values())):
+        img = img.convert("L").convert("RGB")  # mono: никакого цвета, даже из кадра сайта
+    from PIL import ImageStat
+    mean = ImageStat.Stat(img.convert("L")).mean[0]
+    if mean * dim > 110:
+        # Светлая страница на чёрной обложке горит пятном: приглушаем до средней яркости 110.
+        dim = 110 / mean
+    if dim < 1:
+        img = img.point(lambda v: int(v * dim))
+    canvas.img.paste(img, (x0, y0))
+    if frame:
+        width = int(canvas.tokens.get("line_width", 2)) * (2 if canvas.size[0] >= 1080 else 1)
+        canvas.draw.rectangle(box, outline=canvas.fg, width=width)
+
+
+def _symbol(canvas: Canvas, box: Tuple[int, int, int, int]) -> None:
     """Предмет-символ линией: окно браузера и курсор. Одна толщина, без заливки и свечения."""
+    draw, fg, accent = canvas.draw, canvas.fg, canvas.accent
+    line = int(canvas.tokens.get("line_width", 2)) * (2 if canvas.size[0] >= 1080 else 1)
     x0, y0, x1, y1 = box
     draw.rectangle(box, outline=fg, width=line)
     bar = y0 + (y1 - y0) // 7
@@ -92,146 +169,189 @@ def _symbol(draw: Any, box: Tuple[int, int, int, int], fg: Tuple[int, int, int],
     for i in range(3):
         yy = bar + 40 + i * 36
         draw.line((x0 + 32, yy, x0 + 32 + (x1 - x0) * (0.6 - i * 0.15), yy), fill=fg, width=line)
-    # Курсор: единственное место акцента в минимальном регистре.
     cx, cy = x0 + int((x1 - x0) * 0.68), y0 + int((y1 - y0) * 0.62)
     arrow = [(cx, cy), (cx, cy + 64), (cx + 16, cy + 48), (cx + 30, cy + 76), (cx + 40, cy + 70), (cx + 26, cy + 44), (cx + 46, cy + 44)]
     draw.line(arrow + [arrow[0]], fill=accent, width=line + 1)
 
 
-def compose(variant: str, facts: Dict[str, Any], tokens: Dict[str, Any], size: Tuple[int, int] = WIDE,
-            background: Optional[str] = None, root: Optional[str] = None) -> Tuple[Any, Dict[str, Any]]:
-    """Нарисовать одну обложку. Возвращает картинку и разметку для проверок."""
-    from PIL import Image, ImageDraw, ImageFilter
-
-    W, H = size
-    pal = tokens["palette"]
-    bg, fg, accent = _hex(pal["bg"]), _hex(pal["fg"]), _hex(pal["accent"])
-    img = Image.new("RGB", size, bg)
-    draw = ImageDraw.Draw(img)
-    line = int(tokens.get("line_width", 2)) * (2 if W >= 1080 else 1)
-    track = tokens.get("tracking", {})
+def texts_for(facts: Dict[str, Any]) -> Dict[str, str]:
+    """Слова обложки: 3-5 штук, не повторяют название, цифра только показанная."""
+    custom = facts.get("cover") or {}
     lang = facts.get("lang", "ru")
     n = facts.get("count", 0)
-    short_names = [name.split()[0].upper() for name in facts.get("names", [])][:3]
     labels = [NOMINATIVE.get(l, l.upper()) for l in facts.get("labels", [])][:3]
-    custom = facts.get("cover") or {}
-    boxes: List[Tuple[int, int, int, int]] = []
-    texts: List[str] = []
-    tall = H > W
-    margin_l = SAFE_TALL["left"] + 40 if tall else 80
-    max_w = (W - SAFE_TALL["right"] - margin_l - 24) if tall else int(W * 0.54)
-
-    if background and os.path.exists(background) and variant == "frame":
-        frame = Image.open(background).convert("RGB")
-        target = (int(W * 0.5), H) if not tall else (W, int(H * 0.42))
-        frame = frame.resize(target) if frame.size != target else frame
-        frame = frame.filter(ImageFilter.GaussianBlur(1)).point(lambda v: int(v * 0.55))
-        img.paste(frame, (W - target[0], 0) if not tall else (0, SAFE_TALL["top"] + 380))
-    elif variant in ("minimal", "frame"):
-        if tall:
-            sym = (margin_l + 40, 1036, W - SAFE_TALL["right"] - 60, 1232)
-        else:
-            sym = (int(W * 0.64), int(H * 0.22), int(W * 0.92), int(H * 0.70))
-        _symbol(draw, sym, fg, accent, line)
-
-    logo_font = _font(tokens, "logo", 34 if not tall else 44, root)
-    logo_y = 56 if not tall else SAFE_TALL["top"] + 24
-    boxes.append(_tracked(draw, (margin_l, logo_y), tokens.get("logo", {}).get("text", "VIORA"), logo_font, fg, track.get("logo", 0.4)))
-    texts.append(tokens.get("logo", {}).get("text", "VIORA"))
-
-    kicker_font = _font(tokens, "body", 30 if not tall else 40, root)
-    head_y = int(H * 0.56) if not tall else SAFE_TALL["top"] + 500
-    step = 54 if not tall else 62
-    if variant == "minimal":
-        kicker = custom.get("kicker") or (["FREE:"] + short_names)
-        y = head_y - step * len(kicker) - 24
-        for row in kicker:
-            boxes.append(_tracked(draw, (margin_l, y), row, kicker_font, fg, track.get("kicker", 0.3)))
-            texts.append(row)
-            y += step
-        headline = custom.get("headline") or ("БЕСПЛАТНО" if lang == "ru" else "FREE")
-        font = _fit_font(tokens, headline, max_w, 150 if not tall else 170, root)
-        draw.text((margin_l, head_y), headline, font=font, fill=fg)
-        hb = draw.textbbox((margin_l, head_y), headline, font=font)
-        boxes.append(hb)
-        texts.append(headline)
-        draw.line((margin_l, hb[3] + 28, margin_l + 160, hb[3] + 28), fill=accent, width=line + 2)
-    elif variant == "punch":
-        plate = custom.get("plate") or (" · ".join(labels) if labels else ("ЧАСТЬ %d" % facts.get("part", 1)))
-        pf = _font(tokens, "body", 30 if not tall else 40, root)
-        pw = int(pf.getlength(plate)) + 40
-        top = head_y - 96
-        draw.rectangle((margin_l, top, margin_l + pw, top + 56), fill=accent)
-        draw.text((margin_l + 20, top + 10), plate, font=pf, fill=bg if contrast(pal["bg"], pal["accent"]) > contrast(pal["fg"], pal["accent"]) else fg)
-        boxes.append((margin_l, top, margin_l + pw, top + 56))
-        texts.append(plate)
-        number = str(custom.get("number", n))
-        noun = facts.get("noun", "сайт")
-        rest = custom.get("rest") or ((" НАХОДКИ" if noun == "находка" else " САЙТА") if lang == "ru" else " FREE SITES")
-        font = _fit_font(tokens, number + rest, max_w if not tall else max_w, 140 if not tall else 150, root)
-        draw.text((margin_l, head_y), number, font=font, fill=accent)
-        nx = margin_l + int(font.getlength(number + " "))
-        draw.text((nx, head_y), rest.strip(), font=font, fill=fg)
-        hb = draw.textbbox((margin_l, head_y), number + rest, font=font)
-        boxes.append(hb)
-        texts.append(number + rest)
-        # Подписи с именами здесь нет: плашка и заголовок уже дают 3-5 слов.
+    if lang == "ru":
+        noun = {"находка": ("НАХОДКА", "НАХОДКИ", "НАХОДОК")}.get(facts.get("noun", ""), ("САЙТ", "САЙТА", "САЙТОВ"))
+        word = noun[0] if n % 10 == 1 and n % 100 != 11 else (noun[1] if 2 <= n % 10 <= 4 and not 12 <= n % 100 <= 14 else noun[2])
+        free = "БЕСПЛАТНО" if facts.get("free", True) else "ПОЛЕЗНОЕ"
     else:
-        headline = custom.get("frame_headline") or (
-            ("%d %s" % (n, "НАХОДКИ" if facts.get("noun") == "находка" else "САЙТА")) if lang == "ru" else "%d SITES" % n)
-        font = _fit_font(tokens, headline, max_w, 140 if not tall else 160, root)
-        draw.text((margin_l, head_y), headline, font=font, fill=fg)
-        hb = draw.textbbox((margin_l, head_y), headline, font=font)
-        boxes.append(hb)
-        texts.append(headline)
-        sub = custom.get("frame_sub") or " · ".join(labels) or ", ".join(short_names)
-        _tracked(draw, (margin_l, hb[3] + 34), sub, kicker_font, accent, track.get("kicker", 0.3))
-        boxes.append((margin_l, hb[3] + 34, margin_l + int(kicker_font.getlength(sub) * 1.3), hb[3] + 34 + kicker_font.size))
-        texts.append(sub)
-    layout = {"size": size, "boxes": boxes, "texts": texts, "variant": variant,
-              "headline_px": font.size, "palette": pal}
-    return img, layout
+        word = "SITE" if n == 1 else "SITES"
+        free = "FREE" if facts.get("free", True) else "USEFUL"
+    return {
+        "kicker": custom.get("kicker") or " · ".join(labels) or free,
+        "headline": custom.get("headline") or free,
+        "number": str(custom.get("number", n)),
+        "noun": custom.get("rest", word).strip(),
+        "plate": custom.get("plate") or free,
+    }
+
+
+def compose(variant: str, facts: Dict[str, Any], tokens: Dict[str, Any], size: Tuple[int, int] = WIDE,
+            shot: Optional[str] = None, root: Optional[str] = None) -> Tuple[Any, Dict[str, Any]]:
+    W, H = size
+    tall = H > W
+    c = Canvas(size, tokens, root)
+    words_ = texts_for(facts)
+    track = tokens.get("tracking", {})
+    has_shot = bool(shot and os.path.exists(shot))
+    pad = 72
+
+    if tall:
+        z = SAFE_TALL
+        left, right, top = z["left"] + 40, W - z["right"] - 24, z["top"] + 32
+        if has_shot:
+            _paste_shot(c, shot, (left, 1000, right, 1000 + int((right - left) * 0.62)), 0.92, True)
+        else:
+            _symbol(c, (left + 40, 1020, right - 60, 1220))
+        c.freeze_background()
+        c.text((left, top), tokens["logo"]["text"], _font(tokens, "logo", 44, root), c.fg, "logo", track.get("logo", 0.4))
+        kicker_font, spacing = _fit_tracked(tokens, words_["kicker"], right - left, 60, root, track.get("kicker", 0.3))
+        c.text((left, top + 160), words_["kicker"], kicker_font, c.accent, tracking=spacing)
+        line = "%s %s" % (words_["number"], words_["noun"])
+        head = _fit_font(tokens, line, right - left, 150, root)
+        c.text((left, top + 270), line, head, c.fg, "headline")
+    elif variant == "minimal":
+        _symbol(c, (int(W * 0.64), int(H * 0.22), int(W * 0.92), int(H * 0.70)))
+        c.freeze_background()
+        max_w = int(W * 0.64) - pad - 40
+        c.text((pad, 56), tokens["logo"]["text"], _font(tokens, "logo", 40, root), c.fg, "logo", track.get("logo", 0.4))
+        kicker_font, spacing = _fit_tracked(tokens, words_["kicker"], max_w, 60, root, track.get("kicker", 0.3))
+        c.text((pad, 250), words_["kicker"], kicker_font, c.fg, tracking=spacing)
+        head = _fit_font(tokens, words_["headline"], max_w, 150, root)
+        box = c.text((pad, 340), words_["headline"], head, c.fg, "headline")
+        width = int(tokens.get("line_width", 2)) + 4
+        c.draw.line((pad, box[3] + 34, pad + 180, box[3] + 34), fill=c.accent, width=width)
+    elif variant == "punch":
+        if has_shot:
+            _paste_shot(c, shot, (0, 0, W, H), 0.24, False)
+        else:
+            _symbol(c, (int(W * 0.62), int(H * 0.2), int(W * 0.92), int(H * 0.68)))
+        plate_font = _font(tokens, "display", 56, root)
+        plate_w = int(plate_font.getlength(words_["plate"])) + 48
+        c.plate((pad, 200, pad + plate_w, 200 + 88), c.accent)
+        c.freeze_background()
+        c.text((pad, 56), tokens["logo"]["text"], _font(tokens, "logo", 40, root), c.fg, "logo", track.get("logo", 0.4))
+        ink = c.bg if contrast(tokens["palette"]["bg"], tokens["palette"]["accent"]) >= \
+            contrast(tokens["palette"]["fg"], tokens["palette"]["accent"]) else c.fg
+        c.text((pad + 24, 210), words_["plate"], plate_font, ink, "plate")
+        line = "%s %s" % (words_["number"], words_["noun"])
+        head = _fit_font(tokens, line, W - pad - 240, 170, root)
+        number_w = int(head.getlength(words_["number"] + " "))
+        c.text((pad, 340), words_["number"], head, c.accent, "headline")
+        c.text((pad + number_w, 340), words_["noun"], head, c.fg, "headline")
+    else:  # hero: слева чёрная колонка с текстом, справа живой кадр
+        split = int(W * 0.46)
+        if has_shot:
+            _paste_shot(c, shot, (split, 0, W, H), 0.85, False)
+            c.draw.line((split, 0, split, H), fill=c.accent, width=6)
+        else:
+            _symbol(c, (split + 80, int(H * 0.2), W - 80, int(H * 0.7)))
+        c.freeze_background()
+        max_w = split - pad - 32
+        c.text((pad, 56), tokens["logo"]["text"], _font(tokens, "logo", 40, root), c.fg, "logo", track.get("logo", 0.4))
+        head = _fit_font(tokens, words_["number"], max_w, 260, root)
+        box = c.text((pad, 150), words_["number"], head, c.accent, "headline")
+        noun = _fit_font(tokens, words_["noun"], max_w, 110, root)
+        box = c.text((pad, box[3] + 30), words_["noun"], noun, c.fg, "headline")
+        kicker_font, spacing = _fit_tracked(tokens, words_["headline"], max_w, 64, root, track.get("kicker", 0.3))
+        c.text((pad, box[3] + 40), words_["headline"], kicker_font, c.fg, tracking=spacing)
+    layout = {"size": size, "texts": c.texts, "variant": variant, "palette": tokens["palette"],
+              "shot": has_shot, "base": c.base, "final": c.img}
+    return c.img, layout
+
+
+def _bg_contrast(layout: Dict[str, Any], item: Dict[str, Any]) -> float:
+    """Контраст надписи к худшему пикселю фона под ней (5-й и 95-й перцентиль)."""
+    base = layout.get("base")
+    text_l = _lum(item["fill"])
+    if base is None:
+        return contrast("#%02x%02x%02x" % item["fill"], layout["palette"]["bg"])
+    x0, y0, x1, y1 = item["box"]
+    crop = base.crop((max(0, x0), max(0, y0), max(x0 + 1, x1), max(y0 + 1, y1))).convert("RGB")
+    crop = crop.resize((max(1, crop.width // 4), max(1, crop.height // 4)))
+    lums = sorted(_lum(px) for px in crop.getdata())
+    if not lums:
+        return 21.0
+    worst = lums[int(len(lums) * 0.95) - 1] if text_l > 0.5 else lums[int(len(lums) * 0.05)]
+    return _ratio(text_l, worst)
 
 
 def checks(layout: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """Машинные проверки обложки: 320 px, контраст, слова, зоны, цвета."""
+    """Машинные проверки по каждой надписи: размер на 320 px, контраст к фону, слова, зоны."""
     W, H = layout["size"]
-    pal = layout["palette"]
+    texts = [t for t in layout["texts"] if t["role"] != "logo"]
     out = []
-    text_words = sum(len(words(t)) for t in layout["texts"][1:])
-    out.append({"id": "words", "ok": 2 <= text_words <= 6, "detail": "слов на обложке %d (цель 3-5, логотип не считаем)" % text_words})
-    small = layout["headline_px"] * 320 / W
-    out.append({"id": "thumb-320", "ok": small >= 18, "detail": "заголовок на 320 px: %.0f px" % small})
-    ratio = contrast(pal["fg"], pal["bg"])
-    out.append({"id": "contrast", "ok": ratio >= 7, "detail": "контраст текста %.1f:1 (нужно от 7)" % ratio})
-    colors = {v.upper() for v in pal.values()}
-    out.append({"id": "colors", "ok": len(colors) <= 3, "detail": "основных цветов %d" % len(colors)})
+    count = sum(len(words(t["text"])) for t in texts)
+    out.append({"id": "words", "ok": 2 <= count <= 5, "detail": "слов на обложке %d (цель 3-5, логотип не считаем)" % count})
+    scale = 320 / W
+    small = min((t["px"] * scale for t in texts), default=0)
+    head = max((t["px"] * scale for t in texts if t["role"] == "headline"), default=0)
+    worst_text = min(texts, key=lambda t: t["px"])["text"] if texts else ""
+    out.append({"id": "thumb-320", "ok": small >= MIN_TEXT_AT_320 and head >= MIN_HEADLINE_AT_320,
+                "detail": "на 320 px самый мелкий текст %.0f px («%s»), заголовок %.0f px (нужно от %d и %d)"
+                % (small, worst_text, head, MIN_TEXT_AT_320, MIN_HEADLINE_AT_320)})
+    ratios = [(_bg_contrast(layout, t), t["text"]) for t in texts]
+    low = min(ratios, default=(21.0, ""))
+    out.append({"id": "contrast", "ok": low[0] >= MIN_CONTRAST,
+                "detail": "худший контраст %.1f:1 у «%s» к фону под ним (нужно от %.1f)" % (low[0], low[1], MIN_CONTRAST)})
+    final = layout.get("final")
+    base = layout.get("base")
+    if final is not None and base is not None:
+        from PIL import ImageChops
+        blank = [t["text"] for t in texts
+                 if not ImageChops.difference(final.crop(t["box"]), base.crop(t["box"])).getbbox()]
+        out.append({"id": "ink", "ok": not blank,
+                    "detail": "все надписи реально нарисованы" if not blank else "не нарисовано: %s" % ", ".join(blank)})
+    clash = []
+    for i, a in enumerate(texts):
+        for b in texts[i + 1:]:
+            ax0, ay0, ax1, ay1 = a["box"]
+            bx0, by0, bx1, by1 = b["box"]
+            if ax0 < bx1 and bx0 < ax1 and ay0 < by1 and by0 < ay1 and a["fill"] != b["fill"] or \
+                    (ax0 < bx1 and bx0 < ax1 and ay0 < by1 and by0 < ay1 and abs(ax0 - bx0) > 4 and ay0 != by0):
+                clash.append("%s / %s" % (a["text"], b["text"]))
+    out.append({"id": "overlap", "ok": not clash, "detail": "надписи не наезжают друг на друга" if not clash else "наезд: " + ", ".join(clash)})
+    colors = {v.upper() for v in layout["palette"].values()}
+    out.append({"id": "colors", "ok": len(colors) <= 3, "detail": "основных цветов бренда %d" % len(colors)})
+    boxes = [t["box"] for t in layout["texts"]]
     if H > W:
         z = SAFE_TALL
-        inside = all(b[0] >= z["left"] and b[2] <= W - z["right"] and b[1] >= z["top"] and b[3] <= H - z["bottom"]
-                     for b in layout["boxes"])
+        inside = all(b[0] >= z["left"] and b[2] <= W - z["right"] and b[1] >= z["top"] and b[3] <= H - z["bottom"] for b in boxes)
         out.append({"id": "safe-zone", "ok": inside, "detail": "весь текст в рабочей зоне Shorts"})
     else:
-        clash = any(b[2] > TIMESTAMP_ZONE[0] and b[3] > TIMESTAMP_ZONE[1] for b in layout["boxes"])
-        out.append({"id": "timestamp", "ok": not clash, "detail": "текст не лезет под длительность в правом нижнем углу"})
-    out.append({"id": "no-glow-gradient", "ok": True, "detail": "заливка плоская по построению: ни градиентов, ни теней"})
+        clash = any(b[2] > TIMESTAMP_ZONE[0] and b[3] > TIMESTAMP_ZONE[1] for b in boxes)
+        overflow = any(b[2] > W - 24 or b[3] > H - 16 for b in boxes)
+        out.append({"id": "timestamp", "ok": not clash and not overflow,
+                    "detail": "текст не лезет под длительность и за край"})
+    out.append({"id": "no-glow-gradient", "ok": True,
+                "detail": "заливки плоские, кадр затемнён равномерно: градиентов и свечения нет по построению"})
     return out
 
 
-def render_set(facts: Dict[str, Any], tokens: Dict[str, Any], out_dir: str,
-               background: Optional[str] = None, root: Optional[str] = None) -> List[Dict[str, Any]]:
-    """Три обложки 16:9 и первый кадр 9:16. Каждая со своим отчётом проверок."""
+def render_set(facts: Dict[str, Any], tokens: Dict[str, Any], out_dir: str, shot: Optional[str] = None,
+               root: Optional[str] = None) -> List[Dict[str, Any]]:
+    """Три обложки 16:9 и постер 9:16. Каждая со своим отчётом проверок и превью 320 px."""
+    from PIL import Image
+
     os.makedirs(out_dir, exist_ok=True)
     result = []
-    plan = [("minimal", WIDE), ("punch", WIDE), ("frame", WIDE), ("minimal", TALL)]
-    for variant, size in plan:
-        img, layout = compose(variant, facts, tokens, size, background, root)
+    for variant, size in (("hero", WIDE), ("punch", WIDE), ("minimal", WIDE), ("poster", TALL)):
+        img, layout = compose(variant, facts, tokens, size, shot, root)
         name = "cover-%s%s.png" % (variant, "-9x16" if size == TALL else "")
-        path = os.path.join(out_dir, name)
-        img.save(path, optimize=True)
-        thumb = img.resize((320, int(320 * size[1] / size[0])))
-        thumb.save(os.path.join(out_dir, name.replace(".png", "-320.png")))
-        result.append({"file": name, "variant": variant, "size": list(size), "checks": checks(layout)})
+        img.save(os.path.join(out_dir, name), optimize=True)
+        img.resize((320, int(320 * size[1] / size[0])), Image.LANCZOS).save(os.path.join(out_dir, name.replace(".png", "-320.png")))
+        result.append({"file": name, "variant": variant, "size": list(size), "shot": layout["shot"],
+                       "checks": checks(layout)})
     return result
 
 
@@ -249,7 +369,7 @@ def prompt(facts: Dict[str, Any], tokens: Dict[str, Any], register: str = "minim
     rows = [
         "Format: 1280x720 (16:9) and a second version 1080x1920 (9:16).",
         "Scene: %s." % scene,
-        "Composition: rule of thirds, subject on the right third, the left 55%% stays empty and dark for text.",
+        "Composition: rule of thirds, subject on the right third, the left 45%% stays empty and dark for text.",
         "Palette: background %s, main %s, one accent %s, nothing else." % (pal["bg"], pal["fg"], pal["accent"]),
         "Style: flat, clean, high contrast, editorial minimalism, like a premium tech channel.",
         "Do NOT draw: any text or letters, logos, faces of real people, neon glow, bloom, lens flare, "

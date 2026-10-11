@@ -47,8 +47,13 @@ python3 tools/reel.py farm film.html --script script.json   # твой расс�
 
 ## Звук
 
-`--sound page` звук самой страницы, `sfx` наши щелчки и свуши, `music` трек из настроек,
-`mute` без звука (только голос). Выбор запоминается: `reel.py prefs set html.sound=page`.
+`--sound page` звук самой страницы, `mix` звук страницы плюс наши щелчки на нажатиях,
+`sfx` только наши звуки, `music` трек из настроек, `mute` без звука (только голос).
+Выбор запоминается: `reel.py prefs set html.sound=mix`.
+
+Наши звуки (`viora-shorts/assets/audio/sfx/`, синтез `tools/make_sfx.py`, MIT): свуш на каждую
+главу, удар на крючке и на главе с data-best, щелчок на каждом нажатии клавиши в игре
+(режимы `mix` и `sfx`). Своя подложка: `reel.py prefs set music=builtin`.
 
 ## Первый кадр
 

@@ -8,15 +8,19 @@
       "tiktok"
     ],
     "duration_target": [
-      20.0,
-      40.0
+      20,
+      40
     ],
     "emotion": "trust",
     "audience": "школьники, студенты, начинающие разработчики и вайб-кодеры, смотрят с телефона",
     "loop": true
   },
   "layout": {
-    "mode": "center_bottom",
+    "mode": "three",
+    "top": {
+      "height_pct": 20,
+      "source": "html:../../../../Viora_Studio/viora-studio/viora-shorts/tests/fixtures/top-loop.html"
+    },
     "bottom": {
       "height_pct": 18,
       "handle": "BADVINO",
@@ -27,14 +31,14 @@
     },
     "cta_in_center": [
       {
-        "t": 11.32,
+        "t": 12.58,
         "duration": 2.5,
         "kind": "handle",
         "text": "BADVINO | t.me/VioraStudio",
         "url": "https://t.me/VioraStudio"
       },
       {
-        "t": 23.32,
+        "t": 26.46,
         "duration": 3.0,
         "kind": "qr",
         "url": "https://t.me/VioraStudio",
@@ -71,15 +75,16 @@
       "voice": "ru-RU-DmitryNeural",
       "speed": 1.05
     },
-    "target_lufs": -14
+    "target_lufs": -14,
+    "x_sfx_dir": "../../../../Viora_Studio/viora-studio/viora-shorts/assets/audio/sfx"
   },
   "scenes": [
     {
       "id": "hook",
-      "say": "Три бесплатные находки: Мегашпаргалка по Linux, лёрн энисинг и кэд сёрч.",
-      "why": "результат и обещание в первую секунду",
-      "x_duration_hint": 4.38,
-      "on_screen_text": "3 БЕСПЛАТНЫЕ НАХОДКИ",
+      "say": "Шпаргалка по Linux до уровня собеседования, бесплатно и на русском. И ещё два сайта на вечер.",
+      "why": "результат из первой строки поста: что человек получит",
+      "x_duration_hint": 6.21,
+      "on_screen_text": "LINUX ДО СОБЕСЕДОВАНИЯ",
       "source": {
         "type": "site",
         "ref": "https://github.com/justxor/Linux-",
@@ -94,6 +99,11 @@
           },
           {
             "t": 3.5,
+            "do": "scroll",
+            "dy": 900
+          },
+          {
+            "t": 5.5,
             "do": "scroll",
             "dy": 900
           }
@@ -114,10 +124,10 @@
     },
     {
       "id": "item-1",
-      "say": "Мегашпаргалка по Linux. База: файлы, процессы, права, память, сеть. Команды SSH, systemd, grep, sed и awk с примерами.",
-      "why": "польза: показываем сайт в деле",
-      "x_duration_hint": 6.94,
-      "on_screen_text": "1 МЕГАШПАРГАЛКА ПО LINUX",
+      "say": "Мегашпаргалка по Linux. От прав на файлы до вопросов с собеседований, и везде примеры.",
+      "why": "польза: листаем оглавление",
+      "x_duration_hint": 6.0,
+      "on_screen_text": "1 ШПАРГАЛКА ПО LINUX",
       "source": {
         "type": "site",
         "ref": "https://github.com/justxor/Linux-",
@@ -151,9 +161,9 @@
     },
     {
       "id": "item-2",
-      "say": "Лёрн энисинг. Пишем, что хотим изучить. Получаем гайды, видео, роадмапы и советы по теме.",
-      "why": "польза: показываем сайт в деле",
-      "x_duration_hint": 6.0,
+      "say": "Лёрн энисинг. Пишешь, что хочешь выучить, и сайт собирает гайды и роадмап. Роадмап это карта: что учить и в каком порядке.",
+      "why": "польза: поиск в деле, термин объяснён",
+      "x_duration_hint": 8.04,
       "on_screen_text": "2 LEARN-ANYTHING",
       "source": {
         "type": "site",
@@ -183,6 +193,11 @@
             "t": 5.5,
             "do": "scroll",
             "dy": 520
+          },
+          {
+            "t": 7.5,
+            "do": "scroll",
+            "dy": 520
           }
         ]
       },
@@ -209,9 +224,9 @@
     },
     {
       "id": "item-3",
-      "say": "Кэд сёрч. Ищет 3D-модели по описанию. Сохраняем и тащим в свои проекты.",
-      "why": "польза: показываем сайт в деле",
-      "x_duration_hint": 6.0,
+      "say": "Кэд сёрч. Описываешь деталь обычными словами и забираешь 3D-модель в свой проект. Для пет-проектов просто находка.",
+      "why": "польза и мнение одной строкой",
+      "x_duration_hint": 6.21,
       "on_screen_text": "3 CAD-SEARCH",
       "source": {
         "type": "site",
@@ -236,6 +251,11 @@
             "t": 3.4,
             "do": "press",
             "key": "Enter"
+          },
+          {
+            "t": 6.0,
+            "do": "hover",
+            "sel": ".result-card"
           }
         ]
       },
@@ -266,7 +286,7 @@
     {
       "id": "cta",
       "say": "Ссылки в закрепе и в канале BADVINO.",
-      "why": "один призыв после пользы, петля на первый кадр",
+      "why": "один призыв, петля на первый кадр",
       "x_duration_hint": 3.5,
       "on_screen_text": "ССЫЛКА В ЗАКРЕПЕ",
       "source": {
@@ -297,7 +317,7 @@
     "register": "minimal",
     "part": 1,
     "parts": 1,
-    "estimated_seconds": 26.82,
+    "estimated_seconds": 29.96,
     "pending": []
   }
 }

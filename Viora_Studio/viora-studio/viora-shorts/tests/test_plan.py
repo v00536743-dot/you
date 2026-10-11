@@ -106,6 +106,31 @@ class Bridge(unittest.TestCase):
             self.assertEqual(p["layout"]["mode"], mode)
             self.assertNotIn("E-CENTER", codes(p))
 
+    def test_slop_words_in_captions(self):
+        good, _ = build()
+        doc = copy.deepcopy(good)
+        doc["captions"]["style"] = "neon gradient"
+        self.assertIn("E-SLOP", codes(doc))
+        self.assertNotIn("E-SLOP", codes(good))
+
+    def test_top_panel_html(self):
+        data = prefs.template()
+        data["layout"] = "three"
+        data["panels"]["top"]["source"] = "html:" + os.path.join(FIX, "top-loop.html")
+        raw = intake.detect(fixture("post-4-nahodki.txt"))
+        items = [c.item for c in probe.select(probe.check_items(raw.items, offline=True))[0]]
+        p = plan.build(script.build(raw, items), prefs.effective(data), raw, base_dir=FIX)
+        self.assertEqual(p["layout"]["top"]["source"], "html:top-loop.html")
+        self.assertEqual([i for i in schema.full_check(p, expect_qr_url=TG, known_presets=plan.known_presets())
+                          if i["level"] == "ERROR"], [])
+
+    def test_sfx_files_exist_for_names(self):
+        p, _ = build()
+        names = {x["name"] for s in p["scenes"] for x in s.get("sfx", [])}
+        folder = os.path.join(MOD, "assets", "audio", "sfx")
+        for name in names:
+            self.assertTrue(os.path.exists(os.path.join(folder, name + ".wav")), name)
+
     def test_mono_preset(self):
         p, _ = build(brand={"preset": "mono", "register": "minimal"})
         self.assertEqual(p["captions"]["highlight"], "none")
@@ -144,6 +169,8 @@ class Rules(unittest.TestCase):
             "E-SCENE-ID": lambda p: p["scenes"][2].update(id=p["scenes"][1]["id"]),
             "E-DURATION": lambda p: p["scenes"][1].update(x_duration_hint=40),
             "E-CAPTION-WORDS": lambda p: p["captions"].update(max_words=4),
+            "E-SLOP": lambda p: p["brand"].update(effects={"text_glow": 12}),
+            "E-TOP-COLOR": lambda p: p["layout"].update(mode="three", top={"height_pct": 20, "source": "color:#111111"}),
         }
         for code, mutate in cases.items():
             doc = copy.deepcopy(good)

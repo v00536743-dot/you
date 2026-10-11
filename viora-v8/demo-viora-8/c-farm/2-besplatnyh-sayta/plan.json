@@ -16,7 +16,11 @@
     "loop": true
   },
   "layout": {
-    "mode": "center_bottom",
+    "mode": "three",
+    "top": {
+      "height_pct": 20,
+      "source": "html:../../../../Viora_Studio/viora-studio/viora-shorts/tests/fixtures/top-loop.html"
+    },
     "bottom": {
       "height_pct": 18,
       "handle": "BADVINO",
@@ -71,12 +75,13 @@
       "voice": "ru-RU-DmitryNeural",
       "speed": 1.05
     },
-    "target_lufs": -14
+    "target_lufs": -14,
+    "x_sfx_dir": "../../../../Viora_Studio/viora-studio/viora-shorts/assets/audio/sfx"
   },
   "scenes": [
     {
       "id": "hook",
-      "say": "Два бесплатных сайта: лёрн энисинг и кэд лукап.",
+      "say": "Два бесплатных сайта, и все работают прямо сейчас.",
       "why": "результат и обещание в первую секунду",
       "x_duration_hint": 3.28,
       "on_screen_text": "2 БЕСПЛАТНЫХ САЙТА",
@@ -125,7 +130,7 @@
     },
     {
       "id": "item-1",
-      "say": "Лёрн энисинг. роадмапы по любой теме, бесплатно",
+      "say": "Лёрн энисинг. Роадмапы по любой теме, бесплатно",
       "why": "польза: показываем сайт в деле",
       "x_duration_hint": 6.61,
       "on_screen_text": "1 LEARN-ANYTHING",

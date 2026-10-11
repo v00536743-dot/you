@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ru" data-duration="8">
+<head>
+<meta charset="utf-8">
+<title>Верхняя панель: заглушка геймплея</title>
+<style>html,body{margin:0;background:#000;height:100%}canvas{display:block;width:100vw;height:100vh}</style>
+</head>
+<body>
+<!-- Своё движение для верхней панели, пока автор не дал запись своей игры. Петля 8 с, кадр зависит только от времени. -->
+<canvas id="c" width="1080" height="384"></canvas>
+<script>
+  const c = document.getElementById("c"), g = c.getContext("2d");
+  const W = 1080, H = 384, T = 8;
+  function draw(t) {
+    t = ((t % T) + T) % T;
+    g.fillStyle = "#000"; g.fillRect(0, 0, W, H);
+    g.strokeStyle = "#F5F5F5"; g.lineWidth = 2;
+    for (let i = 0; i < 9; i++) {
+      const alive = t < 1 + i * 0.75;
+      if (alive) g.strokeRect(80 + i * 104, 40, 88, 32);
+    }
+    const p = (t / T) * 2 * Math.PI;
+    const bx = W / 2 + Math.sin(p * 3) * 440, by = 210 + Math.sin(p * 5) * 110;
+    g.fillStyle = "#E63946"; g.fillRect(bx - 10, by - 10, 20, 20);
+    const px = bx - 80;
+    g.fillStyle = "#F5F5F5"; g.fillRect(Math.max(0, Math.min(W - 160, px)), 340, 160, 12);
+  }
+  window.__duration = T;
+  window.__seek = draw;
+  let start = performance.now();
+  (function loop(now) { draw((now - start) / 1000); requestAnimationFrame(loop); })(start);
+</script>
+</body>
+</html>

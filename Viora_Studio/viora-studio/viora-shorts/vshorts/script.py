@@ -90,6 +90,67 @@ def compress(text: str, limit: int = 16) -> str:
     return " ".join(out).strip()
 
 
+LIST_SPLIT = re.compile(r"\s*[,:;]\s*|\s+(?:и|или|and|or)\s+")
+
+
+def list_run(sentence: str) -> int:
+    """Самая длинная череда коротких (1-2 слова) элементов через запятую: признак описи."""
+    best = run = 0
+    for part in LIST_SPLIT.split(sentence.strip().rstrip(".!?")):
+        if part and len(words(part)) <= 2:
+            run += 1
+            best = max(best, run)
+        else:
+            run = 0
+    return best
+
+
+def shorten_list(sentence: str, keep: int = 3) -> str:
+    """Опись из поста в одну живую фразу: первые три вещи и «ещё много всего»."""
+    body = sentence.strip().rstrip(".!?")
+    if ":" in body:
+        body = body.split(":", 1)[1]
+    parts = [p.strip() for p in re.split(r"\s*,\s*|\s+и\s+", body) if p.strip()]
+    head = parts[:keep]
+    if len(parts) <= keep:
+        return sentence.strip()
+    text = ", ".join(head) + " и ещё много всего."
+    return text[:1].upper() + text[1:]
+
+
+def item_line(item: Item, limit: int = 14) -> str:
+    """Одна мысль про пункт: первое предложение, которое не опись и не одно слово."""
+    pool = sentences(re.sub(r"\([^)]*\)", "", " ".join([item.lead] + list(item.extra))))
+    for sentence in pool:
+        if len(words(sentence)) >= 3 and list_run(sentence) < 4 and len(words(sentence)) <= limit + 4:
+            # «Дальше», «Также» тянут за собой контекст поста: в ролике его нет.
+            sentence = re.sub(r"^(Дальше|Также|Ещё|А ещё|Плюс|Кроме того|Потом|Then|Also)[,:]?\s+", "", sentence)
+            return compress(sentence[:1].upper() + sentence[1:], limit)
+    lists = [s for s in pool if list_run(s) >= 4]
+    if lists:
+        return shorten_list(lists[0])
+    return compress(" ".join(pool), limit)
+
+
+def promise(raw: Raw, chosen: List[Item]) -> Optional[str]:
+    """Обещание из первой строки поста: «4 находки: шпаргалка по Linux до собеседования и ...»
+    даёт «шпаргалка по Linux до собеседования», если это один из показанных пунктов."""
+    hook = (raw.hook or "").strip()
+    if ":" not in hook:
+        return None
+    tail = hook.split(":", 1)[1].strip()
+    first = re.split(r"\s+и\s+(?=\d)|\s*[,;]\s*|\s+и\s+ещё", tail)[0].strip().rstrip(".!")
+    if not 3 <= len(words(first)) <= 11 or re.search(r"\d", first):
+        return None
+    low = first.lower().replace("ё", "е")
+    for item in chosen:
+        name = item.name.lower().replace("ё", "е")
+        stems = [w[:6] for w in words(name) if len(w) >= 5] + [name]
+        if any(stem and stem in low for stem in stems) or any(w[:6] in name for w in words(low) if len(w) >= 6):
+            return first
+    return None
+
+
 def estimate(beat: Beat, lang: str, speed: float) -> float:
     talk = speech_seconds(beat.say, lang, speed) + BEAT_PAD
     return round(max(talk, MIN_SECONDS.get(beat.kind, 3.0)), 2)
@@ -130,6 +191,15 @@ def build(raw: Raw, chosen: List[Item], lang: str = "ru", part: int = 1, parts: 
     if lang != "ru" and any(is_cyrillic(i.lead) for i in chosen):
         raise ValueError("подводки пунктов на русском: для английского ролика модель пишет "
                          "script.json сама (reel.py script --lang en даёт заготовку)")
+    chosen = list(chosen)
+    lead_promise = promise(raw, chosen) if lang == "ru" else None
+    if lead_promise:
+        # Пункт из обещания идёт первым: первая секунда показывает именно то, что обещали.
+        low = lead_promise.lower().replace("ё", "е")
+        hit = next(i for i in chosen if any(w[:6] in low for w in words(i.name.lower().replace("ё", "е")) if len(w) >= 5)
+                   or any(w[:6] in i.name.lower().replace("ё", "е") for w in words(low) if len(w) >= 6))
+        chosen.remove(hit)
+        chosen.insert(0, hit)
     count = len(chosen)
     free = _free(raw, chosen)
     beats: List[Beat] = []
@@ -147,15 +217,27 @@ def build(raw: Raw, chosen: List[Item], lang: str = "ru", part: int = 1, parts: 
             adj = "бесплатных" if free else "полезных"
             noun_word = plural_ru(count, "сайт", "сайта", "сайтов")
             num = NUM_WORDS_RU.get(count, str(count)).capitalize()
-        listing = ", ".join(names[:-1]) + " и " + names[-1] if count > 1 else names[0]
-        hook_say = "%s %s %s: %s." % (num, adj, noun_word, listing) if count > 1 else \
-            "%s: %s." % ("Бесплатная находка" if free else "Находка", listing)
+        if lead_promise:
+            hook_say = lead_promise[:1].upper() + lead_promise[1:]
+            if free and "бесплат" not in lead_promise.lower():
+                hook_say += ", бесплатно"
+            hook_say += "."
+            if count > 1:
+                rest = count - 1
+                if noun == "находка":
+                    more = "%s %s" % (NUM_WORDS_RU_F.get(rest, str(rest)), plural_ru(rest, "находка", "находки", "находок"))
+                else:
+                    more = "%s %s" % (NUM_WORDS_RU.get(rest, str(rest)), plural_ru(rest, "сайт", "сайта", "сайтов"))
+                hook_say += " И ещё %s." % more
+        else:
+            # Без обещания в посте: результат проверки вместо перечня имён.
+            hook_say = "%s %s %s, и все работают прямо сейчас." % (num, adj, noun_word) if count > 1 else \
+                "%s, и работает прямо сейчас." % ("Бесплатная находка" if free else "Находка")
         hook_screen = "%d %s %s" % (count, adj.upper(), noun_word.upper())
     else:
         adj = "free" if free else "useful"
         noun_word = "site" if count == 1 else "sites"
-        listing = ", ".join(names[:-1]) + " and " + names[-1] if count > 1 else names[0]
-        hook_say = "%s %s %s: %s." % (NUM_WORDS_EN.get(count, str(count)).capitalize(), adj, noun_word, listing)
+        hook_say = "%s %s %s that work right now." % (NUM_WORDS_EN.get(count, str(count)).capitalize(), adj, noun_word)
         hook_screen = "%d %s %s" % (count, adj.upper(), noun_word.upper())
     if parts > 1:
         hook_screen += (" | ЧАСТЬ %d" if lang == "ru" else " | PART %d") % part
@@ -163,7 +245,7 @@ def build(raw: Raw, chosen: List[Item], lang: str = "ru", part: int = 1, parts: 
 
     for index, item in enumerate(chosen, 1):
         name = names[index - 1]
-        lead = compress(item.lead or (item.extra[0] if item.extra else ""))
+        lead = item_line(item)
         say = "%s. %s" % (name[:1].upper() + name[1:], lead) if lead else "%s." % name
         screen = "%d %s" % (index, item.name.upper())
         beats.append(Beat("item-%d" % index, "item", say.strip(), screen,
@@ -250,6 +332,20 @@ def lint(script: Script, raw_text: str = "") -> List[Dict[str, str]]:
             if number not in allowed:
                 add("ERROR", "E-NUMBER", "%s: цифры %s нет в сырье, не выдумываем" % (beat.id, number))
 
+    for beat in script.beats:
+        for sentence in sentences(beat.say):
+            if list_run(sentence) >= 4:
+                add("ERROR", "E-READS-LIST", "%s: опись из поста вслух («%s»): одна мысль, до трёх вещей"
+                    % (beat.id, " ".join(sentence.split()[:6])))
+    names = []
+    for beat in script.beats:
+        if beat.item and beat.item.get("name"):
+            names.append(beat.item["name"].lower())
+    spoken = first.say.lower()
+    mentioned = sum(1 for n in names if n in spoken)
+    if len(names) >= 2 and mentioned >= min(3, len(names)):
+        add("ERROR", "E-HOOK-LIST", "крючок это перечень сайтов, а не результат: скажи, что человек получит")
+
     low_first = first.say.lower()
     if any(low_first.startswith(g) or (" %s" % g) in low_first[:40] for g in GREETINGS):
         add("ERROR", "E-GREETING", "первая реплика с приветствием: сразу результат или вопрос")
@@ -323,7 +419,7 @@ def build_html(info: Any, lang: str = "ru", speed_map: Optional[List[Dict[str, f
         title = chapter.title.strip().rstrip(".")
         beat = Beat("chapter-%d" % index, "chapter", title + ".", title.upper()[:40],
                     "глава из таймлайна файла",
-                    item={"start": chapter.start, "end": chapter.end})
+                    item={"start": chapter.start, "end": chapter.end, "best": chapter.best})
         beats.append(beat)
     if lang == "ru":
         cta = "Файл и разбор в канале %s, ссылка в закрепе." % handle

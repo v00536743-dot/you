@@ -38,11 +38,29 @@ class Farm(unittest.TestCase):
         self.assertEqual(stop.exception.status, "ask")
         self.assertIn("1. Язык", stop.exception.message)
 
-    def test_farm_one_command_ready(self):
+    def test_fake_engine_is_plan_ready_not_ready(self):
         self.answer_all()
         summary = self.run_farm(write_log=True, today="2026-10-11")
-        self.assertEqual(summary["status"], "ready")
+        self.assertEqual(summary["status"], "plan-ready")
         self.assertTrue(summary["fake_engine"])
+        report = read(os.path.join(summary["out"], "report.md"))
+        self.assertTrue(report.splitlines()[2].startswith("ПЛАН ГОТОВ, ВИДЕО НЕТ"))
+        self.assertNotIn("ГОТОВО", report)
+        self.assertEqual(journal.due("2026-10-20", self.root), [])
+        self.assertIn("PASTE_VIDEO_URL", read(os.path.join(summary["out"], "announce.txt")))
+
+    def test_ready_only_with_real_engine(self):
+        self.answer_all()
+        with mock.patch.dict(os.environ, {"FAKE_ENGINE_REAL": "1"}):
+            summary = self.run_farm(write_log=True, today="2026-10-11")
+        self.assertEqual(summary["status"], "ready")
+        self.assertFalse(summary["fake_engine"])
+        self.assertEqual(len(journal.due("2026-10-12", self.root)), 1)
+        self.assertTrue(read(os.path.join(summary["out"], "report.md")).splitlines()[2].startswith("ГОТОВО"))
+
+    def test_package_complete(self):
+        self.answer_all()
+        summary = self.run_farm()
         folder = summary["out"]
         for name in ("plan.json", "script.md", "meta.json", "titles.md", "description.txt", "pinned.txt",
                      "tiktok.txt", "captions.srt", "cover-prompt.txt", "announce.txt", "report.md", "sites.md"):
@@ -52,13 +70,11 @@ class Farm(unittest.TestCase):
         self.assertEqual(len(summary["checklist"]), 20)
         self.assertEqual(summary["dropped"], ["builditapp"])
         self.assertEqual(summary["reminder"], "")
-        report = read(os.path.join(folder, "report.md"))
-        self.assertIn("ЗАГЛУШКОЙ", report)
-        self.assertEqual(len(journal.due("2026-10-12", self.root)), 1)
+        self.assertIn("заглушка", read(os.path.join(folder, "report.md")).lower())
 
     def test_defaults_then_reminder(self):
         summary = self.run_farm(assume_defaults=True)
-        self.assertIn(summary["status"], ("ready",))
+        self.assertEqual(summary["status"], "plan-ready")
         self.assertTrue(summary["reminder"].startswith("Не заполнено:"))
         self.assertIn("своё видео для верхней панели", summary["reminder"])
 
@@ -72,15 +88,16 @@ class Farm(unittest.TestCase):
         self.answer_all()
         with mock.patch.dict(os.environ, {"FAKE_ENGINE_FAIL": "duration"}):
             summary = self.run_farm()
-        self.assertEqual(summary["status"], "ready")
+        self.assertEqual(summary["status"], "plan-ready")
         self.assertEqual(len(summary["attempts"]), 2)
+        self.assertTrue(summary["attempts"][1]["passed"])
         self.assertFalse(summary["attempts"][0]["passed"])
 
     def test_english_with_model_script(self):
         self.answer_all()
         summary = self.run_farm(script_path=os.path.join(FIX, "script-en.json"), lang="en")
         self.assertEqual(summary["lang"], "en")
-        self.assertEqual(summary["status"], "ready")
+        self.assertEqual(summary["status"], "plan-ready")
         pkg = load_json(os.path.join(summary["out"], "meta.json"))
         self.assertEqual(metalint.errors(metalint.lint(pkg)), [])
         self.assertTrue(summary["out"].endswith("-en"))
@@ -92,12 +109,15 @@ class Farm(unittest.TestCase):
         summary = self.run_farm(os.path.join(FIX, "mini-film.html"), script_path=os.path.join(FIX, "script-html.json"),
                                 speed_spec="0-4:1.5,4-8:0.6,8-12:2", sound="page")
         self.assertEqual(summary["kind"], "html")
-        self.assertEqual(summary["status"], "ready")
+        self.assertEqual(summary["status"], "plan-ready")
         plan = load_json(os.path.join(summary["out"], "plan.json"))
         self.assertEqual(summary["meta_issues"], [])
         self.assertEqual(summary["announce_issues"], [])
         capture = plan["scenes"][1]["source"]["actions"][0]
         self.assertEqual((capture["do"], capture["mode"]), ("capture", "realtime"))
+        self.assertIn("x_sfx_dir", plan["audio"])
+        best = next(s for s in plan["scenes"] if s["id"] == "chapter-2")
+        self.assertIn("hit", [x["name"] for x in best["sfx"]])
 
     def test_bad_script_stops(self):
         self.answer_all()
@@ -115,9 +135,38 @@ class Farm(unittest.TestCase):
             self.run_farm("builditapp.\n- Майнкрафт.\n\n#сервисы\n")
         self.assertEqual(stop.exception.status, "no-sites")
 
+    def test_model_script_demo_a_is_clean(self):
+        self.answer_all()
+        summary = self.run_farm(script_path=os.path.join(FIX, "script-4-nahodki.json"))
+        self.assertEqual(summary["status"], "plan-ready")
+        self.assertEqual(summary["dropped"], ["builditapp"])
+        self.assertIn("builditapp", read(os.path.join(summary["out"], "announce.txt")))
+        self.assertEqual(summary["script_warnings"], [])
+
+    def test_announce_refresh(self):
+        self.answer_all()
+        summary = self.run_farm()
+        with self.assertRaises(ValueError):
+            farm.refresh_announce(summary["out"], "youtube.com/shorts/x", self.root)
+        result = farm.refresh_announce(summary["out"], "https://youtube.com/shorts/abc", self.root)
+        self.assertTrue(result["changed"])
+        self.assertEqual([i for i in result["issues"] if i["level"] == "ERROR"], [])
+        text = read(os.path.join(summary["out"], "announce.txt"))
+        self.assertIn("[ВИДЕО](https://youtube.com/shorts/abc)", text)
+        self.assertEqual(load_json(os.path.join(summary["out"], "summary.json"))["video_url"], "https://youtube.com/shorts/abc")
+
+    def test_warnings_do_not_block(self):
+        self.answer_all()
+        links = os.path.join(self.out, "links.txt")
+        with open(links, "w", encoding="utf-8") as handle:
+            handle.write("https://learn-anything.xyz/ роадмапы\n")
+        summary = self.run_farm(links)
+        self.assertNotEqual(summary["status"], "needs-fix")
+
     def test_distinct_after_log(self):
         self.answer_all()
-        self.run_farm(write_log=True, today="2026-10-11")
+        with mock.patch.dict(os.environ, {"FAKE_ENGINE_REAL": "1"}):
+            self.run_farm(write_log=True, today="2026-10-11")
         again = self.run_farm()
         self.assertIn("НЕТ", again["checklist"][19]["state"])
 

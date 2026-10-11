@@ -23,6 +23,7 @@ from . import plan as planner, prefs as prefs_mod, probe, schema, script as scri
 from .common import fix_dashes, skill_root, slug, write_json, write_text, words
 
 MAX_ATTEMPTS = 3
+VIDEO_PLACEHOLDER = "PASTE_VIDEO_URL"
 
 
 class FarmStop(Exception):
@@ -207,6 +208,11 @@ def run(source: str, out_root: str, *, root: Optional[str] = None, lang: Optiona
         chosen_items = [b.item for b in built.beats if b.kind == "item" and b.item]
         part_no, parts_total = built.part, built.parts
         voice_speed = float(eff["voice"].get("speed", 1.05))
+        if raw.kind in ("post", "links") and raw.items:
+            # Сценарий написала модель, но отчёт о сайтах автору всё равно нужен.
+            checked = probe.check_items(raw.items, fetch=fetch, offline=offline, root=root, retry_blocked=retry_blocked)
+            site_report = probe.report_lines(checked)
+            dropped = [c.item.name for c in checked if c.verdict != "берём"]
         if raw.kind == "html":
             html_info = html_adapter.inspect(raw.path)
             scripter.retime_html(built, html_adapter.parse_speed(speed_spec), voice_speed)
@@ -302,12 +308,10 @@ def run(source: str, out_root: str, *, root: Optional[str] = None, lang: Optiona
         kb = html_info.size_kb
         sound_word = ("ЗВУК" if language == "ru" else "SOUND") if (html_info.has_webaudio or html_info.has_media) else "CANVAS"
         facts["cover"] = {
-            "kicker": ["HTML", "%d %s" % (kb, "КБ" if language == "ru" else "KB")],
-            "headline": html_info.title.upper()[:24],
-            "plate": "ОДИН HTML-ФАЙЛ" if language == "ru" else "ONE HTML FILE",
-            "number": kb, "rest": " КБ" if language == "ru" else " KB",
-            "frame_headline": html_info.title.upper()[:24],
-            "frame_sub": " · ".join(["HTML", "JS", sound_word]),
+            "kicker": " · ".join(["HTML", "JS", sound_word]),
+            "headline": html_info.title.upper()[:22],
+            "plate": "ОДИН ФАЙЛ" if language == "ru" else "ONE FILE",
+            "number": kb, "rest": "КБ" if language == "ru" else "KB",
         }
     package = meta.package(facts, eff["links"], store.get("title_style"), post_url)
     if html_info is not None and not chosen_items:
@@ -332,11 +336,19 @@ def run(source: str, out_root: str, *, root: Optional[str] = None, lang: Optiona
     write_text(os.path.join(out_dir, "cover-prompt.txt"),
                cover.prompt(facts, tokens, (eff.get("brand") or {}).get("register", "minimal")))
     covers: List[Dict[str, Any]] = []
+    fake = bool((ctx.get("qa") or {}).get("fake"))
+    hero: Optional[str] = None
     if cover.available():
         video = ((gate.get("render") or {}).get("video")) if gate.get("render") else None
-        fake = bool((ctx.get("qa") or {}).get("fake"))
-        frame = _extract_frame(video, os.path.join(out_dir, "frame.png")) if video and not fake else None
-        covers = cover.render_set(facts, tokens, out_dir, background=frame, root=root)
+        if video and not fake:
+            hero = _extract_frame(video, os.path.join(out_dir, "frame.png"))
+        if not hero and not offline:
+            from . import shot
+            targets = [i["url"] for i in chosen_items if i.get("url")]
+            if html_info is not None and not targets:
+                targets = ["file://" + html_info.path]
+            hero = shot.best(targets, os.path.join(out_dir, "shots")) if targets else None
+        covers = cover.render_set(facts, tokens, out_dir, shot=hero, root=root)
     ctx["covers"] = covers
 
     seconds = scripter.total(built)
@@ -346,7 +358,8 @@ def run(source: str, out_root: str, *, root: Optional[str] = None, lang: Optiona
     ru_facts = meta.facts_from(chosen_items, "ru", facts["free"], part_no, parts_total, noun) if chosen_items else \
         dict(facts, names=[html_info.title] if html_info else facts["names"])
     ru_facts["labels_ru"] = ru_facts.get("labels", [])
-    url = video_url or yt.rstrip("/") + "/shorts"
+    # Ссылки на ролик до загрузки нет: метка вместо адреса канала, её меняет reel.py announce.
+    url = video_url or VIDEO_PLACEHOLDER
     if html_info is not None and not chosen_items:
         post, post_issues = announce.best_html(html_info, seconds, url, root)
     else:
@@ -359,11 +372,16 @@ def run(source: str, out_root: str, *, root: Optional[str] = None, lang: Optiona
     rows = checklist(ctx)
     reminder = prefs_mod.reminder(store)
     image_gen = prefs_mod.image_generator()
-    blocking = metalint.errors(meta_issues) or post_issues
-    if gate.get("passed"):
-        status = "needs-fix" if blocking else "ready"
+    # Блокируют только ошибки. Предупреждения линтеров идут в отчёт, выдачу не держат.
+    blocking = metalint.errors(meta_issues) or [i for i in post_issues if i["level"] == "ERROR"]
+    if blocking:
+        status = "needs-fix"
+    elif gate.get("passed") and not fake:
+        status = "ready"
+    elif ctx.get("rendered") and not fake:
+        status = "rendered-qa-failed"
     else:
-        status = "rendered-qa-failed" if ctx.get("rendered") else ("needs-fix" if blocking else "plan-ready")
+        status = "plan-ready"
     summary = {
         "status": status,
         "out": out_dir, "name": name, "kind": raw.kind, "lang": language, "part": part_no, "parts": parts_total,
@@ -375,10 +393,11 @@ def run(source: str, out_root: str, *, root: Optional[str] = None, lang: Optiona
         "script_warnings": [i for i in script_issues if i["level"] == "WARN"],
         "plan_warnings": [i for i in plan_issues if i["level"] == "WARN"],
         "meta_issues": meta_issues, "announce_issues": post_issues, "srt": srt_note,
-        "covers": [c["file"] for c in covers], "image_generator": image_gen["available"],
+        "covers": [c["file"] for c in covers], "cover_shot": bool(hero), "image_generator": image_gen["available"],
+        "video_url": video_url or None,
         "checklist": rows, "reminder": reminder,
     }
-    if write_log and summary["status"] == "ready":
+    if write_log and summary["status"] == "ready" and not fake:
         summary["log"] = journal.add(name, recommended, eff["platforms"], seconds, today, root)
     write_text(os.path.join(out_dir, "report.md"), report_markdown(summary))
     write_json(os.path.join(out_dir, "summary.json"), summary)
@@ -418,13 +437,19 @@ def html_titles(info: Any, lang: str, tags: List[str]) -> List[Dict[str, Any]]:
 
 
 def report_markdown(summary: Dict[str, Any]) -> str:
-    status = {"ready": "ГОТОВО: ролик собран и прошёл QA",
+    fake_note = " Рендер проверен только заглушкой движка: видеофайла нет." if summary.get("fake_engine") else ""
+    status = {"ready": "ГОТОВО: ролик собран и прошёл QA движка",
               "rendered-qa-failed": "РОЛИК СОБРАН, НО QA НЕ ПРОЙДЕН: правки ниже",
-              "plan-ready": "ПЛАН ГОТОВ, движок не подключён: ролик не рендерился",
+              "plan-ready": "ПЛАН ГОТОВ, ВИДЕО НЕТ: движок SHORTS не вшит." + fake_note,
               "needs-fix": "НУЖНА ПРАВКА: упаковка или анонс не прошли линтер, причины ниже"}[summary["status"]]
     rows = ["# Отчёт по ролику %s" % summary["name"], "", status, ""]
     if summary.get("fake_engine"):
-        rows += ["Внимание: рендер сделан ЗАГЛУШКОЙ движка (tests/fake_engine.py). Видео нет, пиксели не проверены.", ""]
+        rows += ["Заглушка (tests/fake_engine.py) проверила только, что план принимается и длина в цели. "
+                 "QR, субтитры по словам, safe zone, громкость и первый кадр не проверял никто. "
+                 "В журнал ролик не записан.", ""]
+    if not summary.get("video_url"):
+        rows += ["В анонсе вместо ссылки метка PASTE_VIDEO_URL: после загрузки запусти "
+                 "`python3 tools/reel.py announce <папка> --video-url <ссылка на ролик>`.", ""]
     rows.append("Язык: %s. Часть %d из %d. Длина: %.1f с. Движок: %s." % (
         summary["lang"], summary["part"], summary["parts"], summary["seconds"], summary["engine_version"]))
     if summary.get("video"):
@@ -443,7 +468,8 @@ def report_markdown(summary: Dict[str, Any]) -> str:
     if summary.get("recommended_title"):
         rows += ["", "Рекомендую название: %s" % summary["recommended_title"]]
     rows += ["", "Субтитры .srt: %s." % summary["srt"]]
-    rows.append("Обложки: %s." % (", ".join(summary["covers"]) if summary["covers"] else "только промпт в cover-prompt.txt"))
+    rows.append("Обложки: %s%s." % (", ".join(summary["covers"]) if summary["covers"] else "только промпт в cover-prompt.txt",
+                                    " (герой: скриншот сайта, shots/shots.txt)" if summary.get("cover_shot") else ""))
     if summary.get("image_generator"):
         rows.append("Генератор картинок найден: фон для обложки можно сгенерировать по cover-prompt.txt.")
     for key, title in (("script_warnings", "Сценарий"), ("plan_warnings", "План"), ("meta_issues", "Упаковка"),
@@ -453,3 +479,23 @@ def report_markdown(summary: Dict[str, Any]) -> str:
     if summary.get("reminder"):
         rows += ["", summary["reminder"]]
     return fix_dashes("\n".join(rows) + "\n")
+
+
+def refresh_announce(folder: str, video_url: str, root: Optional[str] = None) -> Dict[str, Any]:
+    """После загрузки: вставить ссылку на ролик в анонс и прогнать линтер постов ещё раз."""
+    path = os.path.join(folder, "announce.txt")
+    with open(path, encoding="utf-8") as handle:
+        text = handle.read()
+    if VIDEO_PLACEHOLDER not in text:
+        return {"changed": False, "issues": announce.lint(text, root), "note": "метки PASTE_VIDEO_URL в анонсе нет"}
+    if not re.match(r"^https?://", video_url):
+        raise ValueError("ссылка на ролик начинается с http")
+    text = text.replace(VIDEO_PLACEHOLDER, video_url)
+    write_text(path, text)
+    summary_path = os.path.join(folder, "summary.json")
+    if os.path.exists(summary_path):
+        with open(summary_path, encoding="utf-8") as handle:
+            summary = json.load(handle)
+        summary["video_url"] = video_url
+        write_json(summary_path, summary)
+    return {"changed": True, "issues": announce.lint(text, root)}

@@ -1,5 +1,5 @@
 {
-  "status": "ready",
+  "status": "plan-ready",
   "out": "d-english/4-besplatnye-nahodki-shpargalka-po-linux-en",
   "name": "4-besplatnye-nahodki-shpargalka-po-linux-en",
   "kind": "post",
@@ -29,12 +29,14 @@
   "announce_issues": [],
   "srt": "тайминги слов от заглушки движка",
   "covers": [
-    "cover-minimal.png",
+    "cover-hero.png",
     "cover-punch.png",
-    "cover-frame.png",
-    "cover-minimal-9x16.png"
+    "cover-minimal.png",
+    "cover-poster-9x16.png"
   ],
+  "cover_shot": true,
   "image_generator": false,
+  "video_url": null,
   "checklist": [
     {
       "n": "1",
@@ -64,7 +66,7 @@
       "n": "5",
       "what": "Обложка: один фокус, 3-5 слов, 320 px, контраст",
       "who": "auto",
-      "state": "да"
+      "state": "НЕТ"
     },
     {
       "n": "6",
