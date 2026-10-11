@@ -321,9 +321,16 @@ def build_html(info: Any, lang: str = "ru", speed_map: Optional[List[Dict[str, f
         cta_screen = "LINK IN PINNED COMMENT"
     beats.append(Beat("cta", "cta", cta, cta_screen, "один призыв, петля на первый кадр"))
     script = Script(lang=lang, beats=beats, duration_target=duration_target or [25.0, 60.0])
+    retime_html(script, speed_map, voice_speed)
+    return script
+
+
+def retime_html(script: Script, speed_map: Optional[List[Dict[str, float]]] = None, voice_speed: float = 1.05) -> None:
+    """Глава длится, пока звучит реплика, но не меньше куска таймлайна после ретайма (до 12 с)."""
+    from .html_adapter import output_length
+
     retime(script, voice_speed)
     for beat in script.beats:
         if beat.kind == "chapter" and beat.item:
-            shown = output_length(beat.item["start"], beat.item["end"], speed_map)
+            shown = output_length(float(beat.item["start"]), float(beat.item["end"]), speed_map or [])
             beat.seconds = round(max(beat.seconds, min(shown, 12.0)), 2)
-    return script

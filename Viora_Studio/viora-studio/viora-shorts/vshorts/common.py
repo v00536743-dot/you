@@ -145,7 +145,8 @@ def brand_links(root: Optional[str] = None) -> Dict[str, str]:
     path = os.path.join(skill_root(root), "reference", "brand.md")
     found: Dict[str, str] = {}
     try:
-        text = open(path, encoding="utf-8").read()
+        with open(path, encoding="utf-8") as handle:
+            text = handle.read()
     except OSError:
         return found
     keys = (("канал", "telegram"), ("чат", "chat"), ("github", "github"),

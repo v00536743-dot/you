@@ -29,7 +29,8 @@ DONE = "снят"
 
 def _read(path: str) -> str:
     try:
-        return open(path, encoding="utf-8").read()
+        with open(path, encoding="utf-8") as handle:
+            return handle.read()
     except OSError:
         return ""
 
@@ -108,7 +109,7 @@ def measure(name: str, window: str, values: Dict[str, Any], date: Optional[str] 
     mpath = memory_path(METRICS, root)
     text = _read(mpath) or "# Метрики канала\n"
     if SECTION not in text:
-        text = text.rstrip("\n") + "\n\n%s\n\nПишет `reel.py measure`. Остались, % это viewed vs swiped away из Studio.\n\n%s\n%s\n" % (
+        text = text.rstrip("\n") + "\n\n%s\n\nПишет `reel.py measure`. Остались, %% это viewed vs swiped away из Studio.\n\n%s\n%s\n" % (
             SECTION, METRIC_HEADER, METRIC_RULE)
     head, _, tail = text.partition(SECTION)
     block, sep, rest = tail.partition("\n## ")

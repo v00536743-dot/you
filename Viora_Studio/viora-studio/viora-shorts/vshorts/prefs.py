@@ -75,7 +75,6 @@ DEFAULTS: Dict[str, Any] = {
     "language": "ru",
     "platforms": ["youtube_shorts", "tiktok"],
     "sources": ["site", "html", "text"],
-    "layout": "three",
     "qr": True,
     "brand": {"preset": "viora", "register": "minimal"},
     "voice": {"engine": "auto", "gender": "male", "speed": 1.05},

@@ -16,8 +16,8 @@ from .common import plural_ru, short_link, words
 # Тема -> (ярлык в названии по-русски в родительном падеже, по-английски, хэштеги ru, хэштеги en)
 TOPICS: Tuple[Tuple[str, str, str, Tuple[str, ...], Tuple[str, ...]], ...] = (
     (r"linux|линукс|bash|ssh", "Linux", "Linux", ("#linux",), ("#linux",)),
-    (r"изуч|учёб|учеб|роадмап|гайд|курс|студент", "учёбы", "learning", ("#учеба",), ("#learning",)),
-    (r"\b3d\b|3d-|cad|модел", "3D", "3D", ("#3d",), ("#3d",)),
+    (r"изуч|учёб|учеб|роадмап|гайд|курс|студент|learn|roadmap|guide|course", "учёбы", "learning", ("#учеба",), ("#learning",)),
+    (r"\b3d\b|3d-|cad|модел|model", "3D", "3D", ("#3d",), ("#3d",)),
     (r"майнкрафт|minecraft", "Майнкрафта", "Minecraft", ("#minecraft",), ("#minecraft",)),
     (r"нейросет|нейронк|\bии\b|\bai\b|gpt|claude|opus", "нейросетей", "AI", ("#нейросети", "#ии"), ("#ai",)),
     (r"дизайн|интерфейс|ui\b|figma", "дизайна", "design", ("#дизайн",), ("#design",)),

@@ -188,7 +188,7 @@ def cmd_prefs(args) -> int:
 def summary_line(store) -> str:
     eff = prefs.effective(store)
     return "язык %s, площадки %s, раскладка %s, стиль %s, QR %s, голос %s" % (
-        eff["language"], ", ".join(eff["platforms"]), eff["layout"], eff["brand"]["preset"],
+        eff["language"], ", ".join(eff["platforms"]), eff.get("layout") or "по типу ролика", eff["brand"]["preset"],
         "да" if eff["qr"] else "нет", eff["voice"]["voice"])
 
 
@@ -247,7 +247,7 @@ def cmd_doctor(args) -> int:
 
 def cmd_selftest(args) -> int:
     env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1")
-    proc = subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", os.path.join(MOD, "tests"), "-t", MOD]
+    proc = subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", os.path.join(MOD, "tests"), "-t", os.path.join(MOD, "tests")]
                           + (["-v"] if args.verbose else []), cwd=MOD, env=env)
     return proc.returncode
 

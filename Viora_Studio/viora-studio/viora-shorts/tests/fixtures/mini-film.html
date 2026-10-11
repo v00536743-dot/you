@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ru" data-duration="12">
+<head>
+<meta charset="utf-8">
+<title>Ночной рейс</title>
+<style>
+  html, body { margin: 0; background: #000; height: 100%; }
+  canvas { display: block; width: 100vw; height: 100vh; }
+  .scene { display: none; }
+</style>
+</head>
+<body>
+<!-- Офлайн-фикстура для адаптера html: фильм в одном файле. Кадр зависит только от времени. -->
+<section class="scene" data-scene="Корабль выходит из порта" data-t="0" data-end="4"></section>
+<section class="scene" data-scene="Айсберг в темноте" data-t="4" data-end="8" data-best="true"></section>
+<section class="scene" data-scene="Огни на воде" data-t="8" data-end="12"></section>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+  const c = document.getElementById("c");
+  const g = c.getContext("2d");
+  let audio = null;
+  function draw(t) {
+    g.fillStyle = "#000"; g.fillRect(0, 0, 1080, 1920);
+    g.strokeStyle = "#F5F5F5"; g.lineWidth = 2;
+    for (let i = 0; i < 12; i++) {
+      const y = 1200 + i * 40 + Math.sin(t * 1.3 + i) * 8;
+      g.beginPath(); g.moveTo(0, y); g.lineTo(1080, y); g.stroke();
+    }
+    const x = 100 + t * 70;
+    g.beginPath(); g.moveTo(x, 1150); g.lineTo(x + 260, 1150); g.lineTo(x + 220, 1210); g.lineTo(x + 30, 1210); g.closePath(); g.stroke();
+    if (t > 4) {
+      const ix = 980 - (t - 4) * 40;
+      g.strokeStyle = "#E63946";
+      g.beginPath(); g.moveTo(ix, 1200); g.lineTo(ix + 60, 1020); g.lineTo(ix + 140, 1200); g.stroke();
+    }
+    if (t > 8) {
+      g.fillStyle = "#F5F5F5";
+      for (let i = 0; i < 9; i++) g.fillRect(x + 20 + i * 26, 1170 + ((t * 10 + i) % 3), 6, 6);
+    }
+  }
+  // Детерминированный захват: движок зовёт __seek(t) и снимает кадр.
+  window.__duration = 12;
+  window.__seek = (t) => draw(Math.max(0, Math.min(12, t)));
+  // Звук страницы: гул океана, стартует по клику (политика автозапуска браузера).
+  document.addEventListener("click", () => {
+    if (audio) return;
+    audio = new AudioContext();
+    const osc = audio.createOscillator(); const gain = audio.createGain();
+    osc.frequency.value = 55; gain.gain.value = 0.05;
+    osc.connect(gain).connect(audio.destination); osc.start();
+    audio.resume();
+  });
+  document.addEventListener("keydown", (e) => { if (e.key === " ") start = performance.now(); });
+  let start = performance.now();
+  function loop(now) { draw(((now - start) / 1000) % 12); requestAnimationFrame(loop); }
+  requestAnimationFrame(loop);
+</script>
+</body>
+</html>

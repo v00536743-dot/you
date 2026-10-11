@@ -113,10 +113,11 @@ def distinct(hook: str, title: str, root: Optional[str]) -> str:
     """Различимость: новый крючок и название не должны повторять прошлые почти слово в слово."""
     path = os.path.join(skill_root(root), "memory", journal.LOG)
     try:
-        text = open(path, encoding="utf-8").read()
+        with open(path, encoding="utf-8") as handle:
+            text = handle.read()
     except OSError:
         return "да (журнал пуст)"
-    mine = set(w.lower() for w in words(title.split("#")[0] + " " + hook))
+    mine = set(w.lower() for w in words(title.split("#")[0]))
     worst = 0.0
     for row in journal._rows(text):
         other = set(w.lower() for w in words(row[2].split("#")[0]))
@@ -205,8 +206,12 @@ def run(source: str, out_root: str, *, root: Optional[str] = None, lang: Optiona
         eff = prefs_mod.effective(store, language)
         chosen_items = [b.item for b in built.beats if b.kind == "item" and b.item]
         part_no, parts_total = built.part, built.parts
+        voice_speed = float(eff["voice"].get("speed", 1.05))
         if raw.kind == "html":
             html_info = html_adapter.inspect(raw.path)
+            scripter.retime_html(built, html_adapter.parse_speed(speed_spec), voice_speed)
+        else:
+            scripter.retime(built, voice_speed)
     if raw.kind in ("post", "links") and not script_path:
         checked = probe.check_items(raw.items, fetch=fetch, offline=offline, root=root)
         site_report = probe.report_lines(checked)

@@ -201,6 +201,7 @@ def build(script: Script, prefs: Dict[str, Any], raw: Optional[Raw] = None, *,
     handle = links.get("handle") or "BADVINO"
     notes: List[str] = []
 
+    # Раскладку не выбрал автор: три панели для сервисов, только центр для HTML (COMMON.md раздел 1).
     mode = prefs.get("layout") or ("center_only" if html_info else "three")
     top = top_source(prefs)
     if mode in ("three", "top_center") and not top:
